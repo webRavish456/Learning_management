@@ -7,7 +7,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-<<<<<<< HEAD
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -68,58 +67,10 @@ const columns = [
     label: 'Status',
     flex:1,
     align: 'center',
-=======
-
-const columns = [
-  { id: 'no', label: 'SI.No', minWidth: 170 },
-  { id: 'name', label: 'Exam_Name', minWidth: 100 },
-  {
-    id: 'course_name',
-    label: 'Course_Name',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'faculty_name',
-    label: 'Faculty_Name',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'exam_date',
-    label: 'Exam_Date',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toFixed(2),
-  },
-  {
-    id: 'duration',
-    label: 'Duration',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toFixed(2),
-  },
-  {
-    id: 'total_marks',
-    label: 'Total_Marks',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toFixed(2),
-  },
- {
-    id: 'status',
-    label: 'Status',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toFixed(2),
->>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523
   },
   {
     id: 'action',
     label: 'Action',
-<<<<<<< HEAD
     flex:1,
     align: 'center',
   },
@@ -149,39 +100,6 @@ const rows = [
   createData('3', 'Nandani', 'nandani@gmail.com', '1234567892', '1999-03-03', 'Female', 'JSR', '2023-01-03', 'History', 'Active'),
   createData('4', 'Manisha', 'manisha@gmail.com', '1234567893', '1998-04-04', 'Female', 'JSR', '2023-01-04', 'English', 'Inactive'),
   createData('5', 'Aastha', 'aastha@gmail.com', '1234567894', '1997-05-05', 'Female', 'JSR', '2023-01-05', 'Computer Science', 'Active'),
-=======
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toFixed(2),
-  },
-
-];
-
-function createData(no, name, course_name , faculty_name, exam_date, duration, total_marks, status, action){
-    return { no, name, course_name , faculty_name, exam_date, duration, total_marks, status, action
-};
-}
-  
-
-const rows = [
-  createData('1','Api done','Cude operation','Frontend','Ravish','03/03/2025','Inprogress'),
-
-  // createData('China', 'CN', 1403500365, 9596961),
-  // createData('Italy', 'IT', 60483973, 301340),
-  // createData('United States', 'US', 327167434, 9833520),
-  // createData('Canada', 'CA', 37602103, 9984670),
-//function createData(
-    // createData('Australia', 'AU', 25475400, 7692024),
-  // createData('Germany', 'DE', 83019200, 357578),
-  // createData('Ireland', 'IE', 4857000, 70273),
-  // createData('Mexico', 'MX', 126577691, 1972550),
-  // createData('Japan', 'JP', 126317000, 377973),
-  // createData('France', 'FR', 67022000, 640679),
-  // createData('United Kingdom', 'GB', 67545757, 242495),
-  // createData('Russia', 'RU', 146793744, 17098246),
-  // createData('Nigeria', 'NG', 200962417, 923768),
-  // createData('Brazil', 'BR', 210147125, 8515767),
->>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523
 ];
 
 export default function StickyHeadTable() {
@@ -198,12 +116,9 @@ export default function StickyHeadTable() {
   };
 
   return (
-<<<<<<< HEAD
 
     <Box className="container">
       <Search />
-=======
->>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
@@ -252,12 +167,6 @@ export default function StickyHeadTable() {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
-<<<<<<< HEAD
     </Box>
   );
 }
-=======
-  );
-}
- 
->>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523

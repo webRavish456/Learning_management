@@ -1,7 +1,7 @@
 import React from "react";
-import Header from "../Components/Header/Header";
-import Sidebar from "../Components/Sidebar/Sidebar";
 import Faculty from "../Faculty/Faculty";
+import Sidebar from "../Component/Sidebar/Sidebar";
+import Header from "../Component/Header/Header";
 
 
 const LayoutFaculty=()=>
@@ -13,7 +13,7 @@ const LayoutFaculty=()=>
             <Sidebar/>
             <div className="content">
             <Header className="header" />
-          <Faculty className="faculty"/>
+            <Faculty className="faculty"/>
             </div>
         </div>
         </div>

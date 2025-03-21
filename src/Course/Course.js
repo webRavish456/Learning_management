@@ -7,8 +7,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import Search from  "./Search/Search";
 import { Box } from '@mui/material';
+import Search from '../Search/Search';
 
 
 

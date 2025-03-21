@@ -11,15 +11,9 @@ const Forgot=()=>
             noValidate
             autoComplete="off" className="register">
 
-<<<<<<< HEAD
-            <Box className="header_title">Forgot Password</Box>     
-
-            <Box className="forgot">  
-=======
             <Box className="header_title">Forgot_Password</Box>     
 
             <Box className="Forgot">  
->>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523
 
            <TextField
            type="email"
@@ -43,17 +37,10 @@ const Forgot=()=>
           
           <Button className="primary_button">Submit</Button>
             
-<<<<<<< HEAD
-         {/* <Box className="account">
-            <Box>Already an account</Box>
-            <Box className="forgot">Login</Box>
-         </Box> */}
-=======
          <Box className="account">
             <Box>Already an account</Box>
             <Box className="forgot">Login</Box>
          </Box>
->>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523
 
           </Box> 
         
