@@ -35,7 +35,11 @@ const SignIn=()=>
             <Box className="forgot">Forgot Password</Box>
          </Box>
           
+<<<<<<< HEAD
           <Button className="primary_button">SignIn</Button>
+=======
+          <Button className="primary_button">Register</Button>
+>>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523
             
          <Box className="account">
             <Box>Already an account</Box>

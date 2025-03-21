@@ -1,5 +1,8 @@
 import * as React from 'react';
+<<<<<<< HEAD
 import { useState } from 'react';
+=======
+>>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,6 +11,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+<<<<<<< HEAD
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -61,11 +65,101 @@ export default function StickyHeadTable() {
  const [deleteData, setDeleteData] =useState(false)
  
 const handleChangePage = (event, newPage) => {
+=======
+
+const columns = [
+  { id: 'no', label: 'SI.No', minWidth: 170 },
+  { id: 'name', label: 'Exam_Name', minWidth: 100 },
+  {
+    id: 'course_name',
+    label: 'Course_Name',
+    minWidth: 170,
+    align: 'right',
+    format: (value) => value.toLocaleString('en-US'),
+  },
+  {
+    id: 'faculty_name',
+    label: 'Faculty_Name',
+    minWidth: 170,
+    align: 'right',
+    format: (value) => value.toLocaleString('en-US'),
+  },
+  {
+    id: 'exam_date',
+    label: 'Exam_Date',
+    minWidth: 170,
+    align: 'right',
+    format: (value) => value.toFixed(2),
+  },
+  {
+    id: 'duration',
+    label: 'Duration',
+    minWidth: 170,
+    align: 'right',
+    format: (value) => value.toFixed(2),
+  },
+  {
+    id: 'total_marks',
+    label: 'Total_Marks',
+    minWidth: 170,
+    align: 'right',
+    format: (value) => value.toFixed(2),
+  },
+ {
+    id: 'status',
+    label: 'Status',
+    minWidth: 170,
+    align: 'right',
+    format: (value) => value.toFixed(2),
+  },
+  {
+    id: 'action',
+    label: 'Action',
+    minWidth: 170,
+    align: 'right',
+    format: (value) => value.toFixed(2),
+  },
+
+];
+
+function createData(no, name, course_name , faculty_name, exam_date, duration, total_marks, status, action){
+    return { no, name, course_name , faculty_name, exam_date, duration, total_marks, status, action
+};
+}
+  
+
+const rows = [
+  createData('1','Api done','Cude operation','Frontend','Ravish','03/03/2025','Inprogress'),
+
+  // createData('China', 'CN', 1403500365, 9596961),
+  // createData('Italy', 'IT', 60483973, 301340),
+  // createData('United States', 'US', 327167434, 9833520),
+  // createData('Canada', 'CA', 37602103, 9984670),
+//function createData(
+    // createData('Australia', 'AU', 25475400, 7692024),
+  // createData('Germany', 'DE', 83019200, 357578),
+  // createData('Ireland', 'IE', 4857000, 70273),
+  // createData('Mexico', 'MX', 126577691, 1972550),
+  // createData('Japan', 'JP', 126317000, 377973),
+  // createData('France', 'FR', 67022000, 640679),
+  // createData('United Kingdom', 'GB', 67545757, 242495),
+  // createData('Russia', 'RU', 146793744, 17098246),
+  // createData('Nigeria', 'NG', 200962417, 923768),
+  // createData('Brazil', 'BR', 210147125, 8515767),
+];
+
+export default function StickyHeadTable() {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event, newPage) => {
+>>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
+<<<<<<< HEAD
     setPage(0); // Reset to first page when rows per page changes
   };
 
@@ -100,6 +194,14 @@ const handleChangePage = (event, newPage) => {
 
     <Paper sx={{ width: '100%',overflow: 'hidden' }}>
       <TableContainer className="table" sx={{ maxHeight: 440, fontSize: '12px', marginLeft: '20px', marginTop: '0px', marginRight: '20px' }}>
+=======
+    setPage(0);
+  };
+
+  return (
+    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      <TableContainer sx={{ maxHeight: 440 }}>
+>>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -107,7 +209,11 @@ const handleChangePage = (event, newPage) => {
                 <TableCell
                   key={column.id}
                   align={column.align}
+<<<<<<< HEAD
                   style={{ minWidth: column.minWidth, fontWeight: 'bolder', fontSize: '14px' }}
+=======
+                  style={{ minWidth: column.minWidth }}
+>>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523
                 >
                   {column.label}
                 </TableCell>
@@ -116,6 +222,7 @@ const handleChangePage = (event, newPage) => {
           </TableHead>
           <TableBody>
             {rows
+<<<<<<< HEAD
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Adjust row slice based on page and rowsPerPage
               .map((row) => (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.SI_no}>
@@ -143,11 +250,34 @@ const handleChangePage = (event, newPage) => {
                   })}
                 </TableRow>
               ))}
+=======
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => {
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {column.format && typeof value === 'number'
+                            ? column.format(value)
+                            : value}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+>>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
+<<<<<<< HEAD
         rowsPerPageOptions={[10, 25, 50]} // Added more options for rows per page
+=======
+        rowsPerPageOptions={[10, 25, 100]}
+>>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523
         component="div"
         count={rows.length}
         rowsPerPage={rowsPerPage}
@@ -156,6 +286,7 @@ const handleChangePage = (event, newPage) => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
+<<<<<<< HEAD
 
     {/* <Dialog
         open={viewData}
@@ -247,3 +378,7 @@ open={deleteData}
             Submit
           </Button>
         </DialogActions> */
+=======
+  );
+}
+>>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523

@@ -1,6 +1,11 @@
 import React from "react";
+<<<<<<< HEAD
 import Header from "../Component/Header/Header";
 import Sidebar from "../Component/Sidebar/Sidebar";
+=======
+import Header from "../Components/Header/Header";
+import Sidebar from "../Components/Sidebar/Sidebar";
+>>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523
 import Exam from "../Exam/Exam";
 
 
@@ -13,7 +18,11 @@ const LayoutExam=()=>
             <Sidebar/>
             <div className="content">
             <Header className="header" />
+<<<<<<< HEAD
             <Exam className="dashboard" />
+=======
+          <Exam className="exam"/>
+>>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523
             </div>
         </div>
         </div>
@@ -23,4 +32,9 @@ const LayoutExam=()=>
     )
 }
 
+<<<<<<< HEAD
 export default LayoutExam;
+=======
+export default LayoutExam;
+//   <Dashboard  />
+>>>>>>> 658a5d86fb9b60f4b37251412fc13d448935d523
