@@ -18,7 +18,7 @@ const Sidebar=()=>
            <LazyLoadImage 
               src={'/logo.png'} 
               alt='logo'
-              width={50} 
+              width={150} 
               height={50} 
             />
 

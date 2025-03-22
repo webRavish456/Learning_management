@@ -9,6 +9,7 @@ body{
     color: #ffffff !important;
     padding: 8px 1px !important;
     cursor: pointer;
+    width:100px;
 }
 .container{
   padding: 10px 30px;
