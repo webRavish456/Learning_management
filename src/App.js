@@ -8,6 +8,7 @@ import LayoutAssignment from "./Layout/LayoutAssignment";
 import LayoutExam from "./Layout/LayoutExam";
 import LayoutFinance from "./Layout/LayoutFinance";
 import LayoutFaculty from "./Layout/LayoutFaculty";
+import Student from "./Student/Student";
 function App() {
   return (
     <BrowserRouter>
@@ -22,6 +23,7 @@ function App() {
         <Route path="/exam" element={<LayoutExam/>}/>
         <Route path="/finance" element={<LayoutFinance/>}/>
         <Route path="/faculty" element={<LayoutFaculty/>}/>
+        <Route path="/student" element={<Student/>}/>
       </Routes>
     </BrowserRouter>
   );

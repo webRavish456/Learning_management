@@ -1,91 +1,99 @@
-import * as React from 'react';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import IconButton from '@mui/material/IconButton';
-import { Box } from '@mui/material';
+import React, { useState } from "react";
+
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+
+import CloseIcon from "@mui/icons-material/Close";
 import Search from "../Search/Search";
 
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow ,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  TextField,
+  IconButton,
+  Button,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  Grid,
+  useMediaQuery,
+} from "@mui/material";
+import CommonDialog from "../Component/CommonDialog/CommonDialog";
+import ViewDiscount from "./View/View";
+import CreateDiscount from "./Create/Create";
+import EditDiscount from "./Edit/Edit";
+import DeleteDiscount from "./Delete/Delete";
 
-//const Student=()=>
-  // {
+const Exam=()=>
+  {
+  
+    const [openData, setOpenData] = useState(false)
+  
+    const [viewData, setViewData] = useState(false)
+  
+    const [editData, setEditData] = useState(false)
+  
+    const [deleteData, setDeleteData] = useState(false)
+  
+   const handleView = () =>
+    {
+      setViewData(true)
+    }
+  
+  const handleEdit = () =>
+  {
+     setEditData(true)
+  }
+  
+  const handleDelete = () =>
+    {
+      setDeleteData(true)
+    }
+  
+
 const columns = [
   { id: 'si', label: 'SI.No', flex:1, align:'center' },
-  { id: 'name', label: 'Name', flex:1, align:'center' },
-  {
-    id: 'email',
-    label: 'Email',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'mobileno',
-    label: 'MobileNo',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'dob',
-    label: 'Dob',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'gender',
-    label: 'Gender',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'address',
-    label: 'Address',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'enrollmentdate',
-    label: 'EnrollmentDate',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'course',
-    label: 'Course',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'status',
-    label: 'Status',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'action',
-    label: 'Action',
-    flex:1,
-    align: 'center',
-  },
+  { id: 'facultyname', label: 'Faculty Name', flex:1, align:'center' },
+  
+  {id: 'email',label: 'Email',flex:1,align: 'center',},
+  {id: 'mobile',label: 'Mobile',flex:1,align: 'center',},
+  
+  {id: 'dob',label: 'DOB',flex:1, align: 'center',},
+  { id: 'gender',label: 'Gender ', flex:1, align: 'center',},
+ 
+  {id: 'address',label: 'Address ',flex:1,align: 'center',},
+  {id: 'course',label: 'Course ', flex:1,align: 'center',},
+  
+  {id: 'joiningdate',label: 'Joining Date',flex:1,align: 'center', },
+  {id: 'status',label: 'Status',flex:1,align: 'center', },
+  {id: 'action',label: 'Action', flex:1,align: 'center', },
+ 
 ];
 
-function createData(si, name, email, mobileno, dob, gender, address, enrollmentdate, course, status, ) {
-  return { si, name, email, mobileno, dob, gender, address, enrollmentdate, course, status, action: (
+function createData(si, facultyname, email, mobile, dob,gender, address, course, joiningdate,status ) {
+  return { si, facultyname, email, mobile, dob,gender, address, course, joiningdate,status, action: (
       <>
-      <IconButton style={{color:"#000", padding:"4px", transform:"scale(0.8)"}}>
+      <IconButton style={{color:"#000", padding:"4px", transform:"scale(0.8)"}} onClick={handleView}>
         <VisibilityIcon />
       </IconButton>
-      <IconButton style={{color:"#000", padding:"4px", transform:"scale(0.8)"}}>
+      <IconButton style={{color:"#000", padding:"4px", transform:"scale(0.8)"}} onClick={handleEdit}>
         <EditIcon />
       </IconButton>
-      <IconButton style={{color:"#000", padding:"4px", transform:"scale(0.8)"}}>
+      <IconButton style={{color:"#000", padding:"4px", transform:"scale(0.8)"}} onClick={handleDelete}>
         <DeleteIcon />
       </IconButton>
       </>
@@ -95,14 +103,13 @@ function createData(si, name, email, mobileno, dob, gender, address, enrollmentd
 
 
 const rows = [
-  createData('1', 'Ayushi', 'ayushi@gmail.com', '1234567890', '2001-01-01', 'Female', 'JSR', '2023-01-01', 'Math', 'Active'),
-  createData('2', 'Goldie', 'goldie@gmail.com', '1234567891', '2000-02-02', 'Female', 'JSR', '2023-01-02', 'Science', 'Inactive'),
-  createData('3', 'Nandani', 'nandani@gmail.com', '1234567892', '1999-03-03', 'Female', 'JSR', '2023-01-03', 'History', 'Active'),
-  createData('4', 'Manisha', 'manisha@gmail.com', '1234567893', '1998-04-04', 'Female', 'JSR', '2023-01-04', 'English', 'Inactive'),
-  createData('5', 'Aastha', 'aastha@gmail.com', '1234567894', '1997-05-05', 'Female', 'JSR', '2023-01-05', 'Computer Science', 'Active'),
+  createData('1', 'Manisha', 'manisha@12', '676778888', '04-03-2025', 'Female', 'Gamharia','Full stack','05-06-2008' ,'Completed')
+  // createData('2', 'Goldie', 'goldie@gmail.com', '1234567891', '2000-02-02', 'Female', 'JSR', '2023-01-02', 'Science', 'Inactive'),
+  // createData('3', 'Nandani', 'nandani@gmail.com', '1234567892', '1999-03-03', 'Female', 'JSR', '2023-01-03', 'History', 'Active'),
+  // createData('4', 'Manisha', 'manisha@gmail.com', '1234567893', '1998-04-04', 'Female', 'JSR', '2023-01-04', 'English', 'Inactive'),
+  // createData('5', 'Aastha', 'aastha@gmail.com', '1234567894', '1997-05-05', 'Female', 'JSR', '2023-01-05', 'Computer Science', 'Active'),
 ];
 
-export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -115,10 +122,34 @@ export default function StickyHeadTable() {
     setPage(0);
   };
 
+  const onAddClick =()=>
+    {
+      setOpenData(true)
+    }
+
+    const handleClose = () => {
+      setEditData(false)
+      setViewData(false)
+      setOpenData(false)
+      setDeleteData(false)
+   };
+
+   const handleSubmit = (e) => {
+     e.preventDefault();
+     setOpenData(false)
+     // console.log("Form Data Submitted:", formData);
+   }
+
+   const handleUpdate = (e) => {
+      e.preventDefault();
+      setEditData(false)
+   }
+
+
   return (
 
     <Box className="container">
-      <Search />
+      <Search onAddClick={onAddClick}/>
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
@@ -167,6 +198,26 @@ export default function StickyHeadTable() {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
+
+    <CommonDialog 
+      open={openData || viewData || editData || deleteData} 
+      onClose={handleClose}
+      dialogTitle={ <>
+         {openData? "Create New Faculty Detail" : viewData ? "View Faculty Details": editData?"Edit Faculty Details":deleteData?"Delete Faculty Details":null}
+      </>}
+      
+      dialogContent = {
+         openData ? <CreateDiscount handleSubmit={handleSubmit} handleClose={handleClose} /> :
+          viewData ? <ViewDiscount /> : 
+         editData ? <EditDiscount handleUpdate={handleUpdate} handleClose={handleClose} /> : 
+         deleteData? <DeleteDiscount handleDelete={handleDelete} handleClose={handleClose} />:null
+        
+      }
+
+      />
+
     </Box>
   );
 }
+
+export default Exam;
