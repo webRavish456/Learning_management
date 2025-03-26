@@ -16,12 +16,12 @@ function App() {
         <Route path="/sign-in" element={<SignIn />}/>
         <Route path="/" element={<LayoutDashboard/>}/>
         <Route path="/forgot-password" element={<Forgot />}/>
-        <Route path="/course" element={<LayoutCourse/>}/>
-        <Route path="/student" element={<LayoutStudent/>}/>
-        <Route path="/assignments" element={<LayoutAssignment/>}/>
+        <Route path="/course/all-courses" element={<LayoutCourse/>}/>
+        <Route path="/student/all-students" element={<LayoutStudent/>}/>
+        <Route path="/assignment/all-assignments" element={<LayoutAssignment/>}/>
         <Route path="/exam" element={<LayoutExam/>}/>
         <Route path="/finance" element={<LayoutFinance/>}/>
-        <Route path="/faculty" element={<LayoutFaculty/>}/>
+        <Route path="/teacher" element={<LayoutFaculty/>}/>
       </Routes>
     </BrowserRouter>
   );
