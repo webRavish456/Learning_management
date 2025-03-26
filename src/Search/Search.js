@@ -26,7 +26,7 @@ const Search = ({ searchTerm, setSearchTerm, onAddClick }) => {
         className="search"
       />
       <Box className="buttonContainer">
-        <Button variant="contained" color="primary" className="primary_button"><AddIcon/>
+        <Button variant="contained" color="primary" className="primary_button" startIcon={<AddIcon/>}onClick={onAddClick}>
         Add New
         </Button>
       </Box>

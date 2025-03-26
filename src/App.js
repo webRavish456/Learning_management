@@ -8,6 +8,7 @@ import LayoutAssignment from "./Layout/LayoutAssignment";
 import LayoutExam from "./Layout/LayoutExam";
 import LayoutFinance from "./Layout/LayoutFinance";
 import LayoutFaculty from "./Layout/LayoutFaculty";
+import Student from "./Student/Student";
 function App() {
   return (
     <BrowserRouter>

@@ -46,7 +46,7 @@ const Header=()=>
           <Box sx={{ flexGrow: 0, padding:"10px 30px",display:'flex', justifyContent:"flex-end" }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Ravish" src="Ravish" />
+                <Avatar alt="Learning.." src="Learning.." />
               </IconButton>
             </Tooltip>
             <Menu

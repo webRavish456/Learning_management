@@ -18,56 +18,21 @@ import Search from "../Search/Search";
 //const Student=()=>
   // {
 const columns = [
-  { id: 'si', label: 'SI.No', flex:1, align:'center' },
-  { id: 'name', label: 'Name', flex:1, align:'center' },
-  {
-    id: 'email',
-    label: 'Email',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'mobileno',
-    label: 'MobileNo',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'dob',
-    label: 'Dob',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'gender',
-    label: 'Gender',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'address',
-    label: 'Address',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'enrollmentdate',
-    label: 'EnrollmentDate',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'course',
-    label: 'Course',
-    flex:1,
-    align: 'center',
-  },
+  { id: 'si', label: 'Assignement', flex:1, align:'center' },
+  { id: 'quiz', label: 'Quiz', flex:1, align:'center' },
+  { id: 'progress', label: 'Progress Report', flex:1, align:'center' },
+  { id: 'management', label: 'Course Enrollment and Management', flex:1, align:'center' },
+  { id: 'scheduling', label: 'Calender and Scheduling', flex:1, align:'center' },
+  { id: 'study', label: 'Study Materials', flex:1, align:'center' },
+  { id: 'notification', label: 'Notification', flex:1, align:'center' },
+  
   {
     id: 'status',
     label: 'Status',
     flex:1,
     align: 'center',
   },
+ 
   {
     id: 'action',
     label: 'Action',
@@ -76,8 +41,8 @@ const columns = [
   },
 ];
 
-function createData(si, name, email, mobileno, dob, gender, address, enrollmentdate, course, status, ) {
-  return { si, name, email, mobileno, dob, gender, address, enrollmentdate, course, status, action: (
+function createData(si, quiz, progress, management, scheduling, study, notification, status, ) {
+  return { si, quiz, progress, management, scheduling, study, notification, status, action: (
       <>
       <IconButton style={{color:"#000", padding:"4px", transform:"scale(0.8)"}}>
         <VisibilityIcon />
