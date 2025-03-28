@@ -12,7 +12,7 @@ import {
     duration,
   } from "@mui/material";
 
-const EditExam =({handleUpdate, handleClose})=>
+const EditFaculty =({handleUpdate, handleClose})=>
 {
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
@@ -134,4 +134,4 @@ const EditExam =({handleUpdate, handleClose})=>
      )
 }
 
-export default EditExam;
+export default EditFaculty;

@@ -30,9 +30,21 @@ const Sidebar=()=>
               src={item.icon} 
               alt={item.label} 
               width={20} 
-              height={20} 
+              height={20}
+        
               // style={{ filter: "brightness(0) invert(1)" }}
             />
+            
+
+            {/* <LazyLoadImage 
+              src={item.item} 
+              alt={item.label} 
+              width={20} 
+              height={20}
+  
+              // style={{ filter: "brightness(0) invert(1)" }}
+            /> */}
+
           {isSmScreen?null:  <span className="menu-label">{item.label}</span>}
           </NavLink>
         </div>

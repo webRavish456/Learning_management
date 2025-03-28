@@ -153,3 +153,17 @@ body{
   {
     padding: 8px 0px !important;
   }
+  .dropdown {
+    margin-left: 20px;
+  }
+  
+  .dropdown-link {
+    display: block;
+    padding: 5px 0;
+    text-decoration: none;
+    color: white;
+  }
+  
+  .dropdown-link:hover {
+    color: white;
+  }

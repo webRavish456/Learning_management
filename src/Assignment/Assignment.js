@@ -7,6 +7,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import Search from "../Search/Search";
 
+
+
 import {
   Paper,
   Table,
@@ -67,22 +69,22 @@ const Exam=()=>
 
 const columns = [
   { id: 'si', label: 'SI.No', flex:1, align:'center' },
-  { id: 'assignment', label: 'Assignment', flex:1, align:'center' },
+  { id: 'assignmenttitle', label: 'Assignment Title', flex:1, align:'center' },
   
-  {id: 'description',label: 'Description',flex:1,align: 'center',},
+  
   {id: 'course',label: 'Course',flex:1,align: 'center',},
   
-  {id: 'faculty',label: 'Faculty',flex:1, align: 'center',},
+  {id: 'teacher',label: 'Teacher',flex:1, align: 'center',},
   { id: 'duedate',label: 'Due Date ', flex:1, align: 'center',},
   
-  
+  { id: 'totalcomplition',label: 'Total Complition ', flex:1, align: 'center',},
   {id: 'status',label: 'Status',flex:1,align: 'center', },
   {id: 'action',label: 'Action', flex:1,align: 'center', },
  
 ];
 
-function createData(si, assignment, description, course,faculty,duedate ,status ,) {
-  return { si, assignment, description, course,faculty,duedate,status, action: (
+function createData(si, assignmenttitle, course,teacher,duedate,totalcomplition ,status ,) {
+  return { si, assignmenttitle, course,teacher,duedate,totalcomplition ,status, action: (
       <>
       <IconButton style={{color:"#000", padding:"4px", transform:"scale(0.8)"}} onClick={handleView}>
         <VisibilityIcon />
@@ -149,6 +151,8 @@ const rows = [
       <Search onAddClick={onAddClick}/>
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
+      
+
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>

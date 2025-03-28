@@ -4,7 +4,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import CloseIcon from "@mui/icons-material/Close";
+//import CloseIcon from "@mui/icons-material/Close";
 import Search from "../Search/Search";
 
 import {
@@ -17,28 +17,17 @@ import {
   TablePagination,
   TableRow ,
   Box,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  TextField,
+ 
   IconButton,
-  Button,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  Grid,
-  useMediaQuery,
+  
 } from "@mui/material";
 import CommonDialog from "../Component/CommonDialog/CommonDialog";
-import ViewDiscount from "./View/View";
-import CreateDiscount from "./Create/Create";
-import EditDiscount from "./Edit/Edit";
-import DeleteDiscount from "./Delete/Delete";
+import ViewFaculty from "./View/View";
+import CreateFaculty from "./Create/Create";
+import EditFaculty from "./Edit/Edit";
+import DeleteFaculty from "./Delete/Delete";
 
-const Exam=()=>
+const Faculty=()=>
   {
   
     const [openData, setOpenData] = useState(false)
@@ -207,10 +196,10 @@ const rows = [
       </>}
       
       dialogContent = {
-         openData ? <CreateDiscount handleSubmit={handleSubmit} handleClose={handleClose} /> :
-          viewData ? <ViewDiscount /> : 
-         editData ? <EditDiscount handleUpdate={handleUpdate} handleClose={handleClose} /> : 
-         deleteData? <DeleteDiscount handleDelete={handleDelete} handleClose={handleClose} />:null
+         openData ? <CreateFaculty handleSubmit={handleSubmit} handleClose={handleClose} /> :
+          viewData ? <ViewFaculty /> : 
+         editData ? <EditFaculty handleUpdate={handleUpdate} handleClose={handleClose} /> : 
+         deleteData? <DeleteFaculty handleDelete={handleDelete} handleClose={handleClose} />:null
         
       }
 
@@ -220,4 +209,4 @@ const rows = [
   );
 }
 
-export default Exam;
+export default Faculty;

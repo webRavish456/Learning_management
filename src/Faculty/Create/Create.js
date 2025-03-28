@@ -12,7 +12,7 @@ import {
     duration,
   } from "@mui/material";
 
-const CreateExam =({handleSubmit, handleClose})=>
+const CreateFaculty =({handleSubmit, handleClose})=>
 {
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
@@ -124,4 +124,4 @@ const CreateExam =({handleSubmit, handleClose})=>
      )
 }
 
-export default CreateExam;
+export default CreateFaculty;

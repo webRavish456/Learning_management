@@ -9,6 +9,8 @@ import LayoutExam from "./Layout/LayoutExam";
 import LayoutFinance from "./Layout/LayoutFinance";
 import LayoutFaculty from "./Layout/LayoutFaculty";
 import Student from "./Student/Student";
+import LayoutBranchList from "./Layout/LayoutBranchList";
+import LayoutScheduling from "./Layout/LayoutScheduling";
 function App() {
   return (
     <BrowserRouter>
@@ -24,6 +26,8 @@ function App() {
         <Route path="/finance" element={<LayoutFinance/>}/>
         <Route path="/faculty" element={<LayoutFaculty/>}/>
         <Route path="/student" element={<Student/>}/>
+        <Route path="/branchlist" element={<LayoutBranchList/>}/>
+        <Route path="/scheduling" element={<LayoutScheduling/>}/>
       </Routes>
     </BrowserRouter>
   );
