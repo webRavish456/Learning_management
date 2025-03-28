@@ -13,43 +13,65 @@ const Menuitems = [
       href: "/branchlist",
   },
     {
+      icon: '/Sidebar/patient.png',
+      label: "Branch",
+      href: "/branch",
+    },
+     {
       icon: '/sidebar/course.png',
       label: "Course",
-      href: "/course",
+      href: "/course/all-courses",
+      item : [
+        {
+           label: "All Course",
+           href: "/course/all-courses"
+        },
+        {
+           label: "Document Sharing",
+           href: "/course/document-sharing"
+        }
+      ]
     },
-    {
-      icon: '/sidebar/scheduling.png',
-      label: "Scheduling",
-      href: "/scheduling",
-    },
-    
-    {
-       icon: "/sidebar/students.png",
-       label: "Student",
-       href: "/student",
-      },
     {
       icon: "/sidebar/faculty.png",
-      label: "Faculty",
-      href: "/faculty",
+      label: "Teacher",
+      href: "/teacher",
     },
+     {
+        icon: "/sidebar/students.png",
+        label: "Student",
+        href: "/student/all-students",
+        item : [
+          {
+             label: "All Students",
+             href: "/student/all-students"
+          },
+          {
+             label: "Certificates",
+             href: "/student/certificates"
+          }
+        ]
+      },
+      {
+        icon: "/sidebar/assignments.png",
+        label: "Scheduling",
+        href: "/scheduling",
+      },
+
     {
       icon: "/sidebar/assignments.png",
       label: "Assignments",
-      href: "/assignments",
-      
-      item:[
+      href: "/assignment/all-assignments",
+      item : [
         {
-          label:"AssignmentList",
-          href:"/assignmentlist",
+           label: "All Assignments",
+           href: "/assignment/all-assignments"
         },
         {
-          label:"StudentAssignment",
-          href:"/studentassignment",
+           label: "Student's Assignment",
+           href: "/assignment/students-assignment"
         }
       ]
-
-      
     },
     
     
@@ -60,8 +82,8 @@ const Menuitems = [
     },
     {
       icon: "/sidebar/finance.png",
-      label: "Finance",
-      href: "/finance",
+      label: "Results",
+      href: "/results"
     },
 
 ];
