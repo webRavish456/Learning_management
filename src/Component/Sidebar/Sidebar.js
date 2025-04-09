@@ -54,7 +54,7 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
-      <LazyLoadImage src={'/logoo.png'} alt="logo" className="logo" />
+      <LazyLoadImage src={'/VED.png'} alt="logo" className="logo" />
 
       {Menuitems.map((item, index) => {
         const isActive = activeIndex === index;
@@ -70,7 +70,7 @@ const Sidebar = () => {
                 alt={item.label}
                 width={20}
                 height={20}
-                style={{ filter: "brightness(0) invert(1)" }}
+                // style={{ filter: "brightness(0) invert(1)" }}
               />
               <div className="menu-labeldata">
                 {!isSmScreen && <div className="menu-label">{item.label}</div>}

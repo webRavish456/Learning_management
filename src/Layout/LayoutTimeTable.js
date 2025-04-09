@@ -1,10 +1,10 @@
 import React from "react";
 import Header from "../Component/Header/Header";
 import Sidebar from "../Component/Sidebar/Sidebar";
-import Scheduling from "../Scheduling/Scheduling";
+import TimeTable from "../Scheduling/TimeTable/TimeTable";
 
 
-const LayoutScheduling=()=>
+const LayoutTimeTable=()=>
 {
     return (
         <>
@@ -14,7 +14,7 @@ const LayoutScheduling=()=>
             <div className="content">
             <Header className="header" />
             {/* <Course className="dashboard" /> */}
-            <Scheduling className="scheduling" />
+            <TimeTable className="time-table" />
             </div>
         </div>
         </div>
@@ -24,4 +24,4 @@ const LayoutScheduling=()=>
     )
 }
 
-export default LayoutScheduling;
+export default LayoutTimeTable;

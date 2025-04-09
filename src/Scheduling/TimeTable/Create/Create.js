@@ -12,16 +12,16 @@ import {
     duration,
   } from "@mui/material";
 
-const CreateExam =({handleSubmit, handleClose})=>
+const CreateTimeTable =({handleSubmit, handleClose})=>  //CreateExam
 {
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
     const [formData, setFormData] = useState({
-        examName: "",
         courseName: "",
-        facultyName: "",
-        examDate: "",  
-        duration: "",
+        teacherName: "",
+        startingTiming: "",
+        endingTiming: "",  
+        workDays: "",
         status: "",
      });
 
@@ -38,23 +38,7 @@ const CreateExam =({handleSubmit, handleClose})=>
             <TextField
             label={
             <>
-                Exam Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-            </>
-            }
-            name="examName"
-            value={formData.examName}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            />
-            </Grid>
-
-            <Grid item xs={12} sm={isSmScreen?12:6} md={6}>
-
-            <TextField
-            label={
-            <>
-                Course Name  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
             </>
             }
             name="courseName"
@@ -63,6 +47,22 @@ const CreateExam =({handleSubmit, handleClose})=>
             fullWidth
             margin="normal"
             />
+            </Grid>
+
+            <Grid item xs={12} sm={isSmScreen?12:6} md={6}>
+
+            <TextField
+            label={
+            <>
+                Teacher Name  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+            </>
+            }
+            name="teacherName"
+            value={formData.teacherName}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            />
 
             </Grid>
 
@@ -70,11 +70,11 @@ const CreateExam =({handleSubmit, handleClose})=>
             <TextField
             label={
             <>
-                Faculty Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                Starting Timing <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
             </>
             }
-            name="facultyName"
-            value={formData.facultyName}
+            name="startingTiming"
+            value={formData.startingTiming}
             onChange={handleChange}
             fullWidth
             margin="normal"
@@ -85,35 +85,52 @@ const CreateExam =({handleSubmit, handleClose})=>
             <TextField
             label={
             <>
-                Exam Date  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                Ending Timing  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
             </>
             }
-            name="examDate"
-            value={formData.examDate}
+            name="endingTiming"
+            value={formData.endingTiming}
             onChange={handleChange}
             fullWidth
             margin="normal"
             />
             </Grid>
 
-            <Grid item xs={12} sm={12} md={12}>
+            <Grid item xs={12} sm={isSmScreen?12:6} md={6}>
             <TextField
             label={
             <>
-                Duration <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                Work Days <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
             </>
             }
-            name="duration"
-            value={formData.duration}
+            name="workDays"
+            value={formData.workDays}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            />
+           
+
+            </Grid>
+            <Grid item xs={12} sm={isSmScreen?12:6} md={6}>
+            <TextField
+            label={
+            <>
+                Address  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+            </>
+            }
+            name="address"
+            value={formData.address}
             onChange={handleChange}
             fullWidth
             margin="normal"
             />
             </Grid>
+           
 
             </Grid>
 
-            <Box className="submit">
+            <Box className="submit" sx={{display:'flex',justifyContent:'flex-end',gap:'15px',margin:'20px'}}>
             <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
             <Button onClick={handleSubmit} className="primary_button">
              Submit
@@ -124,4 +141,4 @@ const CreateExam =({handleSubmit, handleClose})=>
      )
 }
 
-export default CreateExam;
+export default CreateTimeTable;//CreateExam
