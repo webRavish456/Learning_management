@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Grid,  useMediaQuery} from "@mui/material";
 
-const ViewExam =()=>
+const ViewResult =()=>
 {
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
@@ -44,34 +44,7 @@ const ViewExam =()=>
             <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
 
             <Grid item xs={6}>
-            <Box className="pageTitle">Exan Date:</Box>
-            </Grid>
-
-            <Grid item xs={6}>
-            <Box className="pageDescription">04-03-2025</Box>
-            </Grid>
-
-            </Grid>
-
-            <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
-
-            <Grid item xs={6}>
-            <Box className="pageTitle">Duration:</Box>
-            </Grid>
-
-            <Grid item xs={6}>
-            <Box className="pageDescription">1 hour</Box>
-            </Grid>
-
-            </Grid>
-
-            
-
-
-            <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
-
-            <Grid item xs={6}>
-            <Box className="pageTitle">Test Type</Box>
+            <Box className="pageTitle">Test Type:</Box>
             </Grid>
 
             <Grid item xs={6}>
@@ -83,28 +56,14 @@ const ViewExam =()=>
             <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
 
             <Grid item xs={6}>
-            <Box className="pageTitle">Total Marks</Box>
+            <Box className="pageTitle">Result Date:</Box>
             </Grid>
 
             <Grid item xs={6}>
-            <Box className="pageDescription">100</Box>
+            <Box className="pageDescription">04-03-2025</Box>
             </Grid>
 
             </Grid>
-
-            <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
-
-            <Grid item xs={6}>
-            <Box className="pageTitle">Status:</Box>
-            </Grid>
-
-            <Grid item xs={6}>
-            <Box className="pageDescription">Completed</Box>
-            </Grid>
-
-            </Grid>
-
-
 
             </Grid>
 
@@ -112,4 +71,4 @@ const ViewExam =()=>
      )
 }
 
-export default ViewExam;
+export default ViewResult;

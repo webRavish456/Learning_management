@@ -8,12 +8,12 @@ const Menuitems = [
     },
    
     {
-      icon: '/sidebar/Branch.png',
+      icon: '/sidebar/branch.png',
       label: "BranchList",
       href: "/branchlist",
   },
     {
-      icon: '/Sidebar/patient.png',
+      icon: '/Sidebar/branch.png',
       label: "Branch",
       href: "/branch",
     },
@@ -38,7 +38,7 @@ const Menuitems = [
       href: "/teacher",
     },
      {
-        icon: "/sidebar/students.png",
+        icon: "/sidebar/student.png",
         label: "Student",
         href: "/student/all-students",
         item : [
@@ -53,7 +53,7 @@ const Menuitems = [
         ]
       },
       {
-        icon: "/sidebar/assignments.png",
+        icon: "/sidebar/schedule.png",
         label: "Scheduling",
         href: "/scheduling",
       },
@@ -81,7 +81,7 @@ const Menuitems = [
       href: "/exam",
     },
     {
-      icon: "/sidebar/finance.png",
+      icon: "/sidebar/result.png",
       label: "Results",
       href: "/results"
     },

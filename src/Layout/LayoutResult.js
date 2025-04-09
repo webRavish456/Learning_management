@@ -1,10 +1,10 @@
 import React from "react";
-import Faculty from "../Faculty/Faculty";
-import Sidebar from "../Component/Sidebar/Sidebar";
 import Header from "../Component/Header/Header";
+import Sidebar from "../Component/Sidebar/Sidebar";
+import Result from "../Result/Result";
 
 
-const LayoutFaculty=()=>
+const LayoutResult=()=>
 {
     return (
         <>
@@ -13,7 +13,7 @@ const LayoutFaculty=()=>
             <Sidebar/>
             <div className="content">
             <Header className="header" />
-            <Faculty className="dashboard"/>
+            <Result className="dashboard" />
             </div>
         </div>
         </div>
@@ -23,5 +23,4 @@ const LayoutFaculty=()=>
     )
 }
 
-export default LayoutFaculty;
-//   <Dashboard  />
+export default LayoutResult;
