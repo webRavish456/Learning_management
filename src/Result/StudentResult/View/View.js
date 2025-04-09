@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Grid,  useMediaQuery} from "@mui/material";
 
-const ViewExam =()=>
+const ViewStudentResult =()=>
 {
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
@@ -12,10 +12,10 @@ const ViewExam =()=>
             <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
             
             <Grid item xs={6}>
-            <Box className="pageTitle">Exam Name:</Box> 
+            <Box className="pageTitle">Student Name:</Box> 
             </Grid>  
             <Grid item xs={6}>
-            <Box className="pageDescription">Sem</Box>
+            <Box className="pageDescription">Ayushi</Box>
             </Grid>
 
             </Grid>
@@ -33,10 +33,10 @@ const ViewExam =()=>
             <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
 
             <Grid item xs={6}>
-            <Box className="pageTitle">Teacher Name:</Box> 
+            <Box className="pageTitle">Marks Obtained:</Box> 
             </Grid>   
             <Grid item xs={6}>
-            <Box className="pageDescription">Ravish Kumar</Box>
+            <Box className="pageDescription">80</Box>
             </Grid>
 
             </Grid>
@@ -44,46 +44,7 @@ const ViewExam =()=>
             <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
 
             <Grid item xs={6}>
-            <Box className="pageTitle">Exan Date:</Box>
-            </Grid>
-
-            <Grid item xs={6}>
-            <Box className="pageDescription">04-03-2025</Box>
-            </Grid>
-
-            </Grid>
-
-            <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
-
-            <Grid item xs={6}>
-            <Box className="pageTitle">Duration:</Box>
-            </Grid>
-
-            <Grid item xs={6}>
-            <Box className="pageDescription">1 hour</Box>
-            </Grid>
-
-            </Grid>
-
-            
-
-
-            <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
-
-            <Grid item xs={6}>
-            <Box className="pageTitle">Test Type</Box>
-            </Grid>
-
-            <Grid item xs={6}>
-            <Box className="pageDescription">Quiz</Box>
-            </Grid>
-
-            </Grid>
-
-            <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
-
-            <Grid item xs={6}>
-            <Box className="pageTitle">Total Marks</Box>
+            <Box className="pageTitle">Total Marks:</Box>
             </Grid>
 
             <Grid item xs={6}>
@@ -95,16 +56,38 @@ const ViewExam =()=>
             <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
 
             <Grid item xs={6}>
+            <Box className="pageTitle">Passing Marks:</Box>
+            </Grid>
+
+            <Grid item xs={6}>
+            <Box className="pageDescription">35</Box>
+            </Grid>
+
+            </Grid>
+
+            <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
+
+            <Grid item xs={6}>
+            <Box className="pageTitle">Sheet:</Box>
+            </Grid>
+
+            <Grid item xs={6}>
+            <Box className="pageDescription">downloaded</Box>
+            </Grid>
+
+            </Grid>
+
+            <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
+
+            <Grid item xs={6}>
             <Box className="pageTitle">Status:</Box>
             </Grid>
 
             <Grid item xs={6}>
-            <Box className="pageDescription">Completed</Box>
+            <Box className="pageDescription">Passed</Box>
             </Grid>
 
             </Grid>
-
-
 
             </Grid>
 
@@ -112,4 +95,4 @@ const ViewExam =()=>
      )
 }
 
-export default ViewExam;
+export default ViewStudentResult;

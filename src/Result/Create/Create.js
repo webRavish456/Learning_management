@@ -7,23 +7,19 @@ import {
     InputLabel,
     Grid,
     useMediaQuery,
-    Box,
     Button,
-    duration,
+    Box,
 } from "@mui/material";
 
-const EditExam = ({ handleUpdate, handleClose }) => {
+const CreateResult = ({ handleSubmit, handleClose }) => {
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
     const [formData, setFormData] = useState({
         examName: "",
         courseName: "",
         teacherName: "",
-        examDate: "",
-        duration: "",
         testType: "",
-        totalMarks: "",
-        status: "",
+        resultDate: "",
     });
 
     const handleChange = (e) => {
@@ -79,37 +75,7 @@ const EditExam = ({ handleUpdate, handleClose }) => {
                     <TextField
                         label={
                             <>
-                                Exam Date <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="examDate"
-                        value={formData.examDate}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                </Grid>
-
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                    <TextField
-                        label={
-                            <>
-                                Duration <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="duration"
-                        value={formData.duration}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                </Grid>
-
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                    <TextField
-                        label={
-                            <>
-                                Test Type <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                                Test Type  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                             </>
                         }
                         name="testType"
@@ -120,37 +86,27 @@ const EditExam = ({ handleUpdate, handleClose }) => {
                     />
                 </Grid>
 
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+                <Grid item xs={12} sm={12} md={12}>
                     <TextField
                         label={
                             <>
-                                Total Marks <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                                Result Date <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                             </>
                         }
-                        name="totalMarks"
-                        value={formData.totalMarks}
+                        name="resultDate"
+                        value={formData.resultDate}
                         onChange={handleChange}
                         fullWidth
                         margin="normal"
                     />
                 </Grid>
 
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel>Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
-                        <Select name="status" value={formData.status} onChange={handleChange}>
-                            <MenuItem value="active">Scheduled</MenuItem>
-                            <MenuItem value="inactive">Completed</MenuItem>
-                            <MenuItem value="upcoming">Cancelled</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
             </Grid>
 
-            <Box className="submit" sx={{ display: "flex", gap: 1, justifyContent: "flex-end", marginTop: 2}}>
+            <Box className="submit" sx={{ display: "flex", gap: 1, justifyContent: "flex-end", marginTop: 2 }}>
                 <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
-                <Button onClick={handleUpdate} className="primary_button">
-                    Update
+                <Button onClick={handleSubmit} className="primary_button">
+                    Submit
                 </Button>
             </Box>
 
@@ -158,4 +114,4 @@ const EditExam = ({ handleUpdate, handleClose }) => {
     )
 }
 
-export default EditExam;
+export default CreateResult;

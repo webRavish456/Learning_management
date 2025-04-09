@@ -2,8 +2,14 @@ import React from "react";
 import { TextField, Button, Box } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
 
 const Search = ({ searchTerm, setSearchTerm, onAddClick }) => {
+  const navigate = useNavigate();
+
+  const handleAddClick = () => {
+    navigate("/faculty")
+  }
   return (
 
     <Box
@@ -26,7 +32,7 @@ const Search = ({ searchTerm, setSearchTerm, onAddClick }) => {
         className="search"
       />
       <Box className="buttonContainer">
-        <Button variant="contained" color="primary" className="primary_button" startIcon={<AddIcon/>}onClick={onAddClick}>
+        <Button variant="contained" color="primary" className="primary_button" startIcon={<AddIcon/>}onClick={handleAddClick}>
         Add New
         </Button>
       </Box>

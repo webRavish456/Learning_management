@@ -15,6 +15,13 @@ import LayoutTimeTable from "./Layout/LayoutTimeTable";
 import LayoutAllStudents from "./Layout/LayoutAllStudents";  //AllStudent
 import LayoutCertificates from "./Layout/LayoutCertificates";  //Certificates
 // import LayoutCertificates from "./Layout/LayoutCertificates";
+import LayoutResult from "./Layout/LayoutResult"
+import Student from "./Student/Student";
+import LayoutBranchList from "./Layout/LayoutBranchList";
+import LayoutScheduling from "./Layout/LayoutScheduling";
+import LayoutCreateFaculty from "./Layout/LayoutCreateFaculty";
+import LayoutViewFaculty from "./Layout/LayoutViewFaculty";
+import LayoutEditFaculty from "./Layout/LayoutEditFaculty";
 function App() {
   return (
     <BrowserRouter>
@@ -35,6 +42,19 @@ function App() {
         <Route path="/scheduling/time-table" element={<LayoutTimeTable />} />
         {/* <Route path="/student/all-students" element={<LayoutAllStudents />} /> */}
 
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/" element={<LayoutDashboard />} />
+        <Route path="/forgot-password" element={<Forgot />} />
+        <Route path="/course/all-courses" element={<LayoutCourse />} />
+        <Route path="/student/all-students" element={<LayoutStudent />} />
+        <Route path="/assignment/all-assignments" element={<LayoutAssignment />} />
+        <Route path="/exam" element={<LayoutExam />} />
+        <Route path="/finance" element={<LayoutFinance />} />
+        <Route path="/teacher" element={<LayoutFaculty />} />
+        <Route path="/faculty" element={<LayoutCreateFaculty />} />
+        <Route path="/results" element={<LayoutResult />} />
+        <Route path="/viewfaculty" element={<LayoutViewFaculty />} />
+        <Route path="/editfaculty" element={<LayoutEditFaculty />} />
       </Routes>
     </BrowserRouter>
   );

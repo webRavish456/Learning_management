@@ -4,8 +4,9 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-//import CloseIcon from "@mui/icons-material/Close";
+import CloseIcon from "@mui/icons-material/Close";
 import Search from "../Search/Search";
+import { useNavigate } from "react-router-dom";
 
 import {
   Paper,
@@ -37,15 +38,18 @@ const Faculty=()=>
     const [editData, setEditData] = useState(false)
   
     const [deleteData, setDeleteData] = useState(false)
+   const navigate = useNavigate();
+   
+   
   
    const handleView = () =>
     {
-      setViewData(true)
+      navigate("/viewfaculty")
     }
   
   const handleEdit = () =>
   {
-     setEditData(true)
+    navigate("/editfaculty")
   }
   
   const handleDelete = () =>
@@ -56,33 +60,33 @@ const Faculty=()=>
 
 const columns = [
   { id: 'si', label: 'SI.No', flex:1, align:'center' },
-  { id: 'facultyname', label: 'Faculty Name', flex:1, align:'center' },
+  { id: 'teacherName', label: 'Teacher Name', flex:1, align:'center' },
   
   {id: 'email',label: 'Email',flex:1,align: 'center',},
-  {id: 'mobile',label: 'Mobile',flex:1,align: 'center',},
+  {id: 'mobileNo',label: 'Mobile No',flex:1,align: 'center',},
   
   {id: 'dob',label: 'DOB',flex:1, align: 'center',},
   { id: 'gender',label: 'Gender ', flex:1, align: 'center',},
  
   {id: 'address',label: 'Address ',flex:1,align: 'center',},
+  {id: 'joiningDate',label: 'Joining Date',flex:1,align: 'center', },
+
   {id: 'course',label: 'Course ', flex:1,align: 'center',},
-  
-  {id: 'joiningdate',label: 'Joining Date',flex:1,align: 'center', },
   {id: 'status',label: 'Status',flex:1,align: 'center', },
   {id: 'action',label: 'Action', flex:1,align: 'center', },
  
 ];
 
-function createData(si, facultyname, email, mobile, dob,gender, address, course, joiningdate,status ) {
-  return { si, facultyname, email, mobile, dob,gender, address, course, joiningdate,status, action: (
+function createData(si, teacherName, email, mobileNo, dob, gender, address, course, joiningDate,status ) {
+  return { si, teacherName, email, mobileNo, dob, gender, address, course, joiningDate,status, action: (
       <>
-      <IconButton style={{color:"#000", padding:"4px", transform:"scale(0.8)"}} onClick={handleView}>
+      <IconButton style={{color:"blue", padding:"4px", transform:"scale(0.8)"}} onClick={handleView}>
         <VisibilityIcon />
       </IconButton>
-      <IconButton style={{color:"#000", padding:"4px", transform:"scale(0.8)"}} onClick={handleEdit}>
+      <IconButton style={{color:"grey", padding:"4px", transform:"scale(0.8)"}} onClick={handleEdit}>
         <EditIcon />
       </IconButton>
-      <IconButton style={{color:"#000", padding:"4px", transform:"scale(0.8)"}} onClick={handleDelete}>
+      <IconButton style={{color:"red", padding:"4px", transform:"scale(0.8)"}} onClick={handleDelete}>
         <DeleteIcon />
       </IconButton>
       </>
@@ -92,7 +96,7 @@ function createData(si, facultyname, email, mobile, dob,gender, address, course,
 
 
 const rows = [
-  createData('1', 'Manisha', 'manisha@12', '676778888', '04-03-2025', 'Female', 'Gamharia','Full stack','05-06-2008' ,'Completed')
+  createData('1', 'Ravish', 'ravish@gmail.com', '1234567812', '17-12-2001', 'Male', 'Sakchi','Full stack','12-03-2025' ,'Active')
   // createData('2', 'Goldie', 'goldie@gmail.com', '1234567891', '2000-02-02', 'Female', 'JSR', '2023-01-02', 'Science', 'Inactive'),
   // createData('3', 'Nandani', 'nandani@gmail.com', '1234567892', '1999-03-03', 'Female', 'JSR', '2023-01-03', 'History', 'Active'),
   // createData('4', 'Manisha', 'manisha@gmail.com', '1234567893', '1998-04-04', 'Female', 'JSR', '2023-01-04', 'English', 'Inactive'),
@@ -136,7 +140,6 @@ const rows = [
 
 
   return (
-
     <Box className="container">
       <Search onAddClick={onAddClick}/>
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -148,7 +151,7 @@ const rows = [
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  style={{ minWidth: column.minWidth, fontWeight: 700 }}
                 >
                   {column.label}
                 </TableCell>
