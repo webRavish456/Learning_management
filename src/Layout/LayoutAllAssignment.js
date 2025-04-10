@@ -1,10 +1,10 @@
 import React from "react";
 import Header from "../Component/Header/Header";
 import Sidebar from "../Component/Sidebar/Sidebar";
-import BranchList from "../Branch/BranchList/BranchList";
+import AllAssignment from "../Assignment/AllAssignment/AllAssignment";
 
 
-const LayoutBranchList=()=>
+const LayoutAllAssignment=()=>
 {
     return (
         <>
@@ -13,8 +13,7 @@ const LayoutBranchList=()=>
             <Sidebar/>
             <div className="content">
             <Header className="header" />
-            {/* <Course className="dashboard" /> */}
-            <BranchList className="dashboard" />
+            <AllAssignment className="dashboard" />
             </div>
         </div>
         </div>
@@ -24,4 +23,4 @@ const LayoutBranchList=()=>
     )
 }
 
-export default LayoutBranchList;
+export default LayoutAllAssignment;

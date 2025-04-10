@@ -1,7 +1,7 @@
 import { Box, Button } from "@mui/material";
 import React from "react"
 
-const DeleteAllStudents = ({ handleClose, handleDelete }) => {
+const DeleteAllStudent = ({ handleClose, handleDelete }) => {
     return (
         <>
             <Box sx={{ height: '40px', width: '500px' }}>
@@ -9,7 +9,7 @@ const DeleteAllStudents = ({ handleClose, handleDelete }) => {
             </Box>
             <Box className="submit" sx={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', margin: '20px' }}>
                 <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
-                <Button onClick={handleDelete} style={{ color: "white", background: "red" }}>
+                <Button onClick={handleDelete} className="delete_button">
                     {/* <Button onClick={handleDelete} className="primary_button"> */}
                     Delete
                 </Button>
@@ -18,4 +18,4 @@ const DeleteAllStudents = ({ handleClose, handleDelete }) => {
     )
 }
 
-export default DeleteAllStudents;
+export default DeleteAllStudent;

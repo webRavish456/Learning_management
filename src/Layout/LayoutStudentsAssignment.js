@@ -1,10 +1,10 @@
 import React from "react";
 import Header from "../Component/Header/Header";
 import Sidebar from "../Component/Sidebar/Sidebar";
-import Assignment from "../Assignment/Assignment";
+import StudentsAssignment from "../Assignment/StudentsAssignment/StudentsAssignment";
 
 
-const LayoutAssignment=()=>
+const LayoutStudentsAssignment=()=>
 {
     return (
         <>
@@ -13,7 +13,7 @@ const LayoutAssignment=()=>
             <Sidebar/>
             <div className="content">
             <Header className="header" />
-            <Assignment className="dashboard" />
+            <StudentsAssignment className="dashboard" />
             </div>
         </div>
         </div>
@@ -23,4 +23,4 @@ const LayoutAssignment=()=>
     )
 }
 
-export default LayoutAssignment;
+export default LayoutStudentsAssignment;

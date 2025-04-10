@@ -145,8 +145,10 @@ color: #000000;
 }
 
 .logo {
-  height: 60px;
+  height: 80px;
+  width: auto;
   display: flex;
+  padding: 10px;
   justify-content: center;
   align-items: center;
   font-size: 22px;

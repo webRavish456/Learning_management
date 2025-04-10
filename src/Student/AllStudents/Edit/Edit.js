@@ -17,7 +17,7 @@ import {
     // duration,
 } from "@mui/material";
 
-const EditAllStudents = ({ handleUpdate, handleClose }) => {
+const EditAllStudent = ({ handleUpdate, handleClose }) => {
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
     const [formData, setFormData] = useState({
@@ -183,4 +183,4 @@ const EditAllStudents = ({ handleUpdate, handleClose }) => {
     )
 }
 
-export default EditAllStudents;
+export default EditAllStudent;

@@ -4,7 +4,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import CloseIcon from "@mui/icons-material/Close";
+// import CloseIcon from "@mui/icons-material/Close";
 
 
 
@@ -35,13 +35,13 @@ import {
     useMediaQuery,
 } from "@mui/material";
 import CommonDialog from "../../Component/CommonDialog/CommonDialog";
-import CreateCertificate from "./Create/Create";
-import ViewCertificates from "./View/View";
-import EditCertificate from "./Edit/Edit";
-import DeleteCertificate from "./Delete/Delete";
+import ViewDiscount from "./View/View";
+import CreateDiscount from "./Create/Create";
+import EditDiscount from "./Edit/Edit";
+import DeleteDiscount from "./Delete/Delete";
 import Search from "../../Search/Search";
 
-const Certificates = () => {
+const AllAssignment = () => {
 
     const [openData, setOpenData] = useState(false)
 
@@ -65,23 +65,46 @@ const Certificates = () => {
 
 
     const columns = [
-        { id: 'si', label: 'SI.No', flex: 1, align: 'center' },
-
-        { id: 'student_name', label: 'Student Name', flex: 1, align: 'center' },
-
-        { id: 'course_name', label: 'Course Name', flex: 1, align: 'center', },
-
-        { id: 'duration', label: 'Duration', flex: 1, align: 'center', },
-
-        { id: 'certificate', label: 'Certificate', flex: 1, align: 'center', },
-
-        { id: 'action', label: 'Action', flex: 1, align: 'center', },
-
+        { id: 'si',
+             label: 'SI.No',
+              flex: 1, 
+              align: 'center' },
+        { 
+            id: 'assignment_title',
+             label: 'Assignment Title',
+              flex: 1,
+               align: 'center'
+             },
+        {
+            id: 'teacher',
+            label: 'Teacher',
+            flex: 1,
+            align: 'center',
+        },
+        {
+            id: 'due_date',
+            label: 'Due Date',
+            flex: 1,
+            align: 'center',
+        },
+        {
+            id: 'status',
+            label: 'Status',
+            flex: 1,
+            align: 'center',
+        },
+        {
+            id: 'action',
+            label: 'Action',
+            flex: 1,
+            align: 'center',
+        },
     ];
 
-    function createData(si, student_name, course_name, duration, certificate) {
+    function createData(si, assignment_title, teacher, due_date, status) {
         return {
-            si, student_name, course_name, duration, certificate, action: (
+            si, assignment_title, teacher, due_date,status, action: (
+
                 <>
                     <IconButton style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }} onClick={handleView}>
                         <VisibilityIcon />
@@ -99,7 +122,7 @@ const Certificates = () => {
 
 
     const rows = [
-        createData('1', 'Nandini', 'Full Stack', '6-Month', 'Completed')
+        createData('1', 'Learning Management', 'Ravish', '12-04-25', 'Active')
         // createData('2', 'Goldie', 'goldie@gmail.com', '1234567891', '2000-02-02', 'Female', 'JSR', '2023-01-02', 'Science', 'Inactive'),
         // createData('3', 'Nandani', 'nandani@gmail.com', '1234567892', '1999-03-03', 'Female', 'JSR', '2023-01-03', 'History', 'Active'),
         // createData('4', 'Manisha', 'manisha@gmail.com', '1234567893', '1998-04-04', 'Female', 'JSR', '2023-01-04', 'English', 'Inactive'),
@@ -200,14 +223,14 @@ const Certificates = () => {
                 open={openData || viewData || editData || deleteData}
                 onClose={handleClose}
                 dialogTitle={<>
-                    {openData ? "Create New Certificate" : viewData ? "View Certificate " : editData ? "Edit Certificate" : deleteData ? "Delete Certificate" : null}
+                    {openData ? "Create New Time Table List" : viewData ? "View The Time Table List" : editData ? "Edit Time Table List" : deleteData ? "Delete Time Table List" : null}
                 </>}
 
                 dialogContent={
-                    openData ? <CreateCertificate handleSubmit={handleSubmit} handleClose={handleClose} /> :
-                        viewData ? <ViewCertificates /> :
-                            editData ? <EditCertificate handleUpdate={handleUpdate} handleClose={handleClose} /> :
-                                deleteData ? <DeleteCertificate handleDelete={handleDelete} handleClose={handleClose} /> : null
+                    openData ? <CreateDiscount handleSubmit={handleSubmit} handleClose={handleClose} /> :
+                        viewData ? <ViewDiscount /> :
+                            editData ? <EditDiscount handleUpdate={handleUpdate} handleClose={handleClose} /> :
+                                deleteData ? <DeleteDiscount handleDelete={handleDelete} handleClose={handleClose} /> : null
 
                 }
 
@@ -217,4 +240,4 @@ const Certificates = () => {
     );
 }
 
-export default Certificates;
+export default AllAssignment;

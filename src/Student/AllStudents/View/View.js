@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Grid, useMediaQuery } from "@mui/material";
 
-const ViewExam = () => {
+const ViewAllStudent = () => {
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
     return (
@@ -85,4 +85,4 @@ const ViewExam = () => {
     )
 }
 
-export default ViewExam;
+export default ViewAllStudent;

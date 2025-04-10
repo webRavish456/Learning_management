@@ -4,7 +4,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import CloseIcon from "@mui/icons-material/Close";
+// import CloseIcon from "@mui/icons-material/Close";
 
 
 
@@ -35,10 +35,10 @@ import {
     useMediaQuery,
 } from "@mui/material";
 import CommonDialog from "../../Component/CommonDialog/CommonDialog";
-import ViewDiscount from "./View/View";
-import CreateDiscount from "./Create/Create";
-import EditDiscount from "./Edit/Edit";
-import DeleteDiscount from "./Delete/Delete";
+import ViewTimeTable from "./View/View";
+import CreateTimeTable from "./Create/Create";
+import EditTimeTable from "./Edit/Edit";
+import DeleteTimeTable from "./Delete/Delete";
 import Search from "../../Search/Search";
 
 const TimeTable = () => {
@@ -232,10 +232,10 @@ const TimeTable = () => {
                 </>}
 
                 dialogContent={
-                    openData ? <CreateDiscount handleSubmit={handleSubmit} handleClose={handleClose} /> :
-                        viewData ? <ViewDiscount /> :
-                            editData ? <EditDiscount handleUpdate={handleUpdate} handleClose={handleClose} /> :
-                                deleteData ? <DeleteDiscount handleDelete={handleDelete} handleClose={handleClose} /> : null
+                    openData ? <CreateTimeTable handleSubmit={handleSubmit} handleClose={handleClose} /> :
+                        viewData ? <ViewTimeTable /> :
+                            editData ? <EditTimeTable handleUpdate={handleUpdate} handleClose={handleClose} /> :
+                                deleteData ? <DeleteTimeTable handleDelete={handleDelete} handleClose={handleClose} /> : null
 
                 }
 

@@ -1,18 +1,7 @@
 import React, {useState} from "react"
-import {
-    TextField,
-    MenuItem,
-    Select,
-    FormControl,
-    InputLabel,
-    Grid,
-    useMediaQuery,
-    Button,
-    Box,
-    duration,
-  } from "@mui/material";
+import {TextField,MenuItem,Select,FormControl,InputLabel,Grid,useMediaQuery,Box,Button,} from "@mui/material";
 
-const CreateExam =({handleSubmit, handleClose})=>
+const EditAllAssignment =({handleUpdate, handleClose})=>
 {
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
@@ -31,17 +20,17 @@ const CreateExam =({handleSubmit, handleClose})=>
 
      return (
         <>
-             <Grid container columnSpacing={2}>
+            <Grid container columnSpacing={2}>
 
             <Grid item xs={12} sm={isSmScreen?12:6} md={6}>
 
             <TextField
             label={
             <>
-            Assignment Title<span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+               Assignment<span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
             </>
             }
-            name="assignmenttitle"
+            name="assignment"
             value={formData.examName}
             onChange={handleChange}
             fullWidth
@@ -54,7 +43,7 @@ const CreateExam =({handleSubmit, handleClose})=>
             <TextField
             label={
             <>
-                Description <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                Description  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
             </>
             }
             name="description"
@@ -70,10 +59,10 @@ const CreateExam =({handleSubmit, handleClose})=>
             <TextField
             label={
             <>
-                Course<span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                Faculty Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
             </>
             }
-            name="course"
+            name="facultyname"
             value={formData.facultyName}
             onChange={handleChange}
             fullWidth
@@ -85,10 +74,10 @@ const CreateExam =({handleSubmit, handleClose})=>
             <TextField
             label={
             <>
-                        Faculty: <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+               Course <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
             </>
             }
-            name="faculty"
+            name="course"
             value={formData.examDate}
             onChange={handleChange}
             fullWidth
@@ -96,11 +85,11 @@ const CreateExam =({handleSubmit, handleClose})=>
             />
             </Grid>
 
-            <Grid item xs={12} sm={12} md={12}>
+            <Grid item xs={12} sm={isSmScreen?12:6} md={6}>
             <TextField
             label={
             <>
-                Due Date <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+            Due Date <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
             </>
             }
             name="duedate"
@@ -111,12 +100,22 @@ const CreateExam =({handleSubmit, handleClose})=>
             />
             </Grid>
 
+            <Grid item xs={12} sm={isSmScreen?12:6} md={6}>
+            <FormControl fullWidth margin="normal">
+            <InputLabel>Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
+            <Select name="Status" value={formData.status} onChange={handleChange}>
+            <MenuItem value="active">Scheduled</MenuItem>
+            <MenuItem value="inactive">Completed</MenuItem>
+            <MenuItem value="upcoming">Cancelled</MenuItem>
+            </Select>
+            </FormControl>
+            </Grid>
             </Grid>
 
             <Box className="submit">
             <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
-            <Button onClick={handleSubmit} className="primary_button">
-             Submit
+            <Button onClick={handleUpdate} className="primary_button">
+             Update
             </Button>
             </Box>
 
@@ -124,4 +123,4 @@ const CreateExam =({handleSubmit, handleClose})=>
      )
 }
 
-export default CreateExam;
+export default EditAllAssignment;

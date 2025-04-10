@@ -3,25 +3,18 @@ import SignIn from "./Auth/SignIn";
 import Forgot from "./Auth/Forgot";
 import LayoutDashboard from "./Layout/LayoutDashboard";
 import LayoutCourse from "./Layout/LayoutCourse";
-// import LayoutStudent from "./Layout/LayoutStudent";
-import LayoutAssignment from "./Layout/LayoutAssignment";
+import LayoutAssignment from "./Layout/LayoutAllAssignment";   //edit
 import LayoutExam from "./Layout/LayoutExam";
-import LayoutFinance from "./Layout/LayoutFinance";
 import LayoutFaculty from "./Layout/LayoutFaculty";
-// import Student from "./Student/Student";
-// import LayoutBranchList from "./Layout/LayoutBranchList";
-// import LayoutScheduling from "./Layout/LayoutScheduling";
 import LayoutTimeTable from "./Layout/LayoutTimeTable";
 import LayoutAllStudents from "./Layout/LayoutAllStudents";  //AllStudent
 import LayoutCertificates from "./Layout/LayoutCertificates";  //Certificates
-// import LayoutCertificates from "./Layout/LayoutCertificates";
 import LayoutResult from "./Layout/LayoutResult"
-import Student from "./Student/Student";
-import LayoutBranchList from "./Layout/LayoutBranchList";
-import LayoutScheduling from "./Layout/LayoutScheduling";
+import LayoutBranchList from "./Layout/LayoutBranchList";  //edit
 import LayoutCreateFaculty from "./Layout/LayoutCreateFaculty";
 import LayoutViewFaculty from "./Layout/LayoutViewFaculty";
 import LayoutEditFaculty from "./Layout/LayoutEditFaculty";
+import LayoutStudentsAssignment from "./Layout/LayoutStudentsAssignment";
 function App() {
   return (
     <BrowserRouter>
@@ -33,24 +26,13 @@ function App() {
         <Route path="/course/all-courses" element={<LayoutCourse />} />
         {/* <Route path="/student/certificates" element={<LayoutCertificates />} /> */}
         <Route path="/assignment/all-assignments" element={<LayoutAssignment />} />
+        <Route path="/assignment/students-assignment" element={<LayoutStudentsAssignment />} />
         <Route path="/student/all-students" element={<LayoutAllStudents />} />
         <Route path="/student/certificates" element={<LayoutCertificates />} />
         <Route path="/exam" element={<LayoutExam />} />
-        <Route path="/finance" element={<LayoutFinance />} />
         <Route path="/teacher" element={<LayoutFaculty />} />
-        {/* <Route path="/scheduling" element={<LayoutScheduling />} /> */}
+        <Route path="/branch/branch-list" element={<LayoutBranchList/>} />   
         <Route path="/scheduling/time-table" element={<LayoutTimeTable />} />
-        {/* <Route path="/student/all-students" element={<LayoutAllStudents />} /> */}
-
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/" element={<LayoutDashboard />} />
-        <Route path="/forgot-password" element={<Forgot />} />
-        <Route path="/course/all-courses" element={<LayoutCourse />} />
-        <Route path="/student/all-students" element={<LayoutStudent />} />
-        <Route path="/assignment/all-assignments" element={<LayoutAssignment />} />
-        <Route path="/exam" element={<LayoutExam />} />
-        <Route path="/finance" element={<LayoutFinance />} />
-        <Route path="/teacher" element={<LayoutFaculty />} />
         <Route path="/faculty" element={<LayoutCreateFaculty />} />
         <Route path="/results" element={<LayoutResult />} />
         <Route path="/viewfaculty" element={<LayoutViewFaculty />} />
