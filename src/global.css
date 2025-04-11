@@ -144,13 +144,15 @@ color: #000000;
 }
 
 .logo {
-  height: 60px;
+  height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 22px;
   cursor: pointer;
   font-weight: bold;
+  width: auto;
+  padding-bottom: 10px;
 }
 
 .hotelName {
@@ -291,9 +293,4 @@ width: fit-content !important;
 
 .MuiDialog-paper {
    max-width: 740px !important;
-}
-.logo{
-  display:flex;
-  justify-content: center;
-  width:100%;
 }

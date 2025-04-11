@@ -47,7 +47,10 @@ const CreateFaculty = ({ handleSubmit, handleClose }) => {
 
     return (
         <>
-            <Grid container spacing={3} style={{ padding: "20px" }}>
+            <Typography variant="h5" gutterBottom sx={{ marginLeft: 2, marginTop: 4 }}>
+                Create New Teacher
+            </Typography>
+            <Grid container spacing={6} style={{ padding: "20px" }}>
                 {/* Personal Details */}
                 <Grid item xs={6}>
                     <Box
@@ -81,18 +84,19 @@ const CreateFaculty = ({ handleSubmit, handleClose }) => {
                                     margin="normal"
                                 />
                                 <FormControl component="fieldset">
-                                    <FormLabel component="legend">Gender</FormLabel>
+                                    <FormLabel component="legend" sx={{ marginLeft: 2 }}>Gender</FormLabel>
                                     <RadioGroup
                                         name="gender"
                                         value={formData.gender}
                                         onChange={handleChange}
                                         row
                                     >
-                                        <FormControlLabel value="male" control={<Radio />} label="Male" />
-                                        <FormControlLabel value="female" control={<Radio />} label="Female" />
+                                        <FormControlLabel value="male" control={<Radio sx={{ marginLeft: 2 }} />} label="Male" />
+                                        <FormControlLabel value="female" control={<Radio sx={{ marginLeft: 2 }} />} label="Female" />
                                     </RadioGroup>
                                 </FormControl>
                                 <TextField
+                                    sx={{ marginTop: 4 }}
                                     label="Date of Birth"
                                     name="dob"
                                     type="date"
@@ -192,38 +196,61 @@ const CreateFaculty = ({ handleSubmit, handleClose }) => {
                         <Typography variant="h6" gutterBottom>
                             Document Details
                         </Typography>
-                        <TextField
-                            label="Resume Certificate"
-                            name="resumeCertificate"
-                            type="file"
-                            InputLabelProps={{ shrink: true }}
-                            fullWidth
-                            margin="normal"
-                        />
-                        <TextField
-                            label="Highest Qualification Certificate"
-                            name="highestQualificationCertificate"
-                            type="file"
-                            InputLabelProps={{ shrink: true }}
-                            fullWidth
-                            margin="normal"
-                        />
-                        <TextField
-                            label="Pan Card"
-                            name="panCard"
-                            type="file"
-                            InputLabelProps={{ shrink: true }}
-                            fullWidth
-                            margin="normal"
-                        />
-                        <TextField
-                            label="Aadhar Card"
-                            name="aadharCard"
-                            type="file"
-                            InputLabelProps={{ shrink: true }}
-                            fullWidth
-                            margin="normal"
-                        />
+                        {/* <Typography variant="subtitle2" gutterBottom>
+                            Accepted formats: pdf, jpeg, jpg, png | Minimum file size: 100 KB
+                        </Typography> */}
+                        <Box marginBottom={2}>
+                            <TextField
+                                label="Certificate"
+                                name="certificate"
+                                type="file"
+                                InputLabelProps={{ shrink: true }}
+                                fullWidth
+                                margin="normal"
+                            />
+                            <Typography variant="body2">
+                                View existing document: <a href="certificate.pdf" target="_blank" rel="noopener noreferrer">Certificate.pdf</a>
+                            </Typography>
+                        </Box>
+                        <Box marginBottom={2}>
+                            <TextField
+                                label="Resume"
+                                name="resume"
+                                type="file"
+                                InputLabelProps={{ shrink: true }}
+                                fullWidth
+                                margin="normal"
+                            />
+                            <Typography variant="body2">
+                                View existing document: <a href="resume.pdf" target="_blank" rel="noopener noreferrer">Resume.pdf</a>
+                            </Typography>
+                        </Box>
+                        <Box marginBottom={2}>
+                            <TextField
+                                label="Aadhar Document"
+                                name="aadharDocument"
+                                type="file"
+                                InputLabelProps={{ shrink: true }}
+                                fullWidth
+                                margin="normal"
+                            />
+                            <Typography variant="body2">
+                                View existing document: <a href="aadhar.pdf" target="_blank" rel="noopener noreferrer">Aadhar.pdf</a>
+                            </Typography>
+                        </Box>
+                        <Box marginBottom={2}>
+                            <TextField
+                                label="PAN Card Document"
+                                name="panCardDocument"
+                                type="file"
+                                InputLabelProps={{ shrink: true }}
+                                fullWidth
+                                margin="normal"
+                            />
+                            <Typography variant="body2">
+                                View existing document: <a href="panCard.pdf" target="_blank" rel="noopener noreferrer">PANCard.pdf</a>
+                            </Typography>
+                        </Box>
                     </Box>
                 </Grid>
 
@@ -233,7 +260,7 @@ const CreateFaculty = ({ handleSubmit, handleClose }) => {
                             Bank Details
                         </Typography>
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12}>
                                 <TextField
                                     label="Account Holder Name"
                                     name="accountHolderName"
@@ -259,7 +286,7 @@ const CreateFaculty = ({ handleSubmit, handleClose }) => {
                                     margin="normal"
                                 />
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12}>
                                 <TextField
                                     label="IFSC Code"
                                     name="ifscCode"

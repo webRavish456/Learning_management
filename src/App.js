@@ -1,40 +1,45 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignIn from "./Auth/SignIn";
 import Forgot from "./Auth/Forgot";
-import LayoutDashboard from "./Layout/LayoutDashboard";
-import LayoutCourse from "./Layout/LayoutCourse";
-import LayoutStudent from "./Layout/LayoutStudent";
-import LayoutAssignment from "./Layout/LayoutAssignment";
-import LayoutExam from "./Layout/LayoutExam";
-import LayoutFinance from "./Layout/LayoutFinance";
-import LayoutFaculty from "./Layout/LayoutFaculty";
-import LayoutResult from "./Layout/LayoutResult"
+import Dashboard from "./Dashboard/Dashboard";
+import Course from "./Course/Course";
 import Student from "./Student/Student";
-import LayoutBranchList from "./Layout/LayoutBranchList";
-import LayoutScheduling from "./Layout/LayoutScheduling";
-import LayoutCreateFaculty from "./Layout/LayoutCreateFaculty";
-import LayoutViewFaculty from "./Layout/LayoutViewFaculty";
-import LayoutEditFaculty from "./Layout/LayoutEditFaculty";
+import Assignment from "./Assignment/Assignment";
+import Exam from "./Exam/Exam";
+import Finance from "./Finance/Finance";
+import Faculty from "./Faculty/Faculty";
+import Result from "./Result/Result";
+// import BranchList from "./Layout/LayoutBranchList";
+// import Scheduling from "./Layout/LayoutScheduling";
+import CreateFaculty from "./Faculty/Create/Create";
+import ViewFaculty from "./Faculty/View/View";
+import EditFaculty from "./Faculty/Edit/Edit";
+import LayoutMain from "./Layout/LayoutMain";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
 
         <Route path="/sign-in" element={<SignIn />}/>
-        <Route path="/" element={<LayoutDashboard/>}/>
+        <Route path="/" element={<LayoutMain />}>
+        <Route path="dashboard" element={<Dashboard/>}/>
         <Route path="/forgot-password" element={<Forgot />}/>
-        <Route path="/course/all-courses" element={<LayoutCourse/>}/>
-        <Route path="/student/all-students" element={<LayoutStudent/>}/>
-        <Route path="/assignment/all-assignments" element={<LayoutAssignment/>}/>
-        <Route path="/exam" element={<LayoutExam/>}/>
-        <Route path="/finance" element={<LayoutFinance/>}/>
-        <Route path="/teacher" element={<LayoutFaculty/>}/>
-        <Route path="/faculty" element={<LayoutCreateFaculty/>}/>
-        <Route path="/results" element={<LayoutResult/>}/>
-        <Route path="/viewfaculty" element={<LayoutViewFaculty/>}/>
-        <Route path="/editfaculty" element={<LayoutEditFaculty/>}/>
+        <Route path="course/all-courses" element={<Course/>}/>
+        <Route path="student/all-students" element={<Student/>}/>
+        <Route path="assignment/all-assignments" element={<Assignment/>}/>
+        <Route path="exam" element={<Exam/>}/>
+        <Route path="finance" element={<Finance/>}/>
+        <Route path="teacher" element={<Faculty/>}/>
+        <Route path="faculty" element={<CreateFaculty/>}/>
+        <Route path="results" element={<Result/>}/>
+        <Route path="viewfaculty" element={<ViewFaculty/>}/>
+        <Route path="editfaculty" element={<EditFaculty/>}/>
+        </Route>
       </Routes>
+
     </BrowserRouter>
+
+    
   );
 }
 
