@@ -167,7 +167,7 @@ const AllAssignment = () => {
     return (
 
         <Box className="container">
-            <Search onAddClick={onAddClick} />
+            <Search onAddClick={onAddClick} buttonText="Add Assignment" />
             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                 <TableContainer sx={{ maxHeight: 440 }}>
 
@@ -223,7 +223,7 @@ const AllAssignment = () => {
                 open={openData || viewData || editData || deleteData}
                 onClose={handleClose}
                 dialogTitle={<>
-                    {openData ? "Create New Time Table List" : viewData ? "View The Time Table List" : editData ? "Edit Time Table List" : deleteData ? "Delete Time Table List" : null}
+                    {openData ? "Create New Assignment" : viewData ? "View Assignment" : editData ? "Edit Assignment" : deleteData ? "Delete Assignment" : null}
                 </>}
 
                 dialogContent={

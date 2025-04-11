@@ -48,7 +48,7 @@ const CreateFaculty = ({ handleSubmit, handleClose }) => {
     return (
         <>
             <Typography variant="h5" gutterBottom sx={{ marginLeft: 2, marginTop: 4 }}>
-                Create New Teacher
+                Edit Teacher Details
             </Typography>
             <Grid container spacing={6} style={{ padding: "20px" }}>
                 {/* Personal Details */}

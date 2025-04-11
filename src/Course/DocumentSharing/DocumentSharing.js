@@ -4,41 +4,29 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import CloseIcon from "@mui/icons-material/Close";
-import Search from "../Search/Search";
 
 import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow ,
-  Box,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  TextField,
-  IconButton,
-  Button,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  Grid,
-  useMediaQuery,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TablePagination,
+    TableRow ,
+    Box,
+    IconButton,
+    
 } from "@mui/material";
-import CommonDialog from "../Component/CommonDialog/CommonDialog";
-import ViewExam from "./View/View";
-import CreateExam from "./Create/Create";
-import EditExam from "./Edit/Edit";
-import DeleteExam from "./Delete/Delete";
 
-const Exam=()=>
+import CommonDialog from "../../Component/CommonDialog/CommonDialog";
+import Search from "../../Search/Search";
+import CreateDocumentSharing from "./Create/Create";
+import ViewDocumentSharing from "./View/View";
+import EditDocumentSharing from "./Edit/Edit";
+import DeleteDocumentSharing from "./Delete/Delete";
+
+const DocumentSharing=()=>
   {
   
     const [openData, setOpenData] = useState(false)
@@ -67,49 +55,31 @@ const Exam=()=>
 
 const columns = [
   { id: 'si', label: 'SI.No', flex:1, align:'center' },
-  { id: 'examname', label: 'Exam Name', flex:1, align:'center' },
   {
-    id: 'coursename',
-    label: 'Course Name',
+    id: 'coursetitle',
+    label: 'Course Title',
     flex:1,
     align: 'center',
   },
   {
-    id: 'facultyname',
-    label: 'Faculty Name',
+    id: 'coursedescription',
+    label: 'Course Description',
     flex:1,
     align: 'center',
   },
   {
-    id: 'examdate',
-    label: 'Exam Date ',
+    id: 'teacher',
+    label: 'Teacher ',
     flex:1,
     align: 'center',
   },
   {
-    id: 'duration',
-    label: 'Duration ',
+    id: 'document',
+    label: 'Document ',
     flex:1,
     align: 'center',
   },
-  {
-    id: 'testtype',
-    label: 'Test Type',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'totalmarks',
-    label: 'Total Marks ',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'status',
-    label: 'Status',
-    flex:1,
-    align: 'center',
-  },
+
   {
     id: 'action',
     label: 'Action',
@@ -118,8 +88,8 @@ const columns = [
   },
 ];
 
-function createData(si, examname, coursename, facultyname, examdate, duration, testtype, totalmarks, status ) {
-  return { si, examname, coursename, facultyname, examdate, duration, testtype, totalmarks, status, action: (
+function createData(si,coursetitle,coursedescription,teacher,document, ) {
+  return { si,coursetitle,coursedescription,teacher,document , action: (
       <>
       <IconButton
           style={{ color: "blue", padding: "4px", transform: "scale(0.8)" }}
@@ -146,7 +116,7 @@ function createData(si, examname, coursename, facultyname, examdate, duration, t
 
 
 const rows = [
-  createData('1', 'Sem', 'Frontend', 'ravish', '04-03-2025', '1 hour', 'Quiz', '200', 'Completed')
+  createData('1', 'UG', 'Bachelor Of Computer Application', 'Ravish Sir','Schedule')
   // createData('2', 'Goldie', 'goldie@gmail.com', '1234567891', '2000-02-02', 'Female', 'JSR', '2023-01-02', 'Science', 'Inactive'),
   // createData('3', 'Nandani', 'nandani@gmail.com', '1234567892', '1999-03-03', 'Female', 'JSR', '2023-01-03', 'History', 'Active'),
   // createData('4', 'Manisha', 'manisha@gmail.com', '1234567893', '1998-04-04', 'Female', 'JSR', '2023-01-04', 'English', 'Inactive'),
@@ -192,7 +162,8 @@ const rows = [
   return (
 
     <Box className="container">
-      <Search onAddClick={onAddClick} buttonText="Add Exam"/>
+      {/* <Box>Document-Sharing</Box> */}
+      <Search onAddClick={onAddClick } buttonText=' Add New Document'/>
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
@@ -202,7 +173,7 @@ const rows = [
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth, fontWeight:700}}
+                  style={{ minWidth: column.minWidth, fontWeight:700 }}
                 >
                   {column.label}
                 </TableCell>
@@ -242,18 +213,18 @@ const rows = [
       />
     </Paper>
 
-    <CommonDialog 
+    <CommonDialog
       open={openData || viewData || editData || deleteData} 
       onClose={handleClose}
       dialogTitle={ <>
-         {openData? "Exam Form" : viewData ? "View Exam Details": editData?"Edit Exam Details":deleteData?"Delete Exam Details":null}
+         {openData? "DocumentSharing" : viewData ? "View DocumentSharing Details ": editData?"Edit DocumentSharing Details":deleteData?"Delete DocumentSharing Details":null}
       </>}
       
       dialogContent = {
-         openData ? <CreateExam handleSubmit={handleSubmit} handleClose={handleClose} /> :
-          viewData ? <ViewExam /> : 
-         editData ? <EditExam handleUpdate={handleUpdate} handleClose={handleClose} /> : 
-         deleteData? <DeleteExam handleDelete={handleDelete} handleClose={handleClose} />:null
+         openData ? <CreateDocumentSharing handleSubmit={handleSubmit} handleClose={handleClose} /> :
+          viewData ? <ViewDocumentSharing /> : 
+         editData ? <EditDocumentSharing handleUpdate={handleUpdate} handleClose={handleClose} /> : 
+         deleteData? <DeleteDocumentSharing handleDelete={handleDelete} handleClose={handleClose} />:null
         
       }
 
@@ -263,4 +234,4 @@ const rows = [
   );
 }
 
-export default Exam;
+export default DocumentSharing;
