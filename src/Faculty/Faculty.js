@@ -117,7 +117,7 @@ const rows = [
 
   const onAddClick =()=>
     {
-      setOpenData(true)
+       navigate("/faculty")
     }
 
     const handleClose = () => {
@@ -191,23 +191,7 @@ const rows = [
       />
     </Paper>
 
-    <CommonDialog 
-      open={openData || viewData || editData || deleteData} 
-      onClose={handleClose}
-      dialogTitle={ <>
-         {openData? "Create New Teacher" : viewData ? "View Teacher Details": editData?"Edit Teacher Details":deleteData?"Delete Teacher Details":null}
-      </>}
-      
-      dialogContent = {
-         openData ? <CreateFaculty handleSubmit={handleSubmit} handleClose={handleClose} /> :
-          viewData ? <ViewFaculty /> : 
-         editData ? <EditFaculty handleUpdate={handleUpdate} handleClose={handleClose} /> : 
-         deleteData? <DeleteFaculty handleDelete={handleDelete} handleClose={handleClose} />:null
-        
-      }
-
-      />
-
+   
     </Box>
   );
 }
