@@ -5,24 +5,11 @@ const Menuitems = [
         label: "Dashboard",
         href: "/",
     },
-   
-    {
-      icon: '/sidebar/branch.png',
-      label: "BranchList",
-      href: "/branchlist",
-  },
- 
   
   {
     icon: '/sidebar/branch.png',
     label: "Branch",
-    href: "/branch/branch-list",
-    item : [
-      {
-      label: "Branch List",
-      href : "/branch/branch-list"
-    }
-    ]
+    href: "/branch",
   },
    {
     icon: '/sidebar/course.png',
@@ -63,12 +50,7 @@ const Menuitems = [
       icon: "/sidebar/assignments.png",
       label: "Scheduling",
       href: "/scheduling",
-      item: [
-        {
-          label: "Time Table",
-          href: "/scheduling/time-table"
-        },
-      ]
+      
     },
 
   {

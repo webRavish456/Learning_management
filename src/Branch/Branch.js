@@ -4,44 +4,17 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import CloseIcon from "@mui/icons-material/Close";
+// import CloseIcon from "@mui/icons-material/Close";
+import {Paper,Table,TableBody,TableCell,TableContainer,TableHead,TablePagination,TableRow,Box, IconButton} from "@mui/material";
+import CommonDialog from "../Component/CommonDialog/CommonDialog";
+import ViewBranch from "./View/View";
+import CreateBranch from "./Create/Create";
+import EditBranch from "./Edit/Edit";
+import DeleteBranch from "./Delete/Delete";
+import Search from "../Search/Search";
 
 
-
-
-import {
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TablePagination,
-    TableRow,
-    Box,
-    Dialog,
-    DialogTitle,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    TextField,
-    IconButton,
-    Button,
-    MenuItem,
-    Select,
-    FormControl,
-    InputLabel,
-    Grid,
-    useMediaQuery,
-} from "@mui/material";
-import CommonDialog from "../../Component/CommonDialog/CommonDialog";
-import CreateCertificate from "./Create/Create";
-import ViewCertificates from "./View/View";
-import EditCertificate from "./Edit/Edit";
-import DeleteCertificate from "./Delete/Delete";
-import Search from "../../Search/Search";
-
-const Certificates = () => {
+const Branch = () => {
 
     const [openData, setOpenData] = useState(false)
 
@@ -66,22 +39,19 @@ const Certificates = () => {
 
     const columns = [
         { id: 'si', label: 'SI.No', flex: 1, align: 'center' },
-
-        { id: 'student_name', label: 'Student Name', flex: 1, align: 'center' },
-
-        { id: 'course_name', label: 'Course Name', flex: 1, align: 'center', },
-
-        { id: 'duration', label: 'Duration', flex: 1, align: 'center', },
-
-        { id: 'certificate', label: 'Certificate', flex: 1, align: 'center', },
-
-        { id: 'action', label: 'Action', flex: 1, align: 'center', },
-
+       
+        { id: 'branchname',label: 'Branch Name',flex: 1,align: 'center',},
+        { id: 'location', label: 'Location', flex: 1, align: 'center', },
+        
+        { id: 'status', label: 'Status', flex: 1, align: 'center',},
+        { id: 'action',label: 'Action',flex: 1,align: 'center',
+        },
     ];
 
-    function createData(si, student_name, course_name, duration, certificate) {
+    function createData(si, branchname, location,  status) {
         return {
-            si, student_name, course_name, duration, certificate, action: (
+            si, branchname, location,  status, action: (
+
                 <>
                     <IconButton style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }} onClick={handleView}>
                         <VisibilityIcon />
@@ -99,7 +69,7 @@ const Certificates = () => {
 
 
     const rows = [
-        createData('1', 'Nandini', 'Full Stack', '6-Month', 'Completed')
+        createData('1', 'Full stack', 'Gamharia',  'Active')
         // createData('2', 'Goldie', 'goldie@gmail.com', '1234567891', '2000-02-02', 'Female', 'JSR', '2023-01-02', 'Science', 'Inactive'),
         // createData('3', 'Nandani', 'nandani@gmail.com', '1234567892', '1999-03-03', 'Female', 'JSR', '2023-01-03', 'History', 'Active'),
         // createData('4', 'Manisha', 'manisha@gmail.com', '1234567893', '1998-04-04', 'Female', 'JSR', '2023-01-04', 'English', 'Inactive'),
@@ -139,12 +109,13 @@ const Certificates = () => {
         e.preventDefault();
         setEditData(false)
     }
+    
 
 
     return (
 
         <Box className="container">
-            <Search onAddClick={onAddClick} buttonText="Add Certificates" />
+            <Search onAddClick={onAddClick} buttonText='Add Branchlist' />
             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                 <TableContainer sx={{ maxHeight: 440 }}>
 
@@ -200,14 +171,14 @@ const Certificates = () => {
                 open={openData || viewData || editData || deleteData}
                 onClose={handleClose}
                 dialogTitle={<>
-                    {openData ? "Create New Certificate" : viewData ? "View Certificate " : editData ? "Edit Certificate" : deleteData ? "Delete Certificate" : null}
+                    {openData ? "Create New Branch " : viewData ? "View Branch " : editData ? "Edit Branch " : deleteData ? "Delete Branch " : null}
                 </>}
 
                 dialogContent={
-                    openData ? <CreateCertificate handleSubmit={handleSubmit} handleClose={handleClose} /> :
-                        viewData ? <ViewCertificates /> :
-                            editData ? <EditCertificate handleUpdate={handleUpdate} handleClose={handleClose} /> :
-                                deleteData ? <DeleteCertificate handleDelete={handleDelete} handleClose={handleClose} /> : null
+                    openData ? <CreateBranch handleSubmit={handleSubmit} handleClose={handleClose} /> :
+                        viewData ? <ViewBranch /> :
+                            editData ? <EditBranch handleUpdate={handleUpdate} handleClose={handleClose} /> :
+                                deleteData ? <DeleteBranch handleDelete={handleDelete} handleClose={handleClose} /> : null
 
                 }
 
@@ -217,4 +188,4 @@ const Certificates = () => {
     );
 }
 
-export default Certificates;
+export default Branch;

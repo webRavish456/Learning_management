@@ -1,7 +1,7 @@
 import { Box, Button } from "@mui/material";
 import React from "react"
 
-const DeleteCertificate = ({ handleClose, handleDelete }) => {
+const DeleteScheduling = ({ handleClose, handleDelete }) => {
     return (
         <>
             <Box sx={{ height: '40px', width: '500px' }}>
@@ -17,4 +17,4 @@ const DeleteCertificate = ({ handleClose, handleDelete }) => {
     )
 }
 
-export default DeleteCertificate;
+export default DeleteScheduling;

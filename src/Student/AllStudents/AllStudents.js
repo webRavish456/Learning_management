@@ -208,7 +208,7 @@ const rows = [
   return (
 
     <Box className="container">
-      <Search onAddClick={onAddClick}/>
+      <Search onAddClick={onAddClick} buttonText="Add Students"/>
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
@@ -262,7 +262,7 @@ const rows = [
       open={openData || viewData || editData || deleteData} 
       onClose={handleClose}
       dialogTitle={ <>
-         {openData? "Exam Form" : viewData ? "View Exam Details": editData?"Edit Exam Details":deleteData?"Delete Exam Details":null}
+         {openData? "Create Student" : viewData ? "View Student Details": editData?"Edit Student Details":deleteData?"Delete Student Details":null}
       </>}
       
       dialogContent = {
