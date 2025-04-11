@@ -1,9 +1,12 @@
 import React from "react";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 
 const ViewFaculty = () => {
   return (
     <div style={{ padding: "20px" }}>
+       <Typography variant="h5" gutterBottom >
+                    View Teacher Details
+                </Typography>
       <Grid container spacing={2}>
         {/* Personal Details Section */}
         <Grid item xs={12} md={6}>

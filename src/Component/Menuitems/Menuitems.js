@@ -1,9 +1,15 @@
 const Menuitems = [
     
-  {
-      icon: '/sidebar/dashboard.png',
-      label: "Dashboard",
-      href: "/dashboard",
+    {
+        icon: '/sidebar/dashboard.png',
+        label: "Dashboard",
+        href: "/",
+    },
+   
+    {
+      icon: '/sidebar/branch.png',
+      label: "BranchList",
+      href: "/branchlist",
   },
  
   
