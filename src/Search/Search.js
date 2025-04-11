@@ -5,11 +5,8 @@ import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 
 const Search = ({ searchTerm, setSearchTerm, onAddClick }) => {
-  const navigate = useNavigate();
 
-  const handleAddClick = () => {
-    navigate("/faculty")
-  }
+
   return (
 
     <Box
@@ -32,7 +29,7 @@ const Search = ({ searchTerm, setSearchTerm, onAddClick }) => {
         className="search"
       />
       <Box className="buttonContainer">
-        <Button variant="contained" color="primary" className="primary_button" startIcon={<AddIcon/>}onClick={handleAddClick}>
+        <Button variant="contained" color="primary" className="primary_button" startIcon={<AddIcon/>} onClick={onAddClick}>
         Add New
         </Button>
       </Box>
