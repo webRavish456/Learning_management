@@ -7,6 +7,7 @@ body{
 }
 .primary_button {
   text-transform: none !important;
+  /* background-color: red !important; */
   background-color: rgb(12, 12, 101) !important;
   color: #ffffff !important;
   padding: 8px 16px !important;
@@ -146,6 +147,7 @@ color: #000000;
 .logo {
   height: 80px;
   display: flex;
+  padding: 10px;
   justify-content: center;
   align-items: center;
   font-size: 22px;
