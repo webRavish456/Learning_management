@@ -13,6 +13,11 @@ body{
   padding: 8px 16px !important;
   cursor:pointer;
 }
+
+.login_btn {
+  width: 100%;
+}
+
 .secondary_button {
 text-transform: none !important;
 background-color: #ffffff !important;

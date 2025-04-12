@@ -17,12 +17,14 @@ import StudentAssignment from "./Assignment/StudentsAssignment/StudentsAssignmen
 import Scheduling from "./Scheduling/Scheduling";
 import CourseList from "./Course/CourseList/CourseList";
 import DocumentSharing from "./Course/DocumentSharing/DocumentSharing";
+
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
 
-        <Route path="/sign-in" element={<SignIn />}/>
+        <Route path="/login" element={<SignIn />}/>
         <Route path="/" element={<LayoutMain />}>
         <Route path="dashboard" element={<Dashboard/>}/>
         <Route path="/forgot-password" element={<Forgot />}/>
