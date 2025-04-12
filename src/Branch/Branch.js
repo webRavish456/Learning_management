@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
@@ -12,7 +12,7 @@ import CreateBranch from "./Create/Create";
 import EditBranch from "./Edit/Edit";
 import DeleteBranch from "./Delete/Delete";
 import Search from "../Search/Search";
-
+import Cookies from 'js-cookie';
 
 const Branch = () => {
 
@@ -23,6 +23,14 @@ const Branch = () => {
     const [editData, setEditData] = useState(false)
 
     const [deleteData, setDeleteData] = useState(false)
+
+    const token = Cookies.get('token');
+
+    const Base_url = process.env.REACT_APP_BASE_URL;
+
+    const [loading, setloading] =useState(true)
+    
+    const [rows, setRows] = useState([])
 
     const handleView = () => {
         setViewData(true)
@@ -36,8 +44,7 @@ const Branch = () => {
         setDeleteData(true)
     }
 
-
-    const columns = [
+      const columns = [
         { id: 'si', label: 'SI.No', flex: 1, align: 'center' },
        
         { id: 'branchname',label: 'Branch Name',flex: 1,align: 'center',},
@@ -48,18 +55,61 @@ const Branch = () => {
         },
     ];
 
-    function createData(si, branchname, location,  status) {
+    
+
+ useEffect(()=>
+  {
+
+     const fetchBranchData = async () => {
+
+      try {
+    
+        const response = await fetch(`${Base_url}/branch`, {
+         method: "GET",
+         headers: {
+            Authorization: `Bearer ${token}`, 
+           },
+      });
+    
+        const result = await response.text();
+        const res = JSON.parse(result);
+    
+        if (res.status === "success") {
+
+           setloading(false);
+
+           const formattedData = res.data.map((item, index) =>
+            createData(index+1, item, item.branchName, item.branchLocation, item.status)
+          );
+       
+          setRows(formattedData)
+        } 
+
+     } 
+        catch (error) {
+            console.error("Error fetching branch data:", error);
+        }
+    };
+         
+    if(loading)
+    {
+        fetchBranchData()
+    }
+
+ },[loading])
+
+    function createData(si, row, branchname, location,  status) {
         return {
-            si, branchname, location,  status, action: (
+            si, row, branchname, location,  status, action: (
 
                 <>
-                    <IconButton style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }} onClick={handleView}>
+                    <IconButton style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }} onClick={()=>handleView(row)}>
                         <VisibilityIcon />
                     </IconButton>
-                    <IconButton style={{ color: "#6b6666", padding: "4px", transform: "scale(0.8)" }} onClick={handleEdit}>
+                    <IconButton style={{ color: "#6b6666", padding: "4px", transform: "scale(0.8)" }} onClick={()=>handleEdit(row)}>
                         <EditIcon />
                     </IconButton>
-                    <IconButton style={{ color: "#e6130b", padding: "4px", transform: "scale(0.8)" }} onClick={handleDelete}>
+                    <IconButton style={{ color: "#e6130b", padding: "4px", transform: "scale(0.8)" }} onClick={()=>handleDelete(row)}>
                         <DeleteIcon />
                     </IconButton>
                 </>
@@ -67,14 +117,6 @@ const Branch = () => {
         };
     }
 
-
-    const rows = [
-        createData('1', 'Full stack', 'Gamharia',  'Active')
-        // createData('2', 'Goldie', 'goldie@gmail.com', '1234567891', '2000-02-02', 'Female', 'JSR', '2023-01-02', 'Science', 'Inactive'),
-        // createData('3', 'Nandani', 'nandani@gmail.com', '1234567892', '1999-03-03', 'Female', 'JSR', '2023-01-03', 'History', 'Active'),
-        // createData('4', 'Manisha', 'manisha@gmail.com', '1234567893', '1998-04-04', 'Female', 'JSR', '2023-01-04', 'English', 'Inactive'),
-        // createData('5', 'Aastha', 'aastha@gmail.com', '1234567894', '1997-05-05', 'Female', 'JSR', '2023-01-05', 'Computer Science', 'Active'),
-    ];
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
