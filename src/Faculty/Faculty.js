@@ -191,6 +191,20 @@ const rows = [
       />
     </Paper>
 
+    <CommonDialog 
+      open={deleteData} 
+      onClose={handleClose}
+      dialogTitle={ <>
+         {deleteData?"Delete Teacher Details":null}
+      </>}
+      
+      dialogContent = {
+         deleteData? <DeleteFaculty handleDelete={handleDelete} handleClose={handleClose} />:null
+        
+      }
+
+      />
+
    
     </Box>
   );

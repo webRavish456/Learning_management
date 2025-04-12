@@ -74,16 +74,8 @@ const ViewStudentsAssignment = () => {
 
                 </Grid>
 
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6} style={{ display: "flex" }}>
 
-                    <Grid item xs={6}>
-                        <Box className="pageTittle">Course</Box>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Box className="pageDescription">Full stack</Box>
-                    </Grid>
-
-                </Grid>
+                
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6} style={{ display: "flex" }}>
 
                     <Grid item xs={6}>

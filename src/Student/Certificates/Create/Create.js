@@ -50,18 +50,14 @@ const CreateCertificate = ({ handleSubmit, handleClose ,handleFileChange}) => {
 
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
 
-                    <TextField
-                        label={
-                            <>
-                                Course Name  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="courseName"
-                        value={formData.courseName}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
+                    <FormControl fullWidth margin="normal">
+                                            <InputLabel>Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
+                                            <Select name="courseName" value={formData.courseName} onChange={handleChange}>
+                                            <MenuItem value="BCA">BCA</MenuItem>
+                                            <MenuItem value="MCA">MCA</MenuItem>
+                                            <MenuItem value="MBA">BBA</MenuItem>
+                                            </Select>
+                                            </FormControl>
 
                 </Grid>
 
@@ -117,7 +113,7 @@ const CreateCertificate = ({ handleSubmit, handleClose ,handleFileChange}) => {
     />
 </Grid> */}
 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-    <TextField
+    {/* <TextField
 // label={
 //             <>
 //                 Certificate  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
@@ -128,16 +124,28 @@ const CreateCertificate = ({ handleSubmit, handleClose ,handleFileChange}) => {
         InputLabelProps={{ shrink: true }}
         name="certificateFile"
         onChange={handleFileChange}  // Handle file change event
-        accept="application/pdf,image/*"  // You can restrict to certain file types (e.g., pdf, images)
-        style={{ padding: '10px' }}
+        // accept="application/pdf,image/*"  // You can restrict to certain file types (e.g., pdf, images)
+        // style={{ padding: '10px' }}
         />
-    
+     */}
+     <TextField
+                                     label="Certificates"
+                                     name="certificates"
+                                     type="file"
+                                     InputLabelProps={{ shrink: true }}
+                                     fullWidth
+                                     margin="normal"
+                                 />
 </Grid>
 
                
             </Grid>
 
-            <Box className="submit" sx={{display:'flex',justifyContent:'flex-end',gap:'15px',margin:'20px'}}>
+            <Box className="submit" sx={{display: "flex",
+                        gap: 2,
+                        marginTop: 2,
+                        justifyContent: "flex-end",
+                        width: "100%",}}>
                 <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
                 <Button onClick={handleSubmit} className="primary_button">
                     Submit

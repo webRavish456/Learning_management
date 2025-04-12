@@ -34,34 +34,26 @@ const EditScheduling = ({ handleUpdate, handleClose }) => {
 
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
 
-                    <TextField
-                        label={
-                            <>
-                                Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="courseName"
-                        value={formData.courseName}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
+                   <FormControl fullWidth margin="normal">
+                                           <InputLabel>Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
+                                           <Select name="courseName" value={formData.courseName} onChange={handleChange}>
+                                           <MenuItem value="BCA">BCA</MenuItem>
+                                           <MenuItem value="MCA">MCA</MenuItem>
+                                           <MenuItem value="MBA">BBA</MenuItem>
+                                           </Select>
+                                           </FormControl>
                 </Grid>
 
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
 
-                    <TextField
-                        label={
-                            <>
-                                Teacher Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="teacherName"
-                        value={formData.teacherName}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
+                    <FormControl fullWidth margin="normal">
+                                            <InputLabel>Teacher Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
+                                            <Select name="teacherName" value={formData.teacherName} onChange={handleChange}>
+                                            <MenuItem value="BCA">Ravish Kumar</MenuItem>
+                                            <MenuItem value="MCA">Sanjoy</MenuItem>
+                                            <MenuItem value="MBA">Nikhil</MenuItem>
+                                            </Select>
+                                            </FormControl>
 
                 </Grid>
 

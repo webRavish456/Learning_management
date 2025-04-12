@@ -55,34 +55,28 @@ const EditStudentsAssignment = ({ handleUpdate, handleClose }) => {
                 </Grid>
 
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                    <TextField
-                        label={
-                            <>
-                                Faculty Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="facultyname"
-                        value={formData.facultyName}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                </Grid>
-
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                    <TextField
-                        label={
-                            <>
-                                Course <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="course"
-                        value={formData.examDate}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                </Grid>
+                     <FormControl fullWidth margin="normal">
+                                            <InputLabel>Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
+                                            <Select name="courseName" value={formData.courseName} onChange={handleChange}>
+                                            <MenuItem value="BCA">BCA</MenuItem>
+                                            <MenuItem value="MCA">MCA</MenuItem>
+                                            <MenuItem value="MBA">BBA</MenuItem>
+                                            </Select>
+                                            </FormControl>
+                    
+                                </Grid>
+                    
+                                <Grid item xs={12} sm={isSmScreen?12:6} md={6}>
+                                <FormControl fullWidth margin="normal">
+                                            <InputLabel>Teacher Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
+                                            <Select name="teacherName" value={formData.teacherName} onChange={handleChange}>
+                                            <MenuItem value="BCA">Ravish Kumar</MenuItem>
+                                            <MenuItem value="MCA">Sanjoy</MenuItem>
+                                            <MenuItem value="MBA">Nikhil</MenuItem>
+                                            </Select>
+                                            </FormControl>
+                    
+                                </Grid>
 
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
                     <TextField
@@ -111,7 +105,7 @@ const EditStudentsAssignment = ({ handleUpdate, handleClose }) => {
                 </Grid>
             </Grid>
 
-            <Box className="submit">
+            <Box className="submit" sx={{ display: "flex", gap: 1, justifyContent: "flex-end", marginTop: 2}}>
                 <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
                 <Button onClick={handleUpdate} className="primary_button">
                     Update

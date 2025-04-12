@@ -1,19 +1,19 @@
 import React, { useState } from "react"
 import {
     TextField,
-    // MenuItem,
-    // Select,
+    MenuItem,
+    Select,
     FormControl,
     FormControlLabel,
     Radio,
-    // FormGroup,
     FormLabel,
     RadioGroup,
-    // InputLabel,
+    InputLabel,
     Grid,
     useMediaQuery,
     Box,
     Button,
+    
     // duration,
 } from "@mui/material";
 
@@ -138,18 +138,14 @@ const EditAllStudent = ({ handleUpdate, handleClose }) => {
 
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
 
-                    <TextField
-                        label={
-                            <>
-                                Course Name  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="courseName"
-                        value={formData.courseName}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
+                <FormControl fullWidth margin="normal">
+                        <InputLabel>Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
+                        <Select name="courseName" value={formData.courseName} onChange={handleChange}>
+                        <MenuItem value="BCA">BCA</MenuItem>
+                        <MenuItem value="MCA">MCA</MenuItem>
+                        <MenuItem value="MBA">BBA</MenuItem>
+                        </Select>
+                        </FormControl>
 
                 </Grid>
 

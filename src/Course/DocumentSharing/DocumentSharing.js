@@ -217,7 +217,7 @@ const rows = [
       open={openData || viewData || editData || deleteData} 
       onClose={handleClose}
       dialogTitle={ <>
-         {openData? "DocumentSharing" : viewData ? "View DocumentSharing Details ": editData?"Edit DocumentSharing Details":deleteData?"Delete DocumentSharing Details":null}
+         {openData? "Document Sharing" : viewData ? "View Document Sharing Details ": editData?"Edit Document Sharing Details":deleteData?"Delete Document Sharing Details":null}
       </>}
       
       dialogContent = {

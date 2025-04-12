@@ -237,7 +237,7 @@ const StudentsAssignment = () => {
                 open={openData || viewData || editData || deleteData}
                 onClose={handleClose}
                 dialogTitle={<>
-                    {openData ? "Create New Time Table List" : viewData ? "View The Time Table List" : editData ? "Edit Time Table List" : deleteData ? "Delete Time Table List" : null}
+                    {openData ? "Create New Student Assignment" : viewData ? "View Student Assignment Details" : editData ? "Edit Student Assignment Details" : deleteData ? "Delete Student Assignment Details" : null}
                 </>}
 
                 dialogContent={

@@ -57,7 +57,7 @@ const CreateBranch =({handleUpdate, handleClose})=>
 
             
 
-            <Grid item xs={12} sm={isSmScreen?12:6} md={6}>
+            {/* <Grid item xs={12} sm={isSmScreen?12:6} md={6}>
             <FormControl fullWidth margin="normal">
             <InputLabel>Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
             <Select name="Status" value={formData.status} onChange={handleChange}>
@@ -66,7 +66,7 @@ const CreateBranch =({handleUpdate, handleClose})=>
             <MenuItem value="upcoming">Cancelled</MenuItem>
             </Select>
             </FormControl>
-            </Grid>
+            </Grid> */}
             </Grid>
 
             <Box className="submit" sx={{ display: "flex", gap: 1, justifyContent: "flex-end", marginTop: 2}}>

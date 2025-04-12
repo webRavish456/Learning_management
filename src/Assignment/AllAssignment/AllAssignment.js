@@ -223,7 +223,7 @@ const AllAssignment = () => {
                 open={openData || viewData || editData || deleteData}
                 onClose={handleClose}
                 dialogTitle={<>
-                    {openData ? "Create New Assignment" : viewData ? "View Assignment" : editData ? "Edit Assignment" : deleteData ? "Delete Assignment" : null}
+                    {openData ? "Create New Assignment" : viewData ? "View Assignment Details" : editData ? "Edit Assignment Details" : deleteData ? "Delete Assignment Details" : null}
                 </>}
 
                 dialogContent={

@@ -43,7 +43,7 @@ const CreateCourseList = ({ handleSubmit, handleClose }) => {
                     </FormControl>
 
                 </Grid>
-                <Grid item xs={12} sm={12} md={12}>
+                <Grid item xs={12} sm={12} md={6}>
                     <TextField
                         label={
                             <>
@@ -92,11 +92,14 @@ const CreateCourseList = ({ handleSubmit, handleClose }) => {
                             </>
                         }
                         name="syllabus"
+                        type="file"
                         value={formData.syllabus}
                         onChange={handleChange}
+                        InputLabelProps={{ shrink: true }}
                         fullWidth
                         margin="normal"
                     />
+                    
                 </Grid>
 
             </Grid>
