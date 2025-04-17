@@ -1,17 +1,26 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import React from "react"
 
-const DeleteResult = ({handleClose, handleDelete}) =>
+const DeleteResult = ({handleClose, isDeleting, handleDelete}) =>
 {
      return (
      <>
-           <Box>
+           <Box sx={{ width: '400px', padding: '20px', bgcolor: 'background.paper',textAlign:'flex-end' }}>
              Are you sure want to delete?
            </Box>
-           <Box className="submit" sx={{ display: "flex", gap: 1, marginTop: 2, justifyContent: "flex-end", width: 500 }}>
+           <Box className="submit" sx={{ display: "flex", gap: 1, marginTop: 2, justifyContent: "flex-end", width: 500}}>
             <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
             <Button onClick={handleDelete} className="delete_button" >
-              Delete
+            {isDeleting ? ( <>
+            <CircularProgress
+            size={18}
+            style={{ marginRight: 8, color: "#fff" }}
+             /> 
+              Deleting
+             </> 
+            )   : 
+               "Delete"
+           }
             </Button>
             </Box>
      </>

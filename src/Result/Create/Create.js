@@ -1,117 +1,227 @@
 import React, { useState } from "react"
 import {
     TextField,
-    MenuItem,
-    Select,
-    FormControl,
-    InputLabel,
     Grid,
-    useMediaQuery,
     Button,
     Box,
+    CircularProgress,
+    useMediaQuery,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
 } from "@mui/material";
+import * as  yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { toast, } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import Cookies from "js-cookie"
 
-const CreateResult = ({ handleSubmit, handleClose }) => {
+const schema = yup.object().shape({
+    examName: yup.string().required("Exam Name is required"),
+    courseName: yup.string().required("Course Name is required"),
+    teacherName: yup.string().required("Teacher Name is required"),
+    testType: yup.string().required("Test Type is required"),
+    resultDate: yup.string().required("Result Date is required"),
+});
+
+const CreateResult = ({ handleCreate, handleClose }) => {
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
-    const [formData, setFormData] = useState({
-        examName: "",
-        courseName: "",
-        teacherName: "",
-        testType: "",
-        resultDate: "",
+    const token = Cookies.get('token');
+
+    const Base_url = process.env.REACT_APP_BASE_URL;
+
+    const [loading, setLoading] = useState(false)
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset
+    } = useForm({
+        resolver: yupResolver(schema),
     });
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    const courseOptions = ["BCA", "B.Tech", "B.Sc"]; 
+    const teacherOptions = ["Ravish", "Nikhil", "Sanjoy"]; 
+
+    const onSubmit = (data) => {
+
+        setLoading(true)
+
+        const formdata = new FormData();
+        formdata.append("examName", data.examName);
+        formdata.append("courseName", data.courseName);
+        formdata.append("teacherName", data.teacherName);
+        formdata.append("testType", data.testType);
+        formdata.append("resultDate", data.resultDate);
+
+        const requestOptions = {
+            method: "POST",
+            body: formdata,
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+
+        fetch(`${Base_url}/result`, requestOptions)
+            .then((response) => response.text())
+
+            .then((result) => {
+
+                const res = JSON.parse(result)
+
+                if (res.status === "success") {
+                    setLoading(false)
+
+                    toast.success("Result Created Successful!")
+
+                    handleCreate(true)
+                    handleClose()
+                    reset();
+                }
+                else {
+
+                    setLoading(false)
+                    toast.error(res.message)
+
+                }
+            })
+            .catch((error) => console.error(error));
     };
 
     return (
         <>
-            <Grid container columnSpacing={2}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <Grid container columnSpacing={2}>
 
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
 
-                    <TextField
-                        label={
-                            <>
-                                Exam Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                        <TextField
+                            type="text"
+                            label={
+                                <>
+                                    Exam Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                                </>
+                            }
+                            fullWidth
+                            margin="normal"
+                            variant="standard"
+                            {...register("examName")}
+                            error={!!errors.examName}
+                        />
+                        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                            {errors.examName?.message}
+                        </div>
+                    </Grid>
+
+                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+                        <FormControl fullWidth margin="normal" variant="standard">
+                            <InputLabel id="courseName-label">
+                                Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                            </InputLabel>
+                            <Select
+                                labelId="courseName-label"
+                                {...register("courseName")}
+                                error={!!errors.courseName}
+                            >
+                                {courseOptions.map((option) => (
+                                    <MenuItem key={option} value={option}>
+                                        {option}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                                {errors.courseName?.message}
+                            </div>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+                        <FormControl fullWidth margin="normal" variant="standard">
+                            <InputLabel id="teacherName-label">
+                                Teacher Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                            </InputLabel>
+                            <Select
+                                labelId="teacherName-label"
+                                {...register("teacherName")}
+                                error={!!errors.teacherName}
+                            >
+                                {teacherOptions.map((option) => (
+                                    <MenuItem key={option} value={option}>
+                                        {option}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                                {errors.teacherName?.message}
+                            </div>
+                        </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+                        <TextField
+                            label={
+                                <>
+                                    Test Type <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                                </>
+                            }
+                            type="text"
+                            variant="standard"
+                            {...register("testType")}
+                            error={!!errors.testType}
+                            fullWidth
+                            margin="normal"
+                        />
+                        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                            {errors.testType?.message}
+                        </div>
+                    </Grid>
+
+                    <Grid item xs={12} sm={12} md={12}>
+                        <TextField
+                            label={
+                                <>
+                                    Result Date <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                                </>
+                            }
+                            type="date"
+                            variant="standard"
+                                {...register("resultDate")}
+                                error={!!errors.resultDate}
+                                InputLabelProps={{ shrink: true }}
+                                fullWidth
+                                margin="normal"
+                            />
+                            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                                {errors.resultDate?.message}
+                            </div>
+                    </Grid>
+
+                </Grid>
+
+                <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 2 }}>
+                          <Button onClick={handleClose} className="secondary_button">
+                            Cancel
+                          </Button>
+                          <Button type="submit" className="primary_button">
+                
+                          {loading ? (
+                       <>
+                         <CircularProgress size={18} 
+                          style={{ marginRight: 8, color: "#fff" }} />
+                                Submitting
                             </>
-                        }
-                        name="examName"
-                        value={formData.examName}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                </Grid>
+                            ) : (
+                            "Submit"
+                            )}
+                
+                          </Button>
+                        </Box>
+                      </form>
 
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel>Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
-                        <Select name="courseName" value={formData.courseName} onChange={handleChange}>
-                            <MenuItem value="BCA">BCA</MenuItem>
-                            <MenuItem value="MCA">MCA</MenuItem>
-                            <MenuItem value="MBA">BBA</MenuItem>
-                        </Select>
-                    </FormControl>
-
-                </Grid>
-
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel>Teacher Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
-                        <Select name="teacherName" value={formData.teacherName} onChange={handleChange}>
-                            <MenuItem value="BCA">Ravish Kumar</MenuItem>
-                            <MenuItem value="MCA">Sanjoy</MenuItem>
-                            <MenuItem value="MBA">Nikhil</MenuItem>
-                        </Select>
-                    </FormControl>
-
-                </Grid>
-
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                    <TextField
-                        label={
-                            <>
-                                Test Type  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="testType"
-                        value={formData.testType}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                </Grid>
-
-                <Grid item xs={12} sm={12} md={12}>
-                    <TextField
-                        label={
-                            <>
-                                Result Date <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="resultDate"
-                        value={formData.resultDate}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                </Grid>
-
-            </Grid>
-
-            <Box className="submit" sx={{ display: "flex", gap: 1, justifyContent: "flex-end", marginTop: 2 }}>
-                <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
-                <Button onClick={handleSubmit} className="primary_button">
-                    Submit
-                </Button>
-            </Box>
-
-        </>
-    )
+            </>
+            )
 }
 
-export default CreateResult;
+            export default CreateResult;

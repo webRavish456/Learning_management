@@ -49,7 +49,7 @@ const Header=()=>
         if (path.includes("/assignment/all-assignments")) return "All Assignments";
         if (path.includes("/assignment/students-assignment")) return "Students-Assignments";
         if (path.includes("/exam")) return "Exam";
-        if (path.includes("/results")) return "Results";
+        if (path.includes("/result")) return "Results";
 
          // Move the "Dashboard" condition here
   if (path === "/") return "Dashboard";

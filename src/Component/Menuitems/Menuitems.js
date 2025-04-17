@@ -78,7 +78,7 @@ const Menuitems = [
   {
     icon: "/sidebar/result.png",
     label: "Results",
-    href: "/results"
+    href: "/result"
   },
 
 ];
