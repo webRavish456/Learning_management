@@ -1,12 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect,useState } from "react";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-// import CloseIcon from "@mui/icons-material/Close";
-
-
 
 
 import {
@@ -19,74 +15,70 @@ import {
     TablePagination,
     TableRow,
     Box,
-    Dialog,
-    DialogTitle,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    TextField,
     IconButton,
-    Button,
-    MenuItem,
-    Select,
-    FormControl,
-    InputLabel,
-    Grid,
-    useMediaQuery,
 } from "@mui/material";
 import CommonDialog from "../Component/CommonDialog/CommonDialog";
+
+import Search from "../Search/Search";
+import Cookies from "js-cookie";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import DeleteScheduling from "./Delete/Delete";
+import EditScheduling from "./Edit/Edit";
 import ViewScheduling from "./View/View";
 import CreateScheduling from "./Create/Create";
-import EditScheduling from "./Edit/Edit";
-import DeleteScheduling from "./Delete/Delete";
-import Search from "../Search/Search";
 
 const Scheduling = () => {
 
-    const [openData, setOpenData] = useState(false)
+    const [openData, setOpenData] = useState(false);
+    const [viewShow, setViewShow] = useState(false);
+    const [editShow, setEditShow] = useState(false);
+    const [deleteShow, setDeleteShow] = useState(false);
 
-    const [viewData, setViewData] = useState(false)
+    const [viewData, setViewData] = useState(null);
+  const [editData, setEditData] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-    const [editData, setEditData] = useState(false)
-
-    const [deleteData, setDeleteData] = useState(false)
-
-    const handleView = () => {
-        setViewData(true)
-    }
-
-    const handleEdit = () => {
-        setEditData(true)
-    }
-
-    const handleDelete = () => {
-        setDeleteData(true)
-    }
-
+    const [rows, setRows] = useState([]);
+    const [loading, setLoading] = useState(true);
+  
+    const token = Cookies.get("token");
+    const Base_url = process.env.REACT_APP_BASE_URL;
+  
 
     const columns = [
-        { id: 'si', label: 'SI.No', flex: 1, align: 'center' },
-        { id: 'coursename', label: 'Course Name', flex: 1, align: 'center' },
+        { id: 'si',
+           label: 'SI.No',
+            flex: 1, 
+            align: 'center' 
+          
+          },
+        { id: 'courseName',
+           label: 'Course Name', 
+           flex: 1,
+            align: 'center' 
+          },
         {
-            id: 'teachername',
+            id: 'teacherName',
             label: 'Teacher Name',
             flex: 1,
             align: 'center',
         },
         {
-            id: 'starttiming',
+            id: 'startTiming',
             label: 'Start Timing',
             flex: 1,
             align: 'center',
         },
         {
-            id: 'lasttiming',
+            id: 'lastTiming',
             label: 'Last Timing',
             flex: 1,
             align: 'center',
         },
         {
-            id: 'workdays',
+            id: 'workDays',
             label: 'Work Days',
             flex: 1,
             align: 'center',
@@ -106,114 +98,172 @@ const Scheduling = () => {
         },
     ];
 
-    function createData(si, coursename, teachername, starttiming, lasttiming,workdays, status) {
-        return {
-            si, coursename, teachername, starttiming, lasttiming,workdays, status, action: (
+    useEffect(() => {
+        const fetchSchedulingData = async () => {
+          try {
+            const response = await fetch(`${Base_url}/timetable`, {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+    
+            const result = await response.text();
+            const res = JSON.parse(result);
+    
+            if (res.status === "success") {
+              setLoading(false);
+              const formattedData = res.data.map((item, index) =>
+                createData(
+                  index + 1,
+                  item,
+                  item.courseName,
+                  item. teacherName,
+                  item.startTiming,
+                  item.lastTiming,
+                  item.workDays,
+                  item.status
+                )
+              );
+              setRows(formattedData);
+            }
+          } catch (error) {
+            console.error("Error fetching scheduling data:", error);
+          }
+        };
+    
+        if (loading) {
+          fetchSchedulingData();
+        }
+      }, [loading]);
+    
 
+    const createData = (si, row, courseName, teacherName, startTiming, lastTiming, workDays, status) => ( {
+        
+
+        si, row, courseName, teacherName, startTiming, lastTiming,workDays, status,action: (
                 <>
-                    <IconButton style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }} onClick={handleView}>
+                    <IconButton style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }} onClick={() =>handleView(row)}>
                         <VisibilityIcon />
                     </IconButton>
-                    <IconButton style={{ color: "#6b6666", padding: "4px", transform: "scale(0.8)" }} onClick={handleEdit}>
+                    <IconButton style={{ color: "#6b6666", padding: "4px", transform: "scale(0.8)" }} onClick={() => handleEdit(row)}>
                         <EditIcon />
                     </IconButton>
-                    <IconButton style={{ color: "#e6130b", padding: "4px", transform: "scale(0.8)" }} onClick={handleDelete}>
+                    <IconButton style={{ color: "#e6130b", padding: "4px", transform: "scale(0.8)" }} onClick={() => handleShowDelete(row._id)}>
                         <DeleteIcon />
                     </IconButton>
                 </>
             ),
-        };
-    }
+        });
+    
 
 
-    const rows = [
-        createData('1', 'Full stack', 'Ravish', '10:30am', '3:00pm', 'Monday', 'Active')
-        // createData('2', 'Goldie', 'goldie@gmail.com', '1234567891', '2000-02-02', 'Female', 'JSR', '2023-01-02', 'Science', 'Inactive'),
-        // createData('3', 'Nandani', 'nandani@gmail.com', '1234567892', '1999-03-03', 'Female', 'JSR', '2023-01-03', 'History', 'Active'),
-        // createData('4', 'Manisha', 'manisha@gmail.com', '1234567893', '1998-04-04', 'Female', 'JSR', '2023-01-04', 'English', 'Inactive'),
-        // createData('5', 'Aastha', 'aastha@gmail.com', '1234567894', '1997-05-05', 'Female', 'JSR', '2023-01-05', 'Computer Science', 'Active'),
-    ];
-
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
-
-    const onAddClick = () => {
-        setOpenData(true)
-    }
-
-    const handleClose = () => {
-        setEditData(false)
-        setViewData(false)
-        setOpenData(false)
-        setDeleteData(false)
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setOpenData(false)
-        // console.log("Form Data Submitted:", formData);
-    }
-
-    const handleUpdate = (e) => {
-        e.preventDefault();
-        setEditData(false)
-    }
-
-
-    return (
-
-        <Box className="container">
-            <Search onAddClick={onAddClick} buttonText="Add Schedule" />
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                <TableContainer sx={{ maxHeight: 440 }}>
-
-
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{ minWidth: column.minWidth, fontWeight: 700 }}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
+        const handleView = (row) => {
+            setViewData(row);
+            setViewShow(true);
+          };
+        
+          const handleEdit = (data) => {
+            setEditData(data);
+            setEditShow(true);
+          };
+        
+          const handleShowDelete = (id) => {
+            setDeleteId(id);
+            setDeleteShow(true);
+          };
+        
+          const handleDelete = () => {
+            setIsDeleting(true);
+            fetch(`${Base_url}/timetable/${deleteId}`, {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            })
+              .then((response) => response.text())
+              .then((result) => {
+                const res = JSON.parse(result);
+                if (res.status === "success") {
+                  toast.success("Scheduling deleted successfully!");
+                  setLoading(true);
+                } else {
+                  toast.error(res.message);
+                }
+                setIsDeleting(false);
+                handleClose();
+              })
+              .catch((error) => {
+                console.error("Delete error:", error);
+                setIsDeleting(false);
+              });
+          };
+        
+          const handleClose = () => {
+            setOpenData(false);
+            setViewShow(false);
+            setEditShow(false);
+            setDeleteShow(false);
+          };
+        
+          const handleCreate = (refresh = true) => {
+            if (refresh) setLoading(true);
+            setOpenData(false);
+          };
+        
+          const handleUpdate = (refresh = true) => {
+            if (refresh) setLoading(true);
+            setEditShow(false);
+          };
+        
+          const onAddClick = () => setOpenData(true);
+        
+          const [page, setPage] = useState(0);
+          const [rowsPerPage, setRowsPerPage] = useState(10);
+        
+          const handleChangePage = (_, newPage) => setPage(newPage);
+          const handleChangeRowsPerPage = (e) => {
+            setRowsPerPage(+e.target.value);
+            setPage(0);
+          };
+        
+          return (
+            <>
+              <ToastContainer />
+              <Box className="container">
+                <Search onAddClick={onAddClick} buttonText="Add Scheduling" />
+                <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                  <TableContainer sx={{ maxHeight: 440 }}>
+                    <Table stickyHeader aria-label="scheduling table">
+                      <TableHead>
+                        <TableRow>
+                          {columns.map((column) => (
+                            <TableCell
+                              key={column.id}
+                              align={column.align}
+                              style={{ fontWeight: 700 }}
+                            >
+                              {column.label}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {rows
+                          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                          .map((row, idx) => (
+                            <TableRow hover role="checkbox" key={idx}>
+                              {columns.map((column) => (
+                                <TableCell key={column.id} align={column.align}>
+                                  {row[column.id]}
+                                </TableCell>
+                              ))}
                             </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row) => {
-                                    return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <TableCell key={column.id} align={column.align}>
-                                                        {column.format && typeof value === 'number'
-                                                            ? column.format(value)
-                                                            : value}
-                                                    </TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-                                    );
-                                })}
-                        </TableBody>
+                          ))}
+                      </TableBody>
                     </Table>
-                </TableContainer>
-                <TablePagination
+                  </TableContainer>
+                  <TablePagination
                     rowsPerPageOptions={[10, 25, 100]}
                     component="div"
                     count={rows.length}
@@ -221,28 +271,47 @@ const Scheduling = () => {
                     page={page}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </Paper>
+        
+                <CommonDialog
+                  open={openData || viewShow || editShow || deleteShow}
+                  onClose={handleClose}
+                  dialogTitle={
+                    openData
+                      ? "Create New Scheduling"
+                      : viewShow
+                      ? "View Scheduling"
+                      : editShow
+                      ? "Edit Scheduling"
+                      : deleteShow
+                      ? "Delete Scheduling"
+                      : ""
+                  }
+                  dialogContent={
+                    openData ? (
+                      <CreateScheduling handleCreate={handleCreate} handleClose={handleClose} />
+                    ) : viewShow ? (
+                      <ViewScheduling viewData={viewData} />
+                    ) : editShow ? (
+                      <EditScheduling
+                        editData={editData}
+                        handleUpdate={handleUpdate}
+                        handleClose={handleClose}
+                      />
+                    ) : deleteShow ? (
+                      <DeleteScheduling
+                        handleDelete={handleDelete}
+                        isDeleting={isDeleting}
+                        handleClose={handleClose}
+                      />
+                    ) : null
+                  }
                 />
-            </Paper>
-
-            <CommonDialog
-                open={openData || viewData || editData || deleteData}
-                onClose={handleClose}
-                dialogTitle={<>
-                    {openData ? "Create Schedule" : viewData ? "View Schedule" : editData ? "Edit Schedule" : deleteData ? "Delete Schedule" : null}
-                </>}
-
-                dialogContent={
-                    openData ? <CreateScheduling handleSubmit={handleSubmit} handleClose={handleClose} /> :
-                        viewData ? <ViewScheduling /> :
-                            editData ? <EditScheduling handleUpdate={handleUpdate} handleClose={handleClose} /> :
-                                deleteData ? <DeleteScheduling handleDelete={handleDelete} handleClose={handleClose} /> : null
-
-                }
-
-            />
-
-        </Box>
-    );
-}
-
-export default Scheduling;
+              </Box>
+            </>
+          );
+        };
+        
+        export default Scheduling;
+        

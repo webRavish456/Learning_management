@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Grid, useMediaQuery } from "@mui/material";
 
-const ViewScheduling = () => {
+const ViewScheduling = ({viewData}) => {
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
     return (
@@ -14,7 +14,7 @@ const ViewScheduling = () => {
                         <Box className="pageTitle">Course Name:</Box>
                     </Grid>
                     <Grid item xs={6}>
-                        <Box className="pageDescription">Full Stack</Box>
+                        <Box className="pageDescription">{viewData.courseName}</Box>
                     </Grid>
 
                 </Grid>
@@ -25,7 +25,7 @@ const ViewScheduling = () => {
                         <Box className="pageTitle">Teacher Name:</Box>
                     </Grid>
                     <Grid item xs={6}>
-                        <Box className="pageDescription">Ravish</Box>
+                        <Box className="pageDescription">{viewData.teacherName}</Box>
                     </Grid>
                 </Grid>
 
@@ -35,7 +35,7 @@ const ViewScheduling = () => {
                         <Box className="pageTitle">Starting Timing:</Box>
                     </Grid>
                     <Grid item xs={6}>
-                        <Box className="pageDescription">04-07-24</Box>
+                        <Box className="pageDescription">{viewData.startTiming}</Box>
                     </Grid>
 
                 </Grid>
@@ -43,11 +43,11 @@ const ViewScheduling = () => {
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6} style={{ display: "flex" }}>
 
                     <Grid item xs={6}>
-                        <Box className="pageTitle">Ending Timing:</Box>
+                        <Box className="pageTitle">Last Timing:</Box>
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Box className="pageDescription">04-03-2025</Box>
+                        <Box className="pageDescription">{viewData.lastTiming}</Box>
                     </Grid>
 
                 </Grid>
@@ -55,11 +55,11 @@ const ViewScheduling = () => {
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6} style={{ display: "flex" }}>
 
                     <Grid item xs={6}>
-                        <Box className="pageTitle">Works Days:</Box>
+                        <Box className="pageTitle">Work Days:</Box>
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Box className="pageDescription">Monday</Box>
+                        <Box className="pageDescription">{viewData.workDays}</Box>
                     </Grid>
 
                 </Grid>
@@ -72,7 +72,7 @@ const ViewScheduling = () => {
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Box className="pageDescription">Active</Box>
+                        <Box className="pageDescription">{viewData.status}</Box>
                     </Grid>
 
                 </Grid>

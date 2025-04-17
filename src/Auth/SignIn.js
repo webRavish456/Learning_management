@@ -26,29 +26,29 @@ const SignIn = () => {
     resolver: yupResolver(schema)
   });
 
-  const Base_url = process.env.REACT_APP_BASE_URL;
+  const Base_url = process.env.REACT_APP_BASE_URL; //define base url
 
   const [loading, setLoading] = useState(false)
 
-  const onSubmit = (data) => {
-
+  const onSubmit = (data) => {     //data store
+console.log(data)  //check
     setLoading(true)
 
     const formdata = new FormData();
-    formdata.append("email", data.email);
+    formdata.append("email", data.email);       //formdata.append: send data from frontend to backend
     formdata.append("password", data.password);
 
     const requestOptions = {
       method: "POST",
-      body: formdata,
+      body: formdata,    
     };
 
-    fetch(`${Base_url}/login`, requestOptions)
+    fetch(`${Base_url}/login`, requestOptions)         
       .then((response) => response.text())
 
       .then((result) => {
 
-        const res = JSON.parse(result)
+        const res = JSON.parse(result) //data comes from backend to frontent
 
         if(res.status==="success")
         {

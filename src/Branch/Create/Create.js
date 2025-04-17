@@ -1,78 +1,152 @@
 import React, {useState} from "react"
-import {TextField,MenuItem,Select,FormControl,InputLabel,Grid,useMediaQuery,Box,Button,} from "@mui/material";
+import {
+    TextField,
+    Grid,
+    Button,
+    Box,
+    CircularProgress,
+  } from "@mui/material";
 
-const CreateBranch =({handleUpdate, handleClose})=>
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import {  toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'js-cookie';
+
+
+  const schema = yup.object().shape({
+    branchName: yup.string().required("Branch Name is required"),
+    branchLocation: yup.string().required("Branch Location is required"),
+  });
+
+const CreateBranch =({handleCreate, handleClose})=>
 {
-    const isSmScreen = useMediaQuery("(max-width:768px)");
 
-    const [formData, setFormData] = useState({
-       sino:'',
-        branchname:'',
-        location:'',
-     });
+    const token = Cookies.get('token');
 
-     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-      };
+    const Base_url = process.env.REACT_APP_BASE_URL;
+  
+    const [loading, setLoading] = useState(false)
+  
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+      reset,
+    } = useForm({
+      resolver: yupResolver(schema),
+    });
+  
+
+  
+  
+    const onSubmit = (data) => {
+    
+           setLoading(true)
+  
+          const formdata = new FormData();
+          formdata.append("branchName", data.branchName);
+          formdata.append("branchLocation", data.branchLocation);
+      
+          const requestOptions = {
+            method: "POST",
+            body: formdata,
+            headers: {
+              Authorization: `Bearer ${token}`, 
+             },
+          };
+      
+          fetch(`${Base_url}/branch`, requestOptions)
+            .then((response) => response.text())
+      
+            .then((result) => {
+      
+              const res = JSON.parse(result)
+      
+              if(res.status==="success")
+              {
+                setLoading(false)
+               
+                toast.success("Branch Created Successfully!")
+                handleCreate(true)
+                handleClose()
+                reset();
+              }
+              else {
+      
+                setLoading(false)
+                toast.error(res.message)
+      
+              }
+            })
+            .catch((error) => console.error(error));
+    };
 
      return (
         <>
-            <Grid container columnSpacing={2}>
-
-           
-
-            <Grid item xs={12} sm={isSmScreen?12:6} md={6}>
-
+        
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Grid container columnSpacing={2}>
+          <Grid item xs={12}>
             <TextField
-            label={
-            <>
-                Branch Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-            </>
-            }
-            name="branchname"
-            value={formData.courseName}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
+              type="text"
+              label={
+                <>
+                  Branch Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                </>
+              }
+              variant="standard"
+              {...register("branchName")}
+              error={!!errors.branchName}
+              fullWidth
+              margin="normal"
             />
+            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+              {errors.branchName?.message}
+            </div>
+          </Grid>
 
-            </Grid>
-
-            <Grid item xs={12} sm={isSmScreen?12:6} md={6}>
+          <Grid item xs={12}>
             <TextField
-            label={
-            <>
-                Location <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-            </>
-            }
-            name="location"
-            value={formData.facultyName}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
+              type="text"
+              label={
+                <>
+                  Branch Location <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                </>
+              }
+              variant="standard"
+              {...register("branchLocation")}
+              error={!!errors.branchLocation}
+              fullWidth
+              margin="normal"
             />
-            </Grid>
+            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+              {errors.branchLocation?.message}
+            </div>
+          </Grid>
 
-           
+        </Grid>
 
-            
+        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 2 }}>
+          <Button onClick={handleClose} className="secondary_button">
+            Cancel
+          </Button>
+          <Button type="submit" className="primary_button">
 
-            {/* <Grid item xs={12} sm={isSmScreen?12:6} md={6}>
-            <FormControl fullWidth margin="normal">
-            <InputLabel>Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
-            <Select name="Status" value={formData.status} onChange={handleChange}>
-            <MenuItem value="active">Scheduled</MenuItem>
-            <MenuItem value="inactive">Completed</MenuItem>
-            <MenuItem value="upcoming">Cancelled</MenuItem>
-            </Select>
-            </FormControl>
-            </Grid> */}
-            </Grid>
+          {loading ? (
+       <>
+         <CircularProgress size={18} 
+          style={{ marginRight: 8, color: "#fff" }} />
+                Submitting
+            </>
+            ) : (
+            "Submit"
+            )}
 
-            <Box className="submit" sx={{ display: "flex", gap: 1, justifyContent: "flex-end", marginTop: 2}}>
-            <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
-            <Button onClick={handleUpdate} className="primary_button" > Update</Button>
-            </Box>
+          </Button>
+        </Box>
+      </form>
 
         </>
      )

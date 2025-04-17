@@ -4,11 +4,6 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import CloseIcon from "@mui/icons-material/Close";
-
-
-
-
 import {
     Paper,
     Table,
@@ -19,22 +14,25 @@ import {
     TablePagination,
     TableRow,
     Box,
-    Dialog,
-    DialogTitle,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    TextField,
     IconButton,
-    Button,
-    MenuItem,
-    Select,
-    FormControl,
-    InputLabel,
-    Grid,
-    useMediaQuery,
+    // Dialog,
+    // DialogTitle,
+    // DialogActions,
+    // DialogContent,
+    // DialogContentText,
+    // TextField,
+    // Button,
+    // MenuItem,
+    // Select,
+    // FormControl,
+    // InputLabel,
+    // Grid,
+    // useMediaQuery,
 } from "@mui/material";
 import CommonDialog from "../../Component/CommonDialog/CommonDialog";
+import Cookies from "js-cookie";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import CreateCertificate from "./Create/Create";
 import ViewCertificates from "./View/View";
 import EditCertificate from "./Edit/Edit";

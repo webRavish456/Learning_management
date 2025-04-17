@@ -41,7 +41,7 @@ function App() {
         <Route path="results" element={<Result/>}/>
         <Route path="viewfaculty" element={<ViewFaculty/>}/>
         <Route path="editfaculty" element={<EditFaculty/>}/>
-        <Route path="scheduling" element={< Scheduling/>}/>
+        <Route path="timetable" element={< Scheduling/>}/>
         </Route>
       </Routes>
 

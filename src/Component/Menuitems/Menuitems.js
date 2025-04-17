@@ -49,7 +49,7 @@ const Menuitems = [
     {
       icon: "/sidebar/assignments.png",
       label: "Scheduling",
-      href: "/scheduling",
+      href: "/timetable",
       
     },
 
