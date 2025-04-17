@@ -200,7 +200,7 @@ const Branch = () => {
                     <TableCell
                       key={column.id}
                       align={column.align}
-                      style={{ fontWeight: 700 }}
+                      style={{ minWidth: column.minWidth, fontWeight: 700 }}
                     >
                       {column.label}
                     </TableCell>

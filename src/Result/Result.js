@@ -1,9 +1,7 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-
 import CloseIcon from "@mui/icons-material/Close";
 import Search from "../Search/Search";
 
@@ -17,168 +15,213 @@ import {
   TablePagination,
   TableRow ,
   Box,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  TextField,
   IconButton,
-  Button,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  Grid,
-  useMediaQuery,
 } from "@mui/material";
 import CommonDialog from "../Component/CommonDialog/CommonDialog";
 import ViewResult from "./View/View";
 import CreateResult from "./Create/Create";
 import EditResult from "./Edit/Edit";
 import DeleteResult from "./Delete/Delete";
+import Cookies from 'js-cookie'
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
 
 const Result=()=>
   {
-  
-    const [openData, setOpenData] = useState(false)
-  
-    const [viewData, setViewData] = useState(false)
-  
-    const [editData, setEditData] = useState(false)
-  
-    const [deleteData, setDeleteData] = useState(false)
-  
-   const handleView = () =>
+    const [openData, setOpenData] = useState(false);
+    const [viewShow, setViewShow] = useState(false); 
+    const [editShow, setEditShow] = useState(false) ;
+    const [deleteShow, setDeleteShow] = useState(false);  
+
+    const [viewData, setViewData] = useState(null);
+  const [editData, setEditData] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const token = Cookies.get("token");
+  const Base_url = process.env.REACT_APP_BASE_URL;
+
+  const columns = [
+    { id: 'si', label: 'SI.No', flex:1, align:'center' },
+    { id: 'examName', label: 'Exam Name', flex:1, align:'center' },
     {
-      setViewData(true)
-    }
-  
-  const handleEdit = () =>
-  {
-     setEditData(true)
-  }
-  
-  const handleDelete = () =>
+      id: 'courseName',
+      label: 'Course Name',
+      flex:1,
+      align: 'center',
+    },
     {
-      setDeleteData(true)
+      id: 'teacherName',
+      label: 'Teacher Name',
+      flex:1,
+      align: 'center',
+    },
+    {
+      id: 'testType',
+      label: 'Test Type ',
+      flex:1,
+      align: 'center',
+    },
+    {
+      id: 'resultDate',
+      label: 'Result Date ',
+      flex:1,
+      align: 'center',
+    },
+    
+    {
+      id: 'action',
+      label: 'Action',
+      flex:1,
+      align: 'center',
+    },
+  ];
+
+  useEffect(() => {
+    const fetchResultData = async () => {
+      try {
+        const response = await fetch(`${Base_url}/result`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const result = await response.text();
+        const res = JSON.parse(result);
+
+        if (res.status === "success") {
+          setLoading(false);
+          const formattedData = res.data.map((item, index) =>
+            createData(
+              index + 1,
+              item,
+              item.examName,
+              item.courseName,
+              item.teacherName,
+              item.testType,
+              item.resultDate,
+              item.status
+            )
+          );
+          setRows(formattedData);
+        }
+      } catch (error) {
+        console.error("Error fetching result data:", error);
+      }
+    };
+
+    if (loading) {
+      fetchResultData();
     }
+  }, [loading]);
+
+  const createData = (si, row,  examName, courseName, teacherName, testType, resultDate ) => ({
+    si, row, examName, courseName, teacherName, testType, resultDate, action: (
+       <>
+       <IconButton
+           style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }}
+           onClick={() => handleView(row)}
+         >
+           <VisibilityIcon />
+         </IconButton>
+         <IconButton
+           style={{ color: "#6b6666", padding: "4px", transform: "scale(0.8)" }}
+           onClick={() => handleEdit(row)}
+         >
+           <EditIcon />
+         </IconButton>
+         <IconButton
+           style={{ color: "#e6130b", padding: "4px", transform: "scale(0.8)" }}
+           onClick={() => handleShowDelete(row._id)}
+         >
+           <DeleteIcon />
+         </IconButton>
+       </>
+     ),
+    });
+
+    const handleView = (row) => {
+      setViewData(row);
+      setViewShow(true);
+    };
   
-
-const columns = [
-  { id: 'si', label: 'SI.No', flex:1, align:'center' },
-  { id: 'examname', label: 'Exam Name', flex:1, align:'center' },
-  {
-    id: 'coursename',
-    label: 'Course Name',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'teachername',
-    label: 'Teacher Name',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'testtype',
-    label: 'Test Type ',
-    flex:1,
-    align: 'center',
-  },
-  {
-    id: 'resultdate',
-    label: 'Result Date ',
-    flex:1,
-    align: 'center',
-  },
+    const handleEdit = (data) => {
+      setEditData(data);
+      setEditShow(true);
+    };
   
-  {
-    id: 'action',
-    label: 'Action',
-    flex:1,
-    align: 'center',
-  },
-];
-
-function createData(si, examname, coursename, teachername, testtype, resultdate ) {
-  return { si, examname, coursename, teachername, testtype, resultdate, action: (
-      <>
-      <IconButton
-          style={{ color: "blue", padding: "4px", transform: "scale(0.8)" }}
-          onClick={handleView}
-        >
-          <VisibilityIcon />
-        </IconButton>
-        <IconButton
-          style={{ color: "grey", padding: "4px", transform: "scale(0.8)" }}
-          onClick={handleEdit}
-        >
-          <EditIcon />
-        </IconButton>
-        <IconButton
-          style={{ color: "red", padding: "4px", transform: "scale(0.8)" }}
-          onClick={handleDelete}
-        >
-          <DeleteIcon />
-        </IconButton>
-      </>
-    ),
-   };
-}
-
-
-const rows = [
-  createData('1', 'Sem', 'Frontend', 'Ravish Kumar',  'Quiz', '04-03-2025')
-  // createData('2', 'Goldie', 'goldie@gmail.com', '1234567891', '2000-02-02', 'Female', 'JSR', '2023-01-02', 'Science', 'Inactive'),
-  // createData('3', 'Nandani', 'nandani@gmail.com', '1234567892', '1999-03-03', 'Female', 'JSR', '2023-01-03', 'History', 'Active'),
-  // createData('4', 'Manisha', 'manisha@gmail.com', '1234567893', '1998-04-04', 'Female', 'JSR', '2023-01-04', 'English', 'Inactive'),
-  // createData('5', 'Aastha', 'aastha@gmail.com', '1234567894', '1997-05-05', 'Female', 'JSR', '2023-01-05', 'Computer Science', 'Active'),
-];
-
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    const handleShowDelete = (id) => {
+      setDeleteId(id);
+      setDeleteShow(true);
+    };
+  
+    const handleDelete = () => {
+      setIsDeleting(true);
+      fetch(`${Base_url}/result/${deleteId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => response.text())
+      .then((result) => {
+        const res = JSON.parse(result);
+        if (res.status === "success") {
+          toast.success("Result deleted successfully!");
+          setLoading(true);
+        } else {
+          toast.error(res.message);
+        }
+        setIsDeleting(false);
+        handleClose();
+      })
+      .catch((error) => {
+        console.error("Delete error:", error);
+        setIsDeleting(false);
+      });
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
+  const handleClose = () => {
+    setOpenData(false);
+    setViewShow(false);
+    setEditShow(false);
+    setDeleteShow(false);
+  };
+
+  const handleCreate = (refresh = true) => {
+    if (refresh) setLoading(true);
+    setOpenData(false);
+  };
+
+  const handleUpdate = (refresh = true) => {
+    if (refresh) setLoading(true);
+    setEditShow(false);
+  };
+
+  const onAddClick = () => setOpenData(true);
+  
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (_, newPage) => setPage(newPage);
+  const handleChangeRowsPerPage = (e) => {
+    setRowsPerPage(+e.target.value);
     setPage(0);
   };
 
-  const onAddClick =()=>
-    {
-      setOpenData(true)
-    }
-
-    const handleClose = () => {
-      setEditData(false)
-      setViewData(false)
-      setOpenData(false)
-      setDeleteData(false)
-   };
-
-   const handleSubmit = (e) => {
-     e.preventDefault();
-     setOpenData(false)
-     // console.log("Form Data Submitted:", formData);
-   }
-
-   const handleUpdate = (e) => {
-      e.preventDefault();
-      setEditData(false)
-   }
-
-
   return (
+    <>
+    <ToastContainer />
 
     <Box className="container">
       <Search onAddClick={onAddClick} buttonText="Add Result"/>
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
+        <Table stickyHeader aria-label="result table">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -195,22 +238,15 @@ const rows = [
           <TableBody>
             {rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
+              .map((row, idx) => (
+                  <TableRow hover role="checkbox"  key={idx}>
+                    {columns.map((column) => (
                         <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
+                          {row[column.id]} 
                         </TableCell>
-                      );
-                    })}
+                    ))}
                   </TableRow>
-                );
-              })}
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -226,23 +262,36 @@ const rows = [
     </Paper>
 
     <CommonDialog 
-      open={openData || viewData || editData || deleteData} 
+      open={openData || viewData || editData || deleteShow} 
       onClose={handleClose}
       dialogTitle={ <>
-         {openData? "Result" : viewData ? "View Result Details ": editData?"Edit Result Details":deleteData?"Delete Result Details":null}
+         {openData? "Create New Result" : viewData ? "View Result Details ": editData?"Edit Result Details":deleteShow?"Delete Result Details":""}
       </>}
       
       dialogContent = {
-         openData ? <CreateResult handleSubmit={handleSubmit} handleClose={handleClose} /> :
-          viewData ? <ViewResult /> : 
-         editData ? <EditResult handleUpdate={handleUpdate} handleClose={handleClose} /> : 
-         deleteData? <DeleteResult handleDelete={handleDelete} handleClose={handleClose} />:null
-        
+        openData ? (
+          <CreateResult handleCreate={handleCreate} handleClose={handleClose} />
+        ) : viewShow ? (
+          <ViewResult viewData={viewData} />
+        ) : editShow ? (
+          <EditResult
+            editData={editData}
+            handleUpdate={handleUpdate}
+            handleClose={handleClose}
+          />
+        ) : deleteShow ? (
+          <DeleteResult
+            handleDelete={handleDelete}
+            isDeleting={isDeleting}
+            handleClose={handleClose}
+          />
+        ) : null
       }
 
       />
 
     </Box>
+    </>
   );
 }
 

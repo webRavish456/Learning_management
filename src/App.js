@@ -17,6 +17,7 @@ import StudentAssignment from "./Assignment/StudentsAssignment/StudentsAssignmen
 import Scheduling from "./Scheduling/Scheduling";
 import CourseList from "./Course/CourseList/CourseList";
 import DocumentSharing from "./Course/DocumentSharing/DocumentSharing";
+// import StudentResult from "./Result/StudentResult/StudentResult";
 
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
         <Route path="/login" element={<SignIn />}/>
         <Route path="/" element={<LayoutMain />}>
         <Route path="dashboard" element={<Dashboard/>}/>
-        <Route path="/forgot-password" element={<Forgot />}/>
+        <Route path="/forgot" element={<Forgot />}/>
         <Route path="branch" element={<Branch/>}/>
         <Route path="course/all-courses" element={<CourseList/>}/>
         <Route path="course/document-sharing" element={<DocumentSharing/>}/>
@@ -38,7 +39,7 @@ function App() {
         <Route path="exam" element={<Exam/>}/>
         <Route path="teacher" element={<Faculty/>}/>
         <Route path="faculty" element={<CreateFaculty/>}/>
-        <Route path="results" element={<Result/>}/>
+        <Route path="result" element={<Result/>}/>
         <Route path="viewfaculty" element={<ViewFaculty/>}/>
         <Route path="editfaculty" element={<EditFaculty/>}/>
         <Route path="timetable" element={< Scheduling/>}/>

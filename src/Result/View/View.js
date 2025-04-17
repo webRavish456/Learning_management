@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Grid,  useMediaQuery} from "@mui/material";
 
-const ViewResult =()=>
+const ViewResult =({viewData})=>
 {
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
@@ -15,7 +15,7 @@ const ViewResult =()=>
             <Box className="pageTitle">Exam Name:</Box> 
             </Grid>  
             <Grid item xs={6}>
-            <Box className="pageDescription">Sem</Box>
+            <Box className="pageDescription">{viewData.examName}</Box>
             </Grid>
 
             </Grid>
@@ -26,7 +26,7 @@ const ViewResult =()=>
             <Box className="pageTitle">Course Name:</Box>    
             </Grid>
             <Grid item xs={6}>
-            <Box className="pageDescription">Frontend</Box>
+            <Box className="pageDescription">{viewData.courseName}</Box>
             </Grid>
             </Grid>
 
@@ -36,7 +36,7 @@ const ViewResult =()=>
             <Box className="pageTitle">Teacher Name:</Box> 
             </Grid>   
             <Grid item xs={6}>
-            <Box className="pageDescription">Ravish Kumar</Box>
+            <Box className="pageDescription">{viewData.teacherName}</Box>
             </Grid>
 
             </Grid>
@@ -48,7 +48,7 @@ const ViewResult =()=>
             </Grid>
 
             <Grid item xs={6}>
-            <Box className="pageDescription">Quiz</Box>
+            <Box className="pageDescription">{viewData.testType}</Box>
             </Grid>
 
             </Grid>
@@ -60,10 +60,22 @@ const ViewResult =()=>
             </Grid>
 
             <Grid item xs={6}>
-            <Box className="pageDescription">04-03-2025</Box>
+            <Box className="pageDescription">{viewData.resultDate}</Box>
+            </Grid>
             </Grid>
 
+            <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
+            
+                        <Grid item xs={6}>
+                        <Box className="pageTitle">Status:</Box>
+                        </Grid>
+            
+                        <Grid item xs={6}>
+                        <Box className="pageDescription">{viewData.status}</Box>
+                        </Grid>
+
             </Grid>
+            
 
             </Grid>
 

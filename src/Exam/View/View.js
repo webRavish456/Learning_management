@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Grid,  useMediaQuery} from "@mui/material";
 
-const ViewExam =()=>
+const ViewExam =({viewData})=>
 {
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
@@ -15,7 +15,7 @@ const ViewExam =()=>
             <Box className="pageTitle">Exam Name:</Box> 
             </Grid>  
             <Grid item xs={6}>
-            <Box className="pageDescription">Sem</Box>
+            <Box className="pageDescription">{viewData.examName}</Box>
             </Grid>
 
             </Grid>
@@ -26,7 +26,7 @@ const ViewExam =()=>
             <Box className="pageTitle">Course Name:</Box>    
             </Grid>
             <Grid item xs={6}>
-            <Box className="pageDescription">Frontend</Box>
+            <Box className="pageDescription">{viewData.courseName}</Box>
             </Grid>
             </Grid>
 
@@ -36,7 +36,7 @@ const ViewExam =()=>
             <Box className="pageTitle">Teacher Name:</Box> 
             </Grid>   
             <Grid item xs={6}>
-            <Box className="pageDescription">Ravish Kumar</Box>
+            <Box className="pageDescription">{viewData.teacherName}</Box>
             </Grid>
 
             </Grid>
@@ -48,7 +48,7 @@ const ViewExam =()=>
             </Grid>
 
             <Grid item xs={6}>
-            <Box className="pageDescription">04-03-2025</Box>
+            <Box className="pageDescription">{viewData.examDate}</Box>
             </Grid>
 
             </Grid>
@@ -60,7 +60,7 @@ const ViewExam =()=>
             </Grid>
 
             <Grid item xs={6}>
-            <Box className="pageDescription">1 hour</Box>
+            <Box className="pageDescription">{viewData.duration}</Box>
             </Grid>
 
             </Grid>
@@ -75,7 +75,7 @@ const ViewExam =()=>
             </Grid>
 
             <Grid item xs={6}>
-            <Box className="pageDescription">Quiz</Box>
+            <Box className="pageDescription">{viewData.testType}</Box>
             </Grid>
 
             </Grid>
@@ -87,7 +87,7 @@ const ViewExam =()=>
             </Grid>
 
             <Grid item xs={6}>
-            <Box className="pageDescription">100</Box>
+            <Box className="pageDescription">{viewData.totalMarks}</Box>
             </Grid>
 
             </Grid>
@@ -99,7 +99,7 @@ const ViewExam =()=>
             </Grid>
 
             <Grid item xs={6}>
-            <Box className="pageDescription">Completed</Box>
+            <Box className="pageDescription">{viewData.status}</Box>
             </Grid>
 
             </Grid>
