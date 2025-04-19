@@ -4,7 +4,22 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 // import DownloadIcon from '@mui/icons-material/Download';
 
 const ViewCertificates = () => {
+
     const isSmScreen = useMediaQuery("(max-width:768px)");
+
+    const handleDownload = () => {
+
+        const pdfUrl = 'dynamic.pdf'; 
+        const fileName = 'certificate.pdf'; 
+    
+        const link = document.createElement('a');
+        link.href = pdfUrl;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+    }
 
     return (
         <>
@@ -49,7 +64,7 @@ const ViewCertificates = () => {
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Box className="pageDescription"><PictureAsPdfIcon /></Box>
+                        <Box className="pageDescription" onClick={handleDownload}><PictureAsPdfIcon /></Box>
 
 
                     </Grid>
