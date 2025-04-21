@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
@@ -23,10 +23,10 @@ import {
   
 } from "@mui/material";
 import CommonDialog from "../Component/CommonDialog/CommonDialog";
-import ViewFaculty from "./View/View";
-import CreateFaculty from "./Create/Create";
-import EditFaculty from "./Edit/Edit";
 import DeleteFaculty from "./Delete/Delete";
+import Cookies from "js-cookie";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const Faculty=()=>
   {
@@ -38,18 +38,24 @@ const Faculty=()=>
     const [editData, setEditData] = useState(false)
   
     const [deleteData, setDeleteData] = useState(false)
+
+    const [rows, setRows] = useState([]);
+      const [loading, setLoading] = useState(true);
+    
+      const token = Cookies.get("token");
+      const Base_url = process.env.REACT_APP_BASE_URL;
    const navigate = useNavigate();
    
    
   
-   const handleView = () =>
+   const handleView = (id) =>
     {
-      navigate("/viewfaculty")
+      navigate(`/viewfaculty/${id}`)
     }
   
-  const handleEdit = () =>
+  const handleEdit = (id) =>
   {
-    navigate("/editfaculty")
+    navigate(`/editfaculty/${id}`)
   }
   
   const handleDelete = () =>
@@ -62,31 +68,77 @@ const columns = [
   { id: 'si', label: 'SI.No', flex:1, align:'center' },
   { id: 'teacherName', label: 'Teacher Name', flex:1, align:'center' },
   
-  {id: 'email',label: 'Email',flex:1,align: 'center',},
+  {id: 'emailId',label: 'Email ID',flex:1,align: 'center',},
   {id: 'mobileNo',label: 'Mobile No',flex:1,align: 'center',},
   
   {id: 'dob',label: 'DOB',flex:1, align: 'center',},
   { id: 'gender',label: 'Gender ', flex:1, align: 'center',},
  
   {id: 'address',label: 'Address ',flex:1,align: 'center',},
+  {id: 'salary',label: 'Salary',flex:1,align: 'center', },
   {id: 'joiningDate',label: 'Joining Date',flex:1,align: 'center', },
 
-  {id: 'course',label: 'Course ', flex:1,align: 'center',},
+  {id: 'courseName',label: 'Course ', flex:1,align: 'center',},
   {id: 'status',label: 'Status',flex:1,align: 'center', },
   {id: 'action',label: 'Action', flex:1,align: 'center', },
  
 ];
 
-function createData(si, teacherName, email, mobileNo, dob, gender, address, course, joiningDate,status ) {
-  return { si, teacherName, email, mobileNo, dob, gender, address, course, joiningDate,status, action: (
+useEffect(() => {
+  const fetchTeacherData = async () => {
+    try {
+      const response = await fetch(`${Base_url}/teacher`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const result = await response.text();
+      const res = JSON.parse(result);
+
+      console.log("res",res)
+
+      if (res.status === "success") {
+        setLoading(false);
+        const formattedData = res.data.map((item, index) =>
+          createData(
+            index + 1,
+            item._id,
+            item.teacherName,
+            item.emailId,
+            item.mobileNumber,
+            item.dob,
+            item.gender,
+            item.address,
+            item.companyDetails.courseName,
+            item.companyDetails.joiningDate,
+            item.companyDetails.salary,
+            item.availabilityStatus
+          )
+        );
+        setRows(formattedData);
+      }
+    } catch (error) {
+      console.error("Error fetching teacher data:", error);
+    }
+  };
+
+  if (loading) {
+    fetchTeacherData();
+  }
+}, [loading]);
+
+function createData(si, id, teacherName, emailId, mobileNo, dob, gender, address, courseName,salary, joiningDate,status ) {
+  return { si, id,  teacherName, emailId, mobileNo, dob, gender, address, courseName,salary, joiningDate,status, action: (
       <>
-      <IconButton style={{color:"blue", padding:"4px", transform:"scale(0.8)"}} onClick={handleView}>
+      <IconButton style={{color:"rgb(13, 33, 121)", padding:"4px", transform:"scale(0.8)"}} onClick={()=>handleView(id)}>
         <VisibilityIcon />
       </IconButton>
-      <IconButton style={{color:"grey", padding:"4px", transform:"scale(0.8)"}} onClick={handleEdit}>
+      <IconButton style={{color:"rgb(98, 99, 102)", padding:"4px", transform:"scale(0.8)"}} onClick={()=>handleEdit(id)}>
         <EditIcon />
       </IconButton>
-      <IconButton style={{color:"red", padding:"4px", transform:"scale(0.8)"}} onClick={handleDelete}>
+      <IconButton style={{color:"rgb(224, 27, 20)", padding:"4px", transform:"scale(0.8)"}} onClick={()=>handleDelete(id)}>
         <DeleteIcon />
       </IconButton>
       </>
@@ -94,14 +146,9 @@ function createData(si, teacherName, email, mobileNo, dob, gender, address, cour
    };
 }
 
-
-const rows = [
-  createData('1', 'Ravish', 'ravish@gmail.com', '1234567812', '17-12-2001', 'Male', 'Sakchi','Full stack','12-03-2025' ,'Active')
-  // createData('2', 'Goldie', 'goldie@gmail.com', '1234567891', '2000-02-02', 'Female', 'JSR', '2023-01-02', 'Science', 'Inactive'),
-  // createData('3', 'Nandani', 'nandani@gmail.com', '1234567892', '1999-03-03', 'Female', 'JSR', '2023-01-03', 'History', 'Active'),
-  // createData('4', 'Manisha', 'manisha@gmail.com', '1234567893', '1998-04-04', 'Female', 'JSR', '2023-01-04', 'English', 'Inactive'),
-  // createData('5', 'Aastha', 'aastha@gmail.com', '1234567894', '1997-05-05', 'Female', 'JSR', '2023-01-05', 'Computer Science', 'Active'),
-];
+// const rows = [
+//   createData('1', 'Ravish', 'ravish@gmail.com', '1234567812', '17-12-2001', 'Male', 'Sakchi','Full stack','12-03-2025' ,'Active')
+//   ];
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -117,7 +164,7 @@ const rows = [
 
   const onAddClick =()=>
     {
-       navigate("/faculty")
+       navigate("/createfaculty")
     }
 
     const handleClose = () => {

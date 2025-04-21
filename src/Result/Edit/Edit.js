@@ -122,7 +122,7 @@ const EditResult = ({ handleUpdate, editData, handleClose }) => {
                             }
                             fullWidth
                             margin="normal"
-                            variant="standard"
+                            variant="outlined"
                             {...register("examName")}
                             error={!!errors.examName}
                         />
@@ -132,7 +132,7 @@ const EditResult = ({ handleUpdate, editData, handleClose }) => {
                     </Grid>
 
                     <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                        <FormControl fullWidth margin="normal" variant="standard">
+                        <FormControl fullWidth margin="normal" variant="outlined">
                             <InputLabel id="courseName-label">
                                 Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                             </InputLabel>
@@ -153,7 +153,7 @@ const EditResult = ({ handleUpdate, editData, handleClose }) => {
                         </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                        <FormControl fullWidth margin="normal" variant="standard">
+                        <FormControl fullWidth margin="normal" variant="outlined">
                             <InputLabel id="teacherName-label">
                                 Teacher Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                             </InputLabel>
@@ -182,7 +182,7 @@ const EditResult = ({ handleUpdate, editData, handleClose }) => {
                                 </>
                             }
                             type="text"
-                            variant="standard"
+                            variant="outlined"
                             {...register("testType")}
                             error={!!errors.testType}
                             fullWidth
@@ -193,7 +193,7 @@ const EditResult = ({ handleUpdate, editData, handleClose }) => {
                         </div>
                     </Grid>
 
-                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={12}>
+                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
                         <TextField
                             label={
                                 <>
@@ -202,7 +202,7 @@ const EditResult = ({ handleUpdate, editData, handleClose }) => {
                             }
                             type="date"
                             InputLabelProps={{ shrink: true }}
-                            variant="standard"
+                            variant="outlined"
                             {...register("resultDate")}
                             error={!!errors.resultDate}
                             fullWidth
@@ -212,7 +212,7 @@ const EditResult = ({ handleUpdate, editData, handleClose }) => {
                             {errors.resultDate?.message}
                         </div>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={6}>
+                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
                         <TextField
                             label={
                                 <>
@@ -220,7 +220,7 @@ const EditResult = ({ handleUpdate, editData, handleClose }) => {
                                 </>
                             }
                             type="text"
-                            variant="standard"
+                            variant="outlined"
                             {...register("status")}
                             error={!!errors.status}
                             fullWidth

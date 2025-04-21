@@ -17,6 +17,7 @@ import StudentAssignment from "./Assignment/StudentsAssignment/StudentsAssignmen
 import Scheduling from "./Scheduling/Scheduling";
 import CourseList from "./Course/CourseList/CourseList";
 import DocumentSharing from "./Course/DocumentSharing/DocumentSharing";
+import Profile from "./Profile/Profile";
 // import StudentResult from "./Result/StudentResult/StudentResult";
 
 
@@ -38,12 +39,15 @@ function App() {
         <Route path="assignment/students-assignment" element={<StudentAssignment/>}/>
         <Route path="exam" element={<Exam/>}/>
         <Route path="teacher" element={<Faculty/>}/>
-        <Route path="faculty" element={<CreateFaculty/>}/>
+        <Route path="createfaculty" element={<CreateFaculty/>}/>
         <Route path="result" element={<Result/>}/>
         <Route path="viewfaculty" element={<ViewFaculty/>}/>
         <Route path="editfaculty" element={<EditFaculty/>}/>
         <Route path="timetable" element={< Scheduling/>}/>
-        </Route>
+        <Route path="profile" element={< Profile/>}/>
+
+
+    </Route>
       </Routes>
 
     </BrowserRouter>

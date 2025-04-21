@@ -38,7 +38,10 @@ const Branch = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const [rows, setRows] = useState([]);
+  const [filteredRows, setFilteredRows] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [searchTerm, setSearchTerm] = useState("");
 
   const token = Cookies.get("token");
   const Base_url = process.env.REACT_APP_BASE_URL;
@@ -76,6 +79,7 @@ const Branch = () => {
             )
           );
           setRows(formattedData);
+          setFilteredRows(formattedData);
         }
       } catch (error) {
         console.error("Error fetching branch data:", error);
@@ -116,6 +120,15 @@ const Branch = () => {
       </>
     ),
   });
+
+  useEffect(() => {
+    const filtered = rows.filter(
+      (row) =>
+        row.branchname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.location.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredRows(filtered);
+  }, [searchTerm, rows]);
 
   const handleView = (row) => {
     setViewData(row);
@@ -190,7 +203,13 @@ const Branch = () => {
     <>
       <ToastContainer />
       <Box className="container">
-        <Search onAddClick={onAddClick} buttonText="Add Branchlist" />
+        <Search
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          onAddClick={onAddClick}
+          buttonText="Add Branch"
+        />
+
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="branch table">
@@ -208,24 +227,32 @@ const Branch = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, idx) => (
-                    <TableRow hover role="checkbox" key={idx}>
-                      {columns.map((column) => (
-                        <TableCell key={column.id} align={column.align}>
-                          {row[column.id]}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))}
+                {filteredRows.length > 0 ? (
+                  filteredRows
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, idx) => (
+                      <TableRow hover role="checkbox" key={idx}>
+                        {columns.map((column) => (
+                          <TableCell key={column.id} align={column.align}>
+                            {row[column.id]}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={columns.length} align="center">
+                      No results found
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={rows.length}
+            count={filteredRows.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
