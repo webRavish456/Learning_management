@@ -22,7 +22,7 @@ import Cookies from 'js-cookie';
     startTiming: yup.string().required("Start Timing is required"),
     lastTiming: yup.string().required("Last Timing is required"),
     workDays: yup.string().required("Work Days is required"),
-    status:  yup.string().required("Status is required")
+    status:  yup.string()
     
   });
 
@@ -123,6 +123,7 @@ const EditScheduling =({handleUpdate, editData, handleClose})=>
                 Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
             </>
             }
+            // variant="outline"
             type="text"
             {...register("courseName")}
             error={!!errors.courseName}
@@ -144,6 +145,7 @@ const EditScheduling =({handleUpdate, editData, handleClose})=>
                 Teacher Name  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
             </>
             }
+            // variant="outline"
             type="text"
               {...register("teacherName")}
               error={!!errors.teacherName}
@@ -166,6 +168,7 @@ const EditScheduling =({handleUpdate, editData, handleClose})=>
                 Starting Timing <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
             </>
             }
+            // variant="outline"
             type="text"
               {...register("startTiming")}
               error={!!errors.startTiming}
@@ -185,6 +188,7 @@ const EditScheduling =({handleUpdate, editData, handleClose})=>
                 End Timing  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
             </>
             }
+            // variant="outline"
             type="text"
               {...register("lastTiming")}
               error={!!errors.lastTiming}
@@ -204,6 +208,7 @@ const EditScheduling =({handleUpdate, editData, handleClose})=>
                 Work Days <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
             </>
             }
+            // variant="outline"
                 type="text"
               {...register("workDays")}
               error={!!errors.workDays}
@@ -216,6 +221,28 @@ const EditScheduling =({handleUpdate, editData, handleClose})=>
             </div>
             </Grid>
             
+            <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+            
+            <TextField
+            label={
+            <>
+                Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+            </>
+            }
+            // variant="outline"
+                type="text"
+              {...register("status")}
+              error={!!errors.status}
+              fullWidth
+              margin="normal"
+            />
+           
+           <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+              {errors.status?.message}
+            </div>
+            </Grid>
+
+
             </Grid>
 
             <Box className="submit" sx={{display:'flex',justifyContent:'flex-end',gap:'15px',margin:'20px'}}>

@@ -57,7 +57,7 @@ const Header = () => {
     if (path.includes("/result")) return "Results";
 
     // Move the "Dashboard" condition here
-    if (path === "/") return "Dashboard";
+    if (path === "/dashboard") return "Dashboard";
 
     return ""; // Fallback in case no match is found
 

@@ -1,146 +1,246 @@
-import React, { useState } from "react"
+import React, {useState,useEffect} from "react"
 import {
     TextField,
-    MenuItem,
-    Select,
-    FormControl,
-    InputLabel,
     Grid,
     useMediaQuery,
-    Box,
     Button,
-    duration,
-} from "@mui/material";
+    Box,
+    CircularProgress,
+    // duration,
+  } from "@mui/material";
+      
+  import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import {  toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'js-cookie';
 
-const EditCertificate = ({ handleUpdate, handleClose,handleFileChange }) => {
-    const isSmScreen = useMediaQuery("(max-width:768px)");
 
-    const [formData, setFormData] = useState({
-                studentName: "",
-                courseName: "",
-                duration: "",
-                certificate: "",
+  const schema = yup.object().shape({
+    studentName: yup.string().required("Student Name is required"),
+    courseName: yup.string().required("Course Name is required"),
+    duration: yup.string().required("Duration is required"),
+    certificate: yup.string().required("Certificate is required"),
+    status:  yup.string()
+    
+  });
+
+const EditCertificate =({handleUpdate, editData, handleClose})=>  
+{
+
+  const isSmScreen = useMediaQuery("(max-width:768px)");
+
+
+    const token = Cookies.get('token');
+
+    const Base_url = process.env.REACT_APP_BASE_URL;
+  
+    const [loading, setLoading] = useState(false)
+  
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+      reset,
+    } = useForm({
+      resolver: yupResolver(schema),
     });
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    useEffect(() => {
+        if (editData) {
+          reset({
+            studentName: editData.studentName || "",
+            courseName: editData.courseName || "",
+            duration: editData.duration || "",
+            certificate: editData.certificate || "",
+            status: editData.status || "",
+          });
+        }
+      }, [editData, reset]);
+    
 
-    return (
-        <>
-            <Grid container columnSpacing={2}>
+    const onSubmit = (data) => {
+    
+        setLoading(true)
 
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+       const formdata = new FormData();
+       formdata.append("studentName", data.studentName);
+       formdata.append("courseName", data.courseName);
+       formdata.append("duration", data.duration);
+       formdata.append("certificate", data.certificate);
+       formdata.append("status", data.status);
+    
+   
+       const requestOptions = {
+         method: "PATCH",
+         body: formdata,
+         headers: {
+           Authorization: `Bearer ${token}`, 
+          },
+       };
+   
+       fetch(`${Base_url}/certificates/${editData._id}`, requestOptions)
+         .then((response) => response.text())
+   
+         .then((result) => {
+   
+           const res = JSON.parse(result)
+   
+           if(res.status==="success")
+           {
+             setLoading(false)
+            
+             toast.success("Certificate Updated Successfully!")
+             handleUpdate(true)
+             handleClose()
+             reset();
+           }
+           else {
+   
+             setLoading(false)
+             toast.error(res.message)
+   
+           }
+         })
+         .catch((error) => console.error(error));
+ };
 
-                    <TextField
-                        label={
-                            <>
-                                Student Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="studentName"
-                        value={formData.studentName}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                </Grid>
+  return (
+     <>
+     
+   <form onSubmit={handleSubmit(onSubmit)}>
 
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+             <Grid container columnSpacing={2}>
 
-                    <FormControl fullWidth margin="normal">
-                                            <InputLabel>Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
-                                            <Select name="courseName" value={formData.courseName} onChange={handleChange}>
-                                            <MenuItem value="BCA">BCA</MenuItem>
-                                            <MenuItem value="MCA">MCA</MenuItem>
-                                            <MenuItem value="MBA">BBA</MenuItem>
-                                            </Select>
-                                            </FormControl>
+            <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+            
+            <TextField
+            label={
+            <>
+                Student Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+            </>
+            }
+        
+            type="text"
+            {...register("studentName")}
+            error={!!errors.studentName}
+            fullWidth
+            margin="normal"
+            />
 
-                </Grid>
+            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+              {errors.studentName?.message}
+            </div>
 
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                    <TextField
-                        label={
-                            <>
-                                Duration <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="duration"
-                        value={formData.duration}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                </Grid>
-
-                {/* <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                    <TextField
-                        label={
-                            <>
-                                Certificate <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="certificate"
-                        value={formData.certificate}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                </Grid> */}
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                     <TextField
-                                                         label="Certificates"
-                                                         name="certificates"
-                                                         type="file"
-                                                         InputLabelProps={{ shrink: true }}
-                                                         fullWidth
-                                                         margin="normal"
-                                                     />
-                    
-                </Grid>
-                
-
-                {/* <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                    <TextField
-                        label={
-                            <>
-                                Payment Fee <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="payment_Fee"
-                        value={formData.payment_Fee}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                </Grid>
-
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel>Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
-                        <Select name="Status" value={formData.status} onChange={handleChange}>
-                            <MenuItem value="active">Scheduled</MenuItem>
-                            <MenuItem value="inactive">Completed</MenuItem>
-                            <MenuItem value="upcoming">Cancelled</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid> */}
             </Grid>
 
-            <Box className="submit" sx={{display: "flex",
-                        gap: 2,
-                        marginTop: 2,
-                        justifyContent: "flex-end",
-                        width: "100%",}}>
-                <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
-                <Button onClick={handleUpdate} className="primary_button">
-                    Update
-                </Button>
-            </Box>
+            <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+            
+            <TextField
+            label={
+            <>
+                Course Name  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+            </>
+            }
+            
+            type="text"
+              {...register("courseName")}
+              error={!!errors.courseName}
+              fullWidth
+              margin="normal"
+            />
 
-        </>
-    )
+
+<div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+              {errors.courseName?.message}
+            </div>
+          
+            </Grid>
+
+            <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+            
+            <TextField
+            label={
+            <>
+                Duration <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+            </>
+            }
+            
+            type="text"
+              {...register("duration")}
+              error={!!errors.duration}
+              fullWidth
+              margin="normal"
+            />
+             <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+              {errors.duration?.message}
+            </div>
+            </Grid>
+
+            <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+            
+            <TextField
+            
+            label="Certificate"
+            name="certificate"
+            type="file"
+            InputLabelProps={{shrink : true}}
+            {...register("certificate")}
+            error={!!errors.certificate}
+              fullWidth
+              margin="normal"
+            />
+            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+              {errors.certificate?.message}
+            </div>
+             
+            </Grid>
+
+            
+            <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+            
+            <TextField
+            label={
+            <>
+                Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+            </>
+            }
+                type="text"
+              {...register("status")}
+              error={!!errors.status}
+              fullWidth
+              margin="normal"
+            />
+           
+           <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+              {errors.status?.message}
+            </div>
+            </Grid>
+
+
+            </Grid>
+
+            <Box className="submit" sx={{display:'flex',justifyContent:'flex-end',gap:'15px',margin:'20px'}}>
+            <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
+            <Button type="submit" className="primary_button">
+
+{loading ? (
+<>
+<CircularProgress size={18} 
+style={{ marginRight: 8, color: "#fff" }} />
+      Updating
+  </>
+  ) : (
+  "Update"
+  )}
+
+</Button>
+</Box>
+</form>
+
+</>
+)
 }
 
 export default EditCertificate;

@@ -1,159 +1,265 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
-    TextField,
-    MenuItem,
-    Select,
-    FormControl,
-    InputLabel,
-    Grid,
-    useMediaQuery,
-    Button,
-    Box,
-    duration,
-    // Typography,
+  TextField,
+  Grid,
+  useMediaQuery,
+  Button,
+  Box,
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  // duration,
 } from "@mui/material";
-import Certificates from "../Certificates";
 
-const CreateCertificate = ({ handleSubmit, handleClose ,handleFileChange}) => {
-    const isSmScreen = useMediaQuery("(max-width:768px)");
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'js-cookie';
 
-    const [formData, setFormData] = useState({
-         studentName: "",
-        courseName: "",
-        duration: "",
-        certificate: "",
-    });
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+const schema = yup.object().shape({
+  studentName: yup.string().required("Student Name is required"),
+  courseName: yup.string().required("course Name is required"),
+  duration: yup.string().required("duration is required"),
+  certificate: yup.string().required("certificate is required"),
+  status: yup.string()
+
+});
+
+const CreateCertificate = ({ handleCreate, handleClose }) => {
+  const [courseName, setCourseName] = useState([]);
+  const isSmScreen = useMediaQuery("(max-width:768px)");
+
+
+  const token = Cookies.get('token');
+
+  const Base_url = process.env.REACT_APP_BASE_URL;
+
+  const [loading, setLoading] = useState(true)
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  useEffect(() => {
+
+    const fetchCourseData = async () => {
+      try {
+        const response = await fetch(`${Base_url}/courselist`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const result = await response.json();
+        if (result.status === "success") {
+          console.log(result.data)
+
+          setCourseName(result.data)
+          setLoading(false)
+        }
+      } catch (error) {
+        console.error("Error fetching course data:", error);
+      }
+    };
+    if (loading) {
+      fetchCourseData();
+    }
+  }, [loading]); //dropdown
+
+
+  const onSubmit = (data) => {
+
+    setLoading(true)
+
+    const formdata = new FormData();
+    formdata.append("studentName", data.studentName);
+    formdata.append("courseName", data.courseName);
+    formdata.append("duration", data.duration);
+    formdata.append("certificate", data.certificate);
+    formdata.append("status", data.status);
+
+    const requestOptions = {
+      method: "POST",
+      body: formdata,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     };
 
-    return (
-        <>
-            <Grid container columnSpacing={2}>
+    fetch(`${Base_url}/certificates`, requestOptions)
+      .then((response) => response.text())
 
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+      .then((result) => {
 
-                    <TextField
-                        label={
-                            <>
-                                Student Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="studentName"
-                        value={formData.studentName}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                </Grid>
+        const res = JSON.parse(result)
 
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+        if (res.status === "success") {
+          setLoading(false)
 
-                    <FormControl fullWidth margin="normal">
-                                            <InputLabel>Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
-                                            <Select name="courseName" value={formData.courseName} onChange={handleChange}>
-                                            <MenuItem value="BCA">BCA</MenuItem>
-                                            <MenuItem value="MCA">MCA</MenuItem>
-                                            <MenuItem value="MBA">BBA</MenuItem>
-                                            </Select>
-                                            </FormControl>
-
-                </Grid>
-
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                    <TextField
-                        label={
-                            <>
-                                Duration <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                            </>
-                        }
-                        name="duration"
-                        value={formData.duration}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                </Grid>
-
-                {/* <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                    <TextField
-                        // label={
-                        //     <>
-                        //         Certificate  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                        //     </>
-                        // }
-                        label={
-                            <>
-                            Certificate
-                            </>
-                        }
-                        />
-                        <input
-                        type="file"
-                        name="certificateFile"
-                        onChange={handleFileChange}  // Handle file change event
-                        accept="application/pdf,image/*"  // You can restrict to certain file types (e.g., pdf, images)
-                        style={{ padding: '10px' }}
-                    
-                    />
-                </Grid> */}
-                {/* <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-    <TextField
-        label={
-            <>
-                Certificate  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-            </>
+          toast.success("Certificate Created Successfully!")
+          handleCreate(true)
+          handleClose()
+          reset();
         }
-        name="certificate"
-        value={formData.certificate}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-    />
-</Grid> */}
-<Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-    {/* <TextField
-// label={
-//             <>
-//                 Certificate  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-//             </>
-//         }
-        label="Certificate"
-        type="file"
-        InputLabelProps={{ shrink: true }}
-        name="certificateFile"
-        onChange={handleFileChange}  // Handle file change event
-        // accept="application/pdf,image/*"  // You can restrict to certain file types (e.g., pdf, images)
-        // style={{ padding: '10px' }}
-        />
-     */}
-     <TextField
-                                     label="Certificates"
-                                     name="certificates"
-                                     type="file"
-                                     InputLabelProps={{ shrink: true }}
-                                     fullWidth
-                                     margin="normal"
-                                 />
-</Grid>
+        else {
 
-               
-            </Grid>
+          setLoading(false)
+          toast.error(res.message)
 
-            <Box className="submit" sx={{display: "flex",
-                        gap: 2,
-                        marginTop: 2,
-                        justifyContent: "flex-end",
-                        width: "100%",}}>
-                <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
-                <Button onClick={handleSubmit} className="primary_button">
-                    Submit
-                </Button>
-            </Box>
+        }
+      })
+      .catch((error) => console.error(error));
+  };
 
-        </>
-    )
+  return (
+    <>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+
+        <Grid container columnSpacing={2}>
+
+          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+
+            <TextField
+              label={
+                <>
+                  Student Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                </>
+              }
+
+              type="text"
+              {...register("studentName")}
+              error={!!errors.studentName}
+              fullWidth
+              margin="normal"
+            />
+
+            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+              {errors.studentName?.message}
+            </div>
+
+          </Grid>
+
+          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+            <FormControl
+              fullWidth
+              margin="normal"
+              error={!!errors.courseName}
+            >
+              <InputLabel>
+                Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+              </InputLabel>
+
+              <Select
+                label="Course Name"
+                defaultValue=""
+                {...register("courseName", { required: "Course name is required" })}
+              >
+
+                {courseName.map((course, index) => (
+                  <MenuItem key={index} value={course.courseName}>
+                    {course.courseName}
+                  </MenuItem>
+                ))}
+              </Select >
+              <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                {errors.courseName?.message}
+              </div>
+            </FormControl>
+          </Grid>
+
+
+          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+
+            <TextField
+              label={
+                <>
+                  Duration <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                </>
+              }
+
+              type="text"
+              {...register("duration")}
+              error={!!errors.duration}
+              fullWidth
+              margin="normal"
+            />
+            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+              {errors.duration?.message}
+            </div>
+          </Grid>
+
+          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+
+            <TextField
+
+              label="Certificate"
+              name="certificate"
+              type="file"
+              InputLabelProps={{ shrink: true }}
+              {...register("certificate")}
+              error={!!errors.certificate}
+              fullWidth
+              margin="normal"
+            />
+            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+              {errors.certificate?.message}
+            </div>
+          </Grid>
+
+          <Grid item xs={12} >
+
+            <TextField
+              label={
+                <>
+                  Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                </>
+              }
+
+              type="text"
+              {...register("status")}
+              error={!!errors.status}
+              fullWidth
+              margin="normal"
+            />
+
+            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+              {errors.status?.message}
+            </div>
+          </Grid>
+
+        </Grid>
+
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', margin: '20px' }}>
+          <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
+          <Button type="submit" className="primary_button">
+
+            {loading ? (
+              <>
+                <CircularProgress size={18}
+                  style={{ marginRight: 8, color: "#fff" }} />
+                Submitting
+              </>
+            ) : (
+              "Submit"
+            )}
+
+          </Button>
+        </Box>
+      </form>
+
+    </>
+  )
 }
 
 export default CreateCertificate;

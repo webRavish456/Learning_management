@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Grid, useMediaQuery } from "@mui/material";
 
-const ViewAllStudent = () => {
+const ViewAllStudent = ({viewData})  => {
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
     return (
@@ -14,7 +14,7 @@ const ViewAllStudent = () => {
                         <Box className="pageTitle">Student Name:</Box>
                     </Grid>
                     <Grid item xs={6}>
-                        <Box className="pageDescription">Nandani</Box>
+                        <Box className="pageDescription">{viewData.studentName}</Box>
                     </Grid>
 
                 </Grid>
@@ -25,7 +25,7 @@ const ViewAllStudent = () => {
                         <Box className="pageTitle">Course:</Box>
                     </Grid>
                     <Grid item xs={6}>
-                        <Box className="pageDescription">Full Stack</Box>
+                        <Box className="pageDescription">{viewData.course} </Box>
                     </Grid>
                 </Grid>
 
@@ -35,7 +35,7 @@ const ViewAllStudent = () => {
                         <Box className="pageTitle">Mobile Number:</Box>
                     </Grid>
                     <Grid item xs={6}>
-                        <Box className="pageDescription">6347689152</Box>
+                        <Box className="pageDescription">{viewData.mobileNumber} </Box>
                     </Grid>
 
                 </Grid>
@@ -47,7 +47,7 @@ const ViewAllStudent = () => {
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Box className="pageDescription">04-03-2025</Box>
+                        <Box className="pageDescription">{viewData.enrollmentDate} </Box>
                     </Grid>
 
                 </Grid>
@@ -59,7 +59,7 @@ const ViewAllStudent = () => {
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Box className="pageDescription">Jamshedpur</Box>
+                        <Box className="pageDescription">{viewData.address} </Box>
                     </Grid>
 
                 </Grid>
@@ -72,7 +72,7 @@ const ViewAllStudent = () => {
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Box className="pageDescription">Active</Box>
+                        <Box className="pageDescription">{viewData.status} </Box>
                     </Grid>
 
                 </Grid>

@@ -3,7 +3,7 @@ const Menuitems = [
     {
         icon: '/sidebar/dashboard.png',
         label: "Dashboard",
-        href: "/",
+        href: "/dashboard",
     },
   
   {

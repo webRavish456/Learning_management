@@ -14,7 +14,7 @@ import {
   TableRow,
   Box,
   IconButton,
-  
+
 } from "@mui/material";
 
 import CommonDialog from "../../Component/CommonDialog/CommonDialog";
@@ -39,24 +39,30 @@ const AllStudents = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const [rows, setRows] = useState([]);
+  const [filteredRows, setFilteredRows] = useState([]);  //new Line 1
   const [loading, setLoading] = useState(true);
 
+  const [searchTerm, setSearchTerm] = useState("") //2
+
   const token = Cookies.get("token");
+
   const Base_url = process.env.REACT_APP_BASE_URL;
 
   const columns = [
     { id: "si", label: "SI.No", flex: 1, align: "center" },
     { id: "studentName", label: "Student Name", flex: 1, align: "center" },
     { id: "gender", label: "Gender", flex: 1, align: "center" },
-    {id: "mobileNumber", label: "Mobile Number", flex: 1, align: "center"},
-    {id: "emailId", label: "Email Id", flex: 1, align: "center"},
-    {id: "dob", label: "DOB", flex: 1, align: "center"},
-    {id: "address", label: "Address", flex: 1, align: "center"},
-    {id: "enrollmentDate", label: "Enrollment Date", flex: 1, align: "center"},
-    {id: "course", label: "Course", flex: 1, align: "center"},
+    { id: "mobileNumber", label: "Mobile Number", flex: 1, align: "center" },
+    { id: "emailId", label: "Email Id", flex: 1, align: "center" },
+    { id: "dob", label: "DOB", flex: 1, align: "center" },
+    { id: "address", label: "Address", flex: 1, align: "center" },
+    { id: "enrollmentDate", label: "Enrollment Date", flex: 1, align: "center" },
+    { id: "course", label: "Course", flex: 1, align: "center" },
     { id: "status", label: "Status", flex: 1, align: "center" },
     { id: "action", label: "Action", flex: 1, align: "center" },
   ];
+
+
 
   useEffect(() => {
     const fetchAllStudentsData = async () => {
@@ -89,28 +95,32 @@ const AllStudents = () => {
             )
           );
           setRows(formattedData);
+          setFilteredRows(formattedData);  //Initialization filteredrows with all data
         }
       } catch (error) {
         console.error("Error fetching all students data:", error);
       }
     };
 
+
+
     if (loading) {
       fetchAllStudentsData();
     }
   }, [loading]);
 
-  const createData = (si, row, studentName, gender,mobileNumber,emailId,dob, address, enrollmentDate, course, status) => ({
+  const createData = (si, row, studentName, gender, mobileNumber, emailId, dob, address, enrollmentDate, course, status) => ({
     si,
     row,
-    studentName, 
+    studentName,
     gender,
-     mobileNumber, 
-     emailId, 
-     dob,
-     address,
-     enrollmentDate,
-     status,
+    mobileNumber,
+    emailId,
+    dob,
+    address,
+    enrollmentDate,
+    course,
+    status,
     action: (
       <>
         <IconButton
@@ -135,8 +145,21 @@ const AllStudents = () => {
     ),
   });
 
+  //Automatically filter rows based on search term
+  useEffect(() => {
+    const filtered = rows.filter(
+      (row) =>
+        row.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.mobileNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.emailId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.course.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.status.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredRows(filtered);
+  }, [searchTerm, rows]);  //Dependencies ensure filtering happens dynamically 
+
   const handleView = (row) => {
-    console.log("row",row)
+    console.log("row", row)
     setViewData(row);
     setViewShow(true);
   };
@@ -153,7 +176,7 @@ const AllStudents = () => {
 
   const handleDelete = () => {
     setIsDeleting(true);
-    fetch(`${Base_url}/allStudents/${deleteId}`, {
+    fetch(`${Base_url}/allstudents/${deleteId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -211,7 +234,14 @@ const AllStudents = () => {
     <>
       <ToastContainer />
       <Box className="container">
-        <Search onAddClick={onAddClick} buttonText=" Add All Students" />
+        {/* Use update search component */}
+        <Search
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          onAddClick={onAddClick}  //Add button action
+          buttonText=" Add Students List"
+        />
+
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="branch table">
@@ -229,24 +259,32 @@ const AllStudents = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, idx) => (
-                    <TableRow hover role="checkbox" key={idx}>
-                      {columns.map((column) => (
-                        <TableCell key={column.id} align={column.align}>
-                          {row[column.id]}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))}
+                {filteredRows.length > 0 ? (
+                  filteredRows
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, idx) => (
+                      <TableRow hover role="checkbox" key={idx}>
+                        {columns.map((column) => (
+                          <TableCell key={column.id} align={column.align}>
+                            {row[column.id]}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={columns.length} align="center">
+                      No results found
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={rows.length}
+            count={filteredRows.length}  //search
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -259,14 +297,14 @@ const AllStudents = () => {
           onClose={handleClose}
           dialogTitle={
             openData
-              ? "Create New allstudent"
+              ? "Create New Student List"
               : viewShow
-              ? "View allstudent"
-              : editShow
-              ? "Edit allstudent"
-              : deleteShow
-              ? "Delete allstudent"
-              : ""
+                ? "View Student List"
+                : editShow
+                  ? "Edit Student List"
+                  : deleteShow
+                    ? "Delete Student List"
+                    : ""
           }
           dialogContent={
             openData ? (
