@@ -18,7 +18,8 @@ import Scheduling from "./Scheduling/Scheduling";
 import CourseList from "./Course/CourseList/CourseList";
 import DocumentSharing from "./Course/DocumentSharing/DocumentSharing";
 import Profile from "./Profile/Profile";
-// import StudentResult from "./Result/StudentResult/StudentResult";
+import StudentResult from "./Result/StudentResult/StudentResult";
+
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
         <Route path="teacher" element={<Faculty/>}/>
         <Route path="createfaculty" element={<CreateFaculty/>}/>
         <Route path="result" element={<Result/>}/>
+        <Route path="student-result/:examId" element={<StudentResult/>}/>
         <Route path="viewfaculty" element={<ViewFaculty/>}/>
         <Route path="editfaculty" element={<EditFaculty/>}/>
         <Route path="timetable" element={< Scheduling/>}/>

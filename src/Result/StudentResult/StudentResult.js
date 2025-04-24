@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-import CloseIcon from "@mui/icons-material/Close";
-import Search from "../Search/Search";
+import Cookies from 'js-cookie'
 
 import {
   Paper,
@@ -32,14 +30,16 @@ import {
   Grid,
   useMediaQuery,
 } from "@mui/material";
-import CommonDialog from "../Component/CommonDialog/CommonDialog";
+
 import ViewStudentResult from "./View/View";
 import CreateStudentResult from "./Create/Create";
 import EditStudentResult from "./Edit/Edit";
 import DeleteStudentResult from "./Delete/Delete";
+import Search from "../../Search/Search";
+import CommonDialog from "../../Component/CommonDialog/CommonDialog";
+import { useParams } from "react-router-dom";
 
-const StudentResult=()=>
-  {
+const StudentResult = () => {
   
     const [openData, setOpenData] = useState(false)
   
@@ -48,6 +48,17 @@ const StudentResult=()=>
     const [editData, setEditData] = useState(false)
   
     const [deleteData, setDeleteData] = useState(false)
+
+    const [rows, setRows] = useState([]);
+    const [filteredRows, setFilteredRows] = useState([]);
+    const [loading, setLoading] = useState(true);
+  
+    const [searchTerm, setSearchTerm] = useState("");
+  
+    const {examId} = useParams()
+
+    const token = Cookies.get("token");
+    const Base_url = process.env.REACT_APP_BASE_URL;
   
    const handleView = () =>
     {
@@ -112,6 +123,48 @@ const columns = [
   },
 ];
 
+useEffect(() => {
+
+  const fetchStudentResultData = async () => {
+    try {
+      const response = await fetch(`${Base_url}/studentresult/${examId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const result = await response.text();
+      const res = JSON.parse(result);
+
+      if (res.status === "success") {
+        setLoading(false);
+        const formattedData = res.data.map((item, index) =>
+          createData(
+            index + 1,
+            item,
+            item.examName,
+            item.courseName,
+            item.teacherName,
+            item.testType,
+            item.resultDate,
+            item.status
+          )
+        );
+        setRows(formattedData);
+        setFilteredRows(formattedData);
+      }
+    } catch (error) {
+      console.error("Error fetching result data:", error);
+    }
+  };
+
+  if (loading) {
+    fetchStudentResultData();
+  }
+}, [loading]);
+
+
 function createData(si, studentName, courseName, marksObtained, totalMarks, passingMarks, sheet, status  ) {
   return { si, studentName, courseName, marksObtained, totalMarks, passingMarks, sheet, status,  action: (
       <>
@@ -137,15 +190,6 @@ function createData(si, studentName, courseName, marksObtained, totalMarks, pass
     ),
    };
 }
-
-
-const rows = [
-  createData('1', 'Ayushi', 'Frontend', '80',  '100', '35', 'download', 'Passed')
-  // createData('2', 'Goldie', 'goldie@gmail.com', '1234567891', '2000-02-02', 'Female', 'JSR', '2023-01-02', 'Science', 'Inactive'),
-  // createData('3', 'Nandani', 'nandani@gmail.com', '1234567892', '1999-03-03', 'Female', 'JSR', '2023-01-03', 'History', 'Active'),
-  // createData('4', 'Manisha', 'manisha@gmail.com', '1234567893', '1998-04-04', 'Female', 'JSR', '2023-01-04', 'English', 'Inactive'),
-  // createData('5', 'Aastha', 'aastha@gmail.com', '1234567894', '1997-05-05', 'Female', 'JSR', '2023-01-05', 'Computer Science', 'Active'),
-];
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -174,7 +218,6 @@ const rows = [
    const handleSubmit = (e) => {
      e.preventDefault();
      setOpenData(false)
-     // console.log("Form Data Submitted:", formData);
    }
 
    const handleUpdate = (e) => {
@@ -236,7 +279,7 @@ const rows = [
       />
     </Paper>
 
-    <CommonDialog 
+    <CommonDialog
       open={openData || viewData || editData || deleteData} 
       onClose={handleClose}
       dialogTitle={ <>
