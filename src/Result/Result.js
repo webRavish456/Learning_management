@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import CloseIcon from "@mui/icons-material/Close";
-import Search from "../Search/Search";
+
 
 import {
   Paper,
@@ -17,7 +16,7 @@ import {
   Box,
   IconButton,
 } from "@mui/material";
-import CommonDialog from "../Component/CommonDialog/CommonDialog";
+
 import ViewResult from "./View/View";
 import CreateResult from "./Create/Create";
 import EditResult from "./Edit/Edit";
@@ -25,6 +24,9 @@ import DeleteResult from "./Delete/Delete";
 import Cookies from 'js-cookie'
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import Search from "../Search/Search";
+import CommonDialog from "../Component/CommonDialog/CommonDialog";
 
 const Result = () => {
   const [openData, setOpenData] = useState(false);
@@ -127,19 +129,19 @@ const Result = () => {
       <>
         <IconButton
           style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }}
-          onClick={() => handleView(row)}
-        >
+          onClick={(e) => {e.stopPropagation(); handleView(row); } }
+        > 
           <VisibilityIcon />
         </IconButton>
         <IconButton
           style={{ color: "#6b6666", padding: "4px", transform: "scale(0.8)" }}
-          onClick={() => handleEdit(row)}
+          onClick={(e) => {e.stopPropagation(); handleEdit(row)}}
         >
           <EditIcon />
         </IconButton>
         <IconButton
           style={{ color: "#e6130b", padding: "4px", transform: "scale(0.8)" }}
-          onClick={() => handleShowDelete(row._id)}
+          onClick={(e) => { e.stopPropagation(); handleShowDelete(row._id)}}
         >
           <DeleteIcon />
         </IconButton>
@@ -227,6 +229,14 @@ const Result = () => {
     setPage(0);
   };
 
+ const navigate = useNavigate ()
+
+  const handleStudentResult=(examId)=>{
+
+     navigate(`/student-result/${examId._id}`)
+
+  }
+
   return (
     <>
       <ToastContainer />
@@ -259,7 +269,10 @@ const Result = () => {
                     .map((row, idx) => (
                       <TableRow hover role="checkbox" key={idx}>
                         {columns.map((column) => (
-                          <TableCell key={column.id} align={column.align}>
+                          <TableCell key={column.id} align={column.align} onClick={(e) => {
+                     
+                            handleStudentResult(row.row); 
+                          }}>
                             {row[column.id]}
                           </TableCell>
                         ))}
@@ -287,10 +300,10 @@ const Result = () => {
         </Paper>
 
         <CommonDialog
-          open={openData || viewData || editData || deleteShow}
+          open={openData || viewShow || editShow || deleteShow}
           onClose={handleClose}
           dialogTitle={<>
-            {openData ? "Create New Result" : viewData ? "View Result Details " : editData ? "Edit Result Details" : deleteShow ? "Delete Result Details" : ""}
+            {openData ? "Create New Result" : viewShow ? "View Result Details " : editShow ? "Edit Result Details" : deleteShow ? "Delete Result Details" : ""}
           </>}
 
           dialogContent={
