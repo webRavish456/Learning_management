@@ -15,13 +15,14 @@ import {
   TableRow,
   Box,
   IconButton,
+  Skeleton,
 } from "@mui/material";
 
 import ViewResult from "./View/View";
 import CreateResult from "./Create/Create";
 import EditResult from "./Edit/Edit";
 import DeleteResult from "./Delete/Delete";
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -54,33 +55,28 @@ const Result = () => {
     {
       id: 'courseName',
       label: 'Course Name',
-      flex: 1,
-      align: 'center',
+      flex: 1, align: 'center',
     },
     {
       id: 'teacherName',
       label: 'Teacher Name',
-      flex: 1,
-      align: 'center',
+      flex: 1, align: 'center',
     },
     {
       id: 'testType',
       label: 'Test Type ',
-      flex: 1,
-      align: 'center',
+      flex: 1, align: 'center',
     },
     {
       id: 'resultDate',
       label: 'Result Date ',
-      flex: 1,
-      align: 'center',
+      flex: 1, align: 'center',
     },
 
     {
       id: 'action',
       label: 'Action',
-      flex: 1,
-      align: 'center',
+      flex: 1, align: 'center',
     },
   ];
 
@@ -263,7 +259,17 @@ const Result = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredRows.length > 0 ? (
+                {loading ? (
+                  Array.from({ length: rowsPerPage }).map((_, index) => (
+                    <TableRow key={index}>
+                      {columns.map((column) => (
+                        <TableCell key={column.id} align={column.align}>
+                          <Skeleton width="100%" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : filteredRows.length > 0 ? (
                   filteredRows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, idx) => (
@@ -296,8 +302,46 @@ const Result = () => {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
+    
+          <CommonDialog
+            open={openData || viewData || editData || deleteShow}
+            onClose={handleClose}
+            dialogTitle={
+              <>
+                {openData
+                  ? "Create New Result"
+                  : viewData
+                  ? "View Result Details"
+                  : editData
+                  ? "Edit Result Details"
+                  : deleteShow
+                  ? "Delete Result Details"
+                  : ""}
+              </>
+            }
+            dialogContent={
+              openData ? (
+                <CreateResult handleCreate={handleCreate} handleClose={handleClose} />
+              ) : viewShow ? (
+                <ViewResult viewData={viewData} />
+              ) : editShow ? (
+                <EditResult
+                  editData={editData}
+                  handleUpdate={handleUpdate}
+                  handleClose={handleClose}
+                />
+              ) : deleteShow ? (
+                <DeleteResult
+                  handleDelete={handleDelete}
+                  isDeleting={isDeleting}
+                  handleClose={handleClose}
+                />
+              ) : null
+            }
           />
-        </Paper>
+        
 
         <CommonDialog
           open={openData || viewShow || editShow || deleteShow}

@@ -2,7 +2,7 @@
 body{
   background-color: #f0eeee;
   height: 100vh;
-  margin-left: 280px; /* Align content next to the sidebar */
+  margin-left: 230px; /* Align content next to the sidebar */
   overflow-y: auto; /* Enable vertical scrolling */
 }
 .primary_button {
@@ -114,9 +114,6 @@ color: #000000;
   justify-content: space-between;
   padding-top: 10px;
 }
-
-/*  Sidebar */
-
 .menu-item {
   margin-bottom: 10px;
 }
@@ -250,7 +247,7 @@ width: fit-content !important;
 }
 
 .sidebar {
-  width: 260px;
+  width: 210px;
    background-color: var(--primary_color);
   color: white;
   padding: 10px;
