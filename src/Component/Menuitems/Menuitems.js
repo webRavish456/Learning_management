@@ -47,7 +47,7 @@ const Menuitems = [
       ]
     },
     {
-      icon: "/sidebar/assignments.png",
+      icon: "/sidebar/schedule.png",
       label: "Scheduling",
       href: "/timetable",
       

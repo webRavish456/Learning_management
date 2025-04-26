@@ -55,6 +55,8 @@ const Header = () => {
     if (path.includes("/assignment/students-assignment")) return "Students-Assignments";
     if (path.includes("/exam")) return "Exam";
     if (path.includes("/result")) return "Results";
+    if (path.includes("/studentresult")) return "Student-Result";
+
 
     // Move the "Dashboard" condition here
     if (path === "/dashboard") return "Dashboard";

@@ -114,7 +114,7 @@ useEffect(() => {
             item.companyDetails.courseName,
             item.companyDetails.joiningDate,
             item.companyDetails.salary,
-            item.availabilityStatus
+            item.status
           )
         );
         setRows(formattedData);
