@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import SignIn from "./Auth/SignIn";
 import Forgot from "./Auth/Forgot";
 import Dashboard from "./Dashboard/Dashboard";
@@ -19,6 +19,7 @@ import CourseList from "./Course/CourseList/CourseList";
 import DocumentSharing from "./Course/DocumentSharing/DocumentSharing";
 import Profile from "./Profile/Profile";
 import StudentResult from "./Result/StudentResult/StudentResult";
+import ProtectedRoute from "./Component/ProtectedRoute/ProtectedRoute";
 
 
 
@@ -28,9 +29,15 @@ function App() {
       <Routes>
 
         <Route path="/login" element={<SignIn />}/>
-        <Route path="/" element={<LayoutMain />}>
-        <Route path="dashboard" element={<Dashboard/>}/>
         <Route path="/forgot" element={<Forgot />}/>
+        
+        <Route path="/" element={ <ProtectedRoute>
+              <LayoutMain />
+         </ProtectedRoute>}>
+
+         <Route index element={<Navigate to="/dashboard" replace />} />
+
+        <Route path="dashboard" element={<Dashboard/>}/>
         <Route path="branch" element={<Branch/>}/>
         <Route path="course/all-courses" element={<CourseList/>}/>
         <Route path="course/document-sharing" element={<DocumentSharing/>}/>
@@ -42,14 +49,15 @@ function App() {
         <Route path="teacher" element={<Faculty/>}/>
         <Route path="createfaculty" element={<CreateFaculty/>}/>
         <Route path="result" element={<Result/>}/>
-        <Route path="studentresult/:resultId" element={<StudentResult/>}/>
-        <Route path="viewfaculty" element={<ViewFaculty/>}/>
-        <Route path="editfaculty" element={<EditFaculty/>}/>
+        <Route path="student-result/:resultId" element={<StudentResult/>}/>
+        <Route path="viewfaculty/:Id" element={<ViewFaculty/>}/>
+        <Route path="editfaculty/:Id" element={<EditFaculty/>}/>
         <Route path="timetable" element={< Scheduling/>}/>
         <Route path="profile" element={< Profile/>}/>
-
-
     </Route>
+
+     <Route path="*" element={<Navigate to="/login" replace />} />
+
       </Routes>
 
     </BrowserRouter>

@@ -21,8 +21,6 @@ const ViewFaculty = () => {
 
   const { Id } = useParams();
 
-  console.log()
-
   const token = Cookies.get("token");
   const Base_url = process.env.REACT_APP_BASE_URL;
 

@@ -14,8 +14,9 @@ const CommonDialog = ({open, onClose, dialogTitle, dialogContent}) =>
       
 
      return (
-        <>
+     
              <Dialog
+             key={dialogTitle}
         open={open}
         onClose={onClose}
         TransitionComponent={React.Fragment}
@@ -42,7 +43,7 @@ const CommonDialog = ({open, onClose, dialogTitle, dialogContent}) =>
      
       </Dialog>
 
-        </>
+
      )
 }
 

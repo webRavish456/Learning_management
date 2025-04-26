@@ -208,7 +208,8 @@ const CreateCourseList =({handleCreate, handleClose})=>
           formdata.append("courseDescription", data.courseDescription);
           formdata.append("duration", data.duration);
           formdata.append("pricing", data.pricing);
-          formdata.append("syllabus", data.syllabus);
+          formdata.append("syllabus", data.syllabus[0]);
+
           const requestOptions = {
             method: "POST",
             body: formdata,
@@ -246,7 +247,7 @@ const CreateCourseList =({handleCreate, handleClose})=>
     };
 
      return (
-        <>
+    
         
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container columnSpacing={2}>
@@ -268,31 +269,7 @@ const CreateCourseList =({handleCreate, handleClose})=>
               {errors.courseName?.message}
             </div>
           </Grid>
-          {/* <Grid item xs={12} sm={12} md={6}>
-          <FormControl fullWidth margin="normal"
-          variant="outlined"
-          error={!!errors.courseNameName}>
-                        <InputLabel>Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
-                        <Select
-                        label="Course Name"
-                        defaultValue=""
-                        {
-                          ...register("courseName",{required: "course name is required"})
-                        }>
-
-                        {courseName.map((course, index) =>(
-                          <MenuItem key={index} value={course.courseName}>
-                            {course.courseName}
-                          </MenuItem>
-                        ))}
-                        </Select>
-                     </FormControl>
-                     <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.courseName?.message}
-            </div>
-          </Grid>    */}
-
-
+    
           <Grid item xs={12} sm={12} md={6}>
             <TextField
               type="text"
@@ -347,22 +324,18 @@ const CreateCourseList =({handleCreate, handleClose})=>
               {errors.pricing?.message}
             </div>
           </Grid>
-          <Grid item xs={12} sm={12} md={6}>
+          <Grid item xs={12} sm={12} md={12}>
             <TextField
               type="file"
-              // label={
-              //   <>
-              //     Syllabus <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-              //   </>
-              // }
-              InputLabelProps={{shrink:true}}
-              label="syllabus"
+              InputLabelProps={{ shrink: true }}
+              label="Syllabus"
               variant="outlined"
               {...register("syllabus")}
               error={!!errors.syllabus}
               fullWidth
               margin="normal"
-            />
+              inputProps={{ accept: "application/pdf" }} 
+  />
             <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
               {errors.syllabus?.message}
             </div>
@@ -390,7 +363,7 @@ const CreateCourseList =({handleCreate, handleClose})=>
         </Box>
       </form>
 
-        </>
+
      )
 }
 
