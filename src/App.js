@@ -50,8 +50,8 @@ function App() {
         <Route path="createfaculty" element={<CreateFaculty/>}/>
         <Route path="result" element={<Result/>}/>
         <Route path="student-result/:examId" element={<StudentResult/>}/>
-        <Route path="viewfaculty" element={<ViewFaculty/>}/>
-        <Route path="editfaculty" element={<EditFaculty/>}/>
+        <Route path="viewfaculty/:id" element={<ViewFaculty/>}/>
+        <Route path="editfaculty/:id" element={<EditFaculty/>}/>
         <Route path="timetable" element={< Scheduling/>}/>
         <Route path="profile" element={< Profile/>}/>
     </Route>

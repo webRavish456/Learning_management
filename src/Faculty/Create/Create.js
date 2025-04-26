@@ -25,9 +25,10 @@ import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
 
 const schema = yup.object().shape({
+
     teacherName: yup.string().required("Teacher Name is required"),
     emailId: yup.string().required("Email is required"),
-    mobileNo: yup.string().required("Mobile Number is required"),
+    mobileNo: yup.number().required("Mobile Number is required"),
     experience: yup.string().required("Experience is required"),
     gender: yup.string().required("Gender is required"),
     qualification: yup.string().required("Qualification is required"),
@@ -39,8 +40,8 @@ const schema = yup.object().shape({
     joiningDate: yup.string().required("Joining Date is required"),
     resumeCertificate: yup.mixed().required("Resume is required"),
     highestQualificationCertificate: yup.mixed().required("Highest qualification certificate is required"),
-    aadharDocument: yup.mixed().required("Aadhar Document is required"),
-    panCardDocument: yup.mixed().required("PAN Card Document is required"),
+    aadharCard: yup.mixed().required("Aadhar Document is required"),
+    panCard: yup.mixed().required("PAN Card Document is required"),
     accountHolderName: yup.string().required("Account Holder Name is required"),
     accountNumber: yup.string().required("Account Number is required"),
     bankName: yup.string().required("Bank Name is required"),
@@ -99,7 +100,7 @@ const CreateFaculty = () => {
         formdata.append("companyDetails", JSON.stringify(companyDetails))
         formdata.append("bankDetails", JSON.stringify(bankDetails))
 
-        formdata.append("mobileNumber", data.mobileNumber);
+        formdata.append("mobileNumber", data.mobileNo);
         formdata.append("emailId", data.emailId);
         formdata.append("experience", data.experience);
         formdata.append("qualification", data.qualification);
@@ -148,7 +149,7 @@ const CreateFaculty = () => {
     }
 
     return (
-        <>
+  
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Typography variant="h5" gutterBottom sx={{ marginLeft: 2, marginTop: 4 }}>
                     Create New Teacher
@@ -196,13 +197,13 @@ const CreateFaculty = () => {
                                                 </>
                                             }
                                             variant="outlined"
-                                            {...register("mobileNumber")}
-                                            error={!!errors.mobileNumber}
+                                            {...register("mobileNo")}
+                                            error={!!errors.mobileNo}
                                             fullWidth
                                             margin="normal"
                                         />
                                         <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                                            {errors.mobileNumber?.message}
+                                            {errors.mobileNo?.message}
                                         </div>
                                     </Box>
                                     <FormControl component="fieldset" fullWidth margin="normal" error={!!errors.gender}>
@@ -654,7 +655,7 @@ const CreateFaculty = () => {
                     </Box>
                 </Grid>
             </form>
-        </>
+     
     );
 };
 
