@@ -25,8 +25,8 @@ const schema = yup.object().shape({
   studentName: yup.string().required("Student Name is required"),
   courseName: yup.string().required("course Name is required"),
   duration: yup.string().required("duration is required"),
-  certificate: yup.string().required("certificate is required"),
-  status: yup.string()
+  certificates: yup.mixed().required("certificates is required"),
+  
 
 });
 
@@ -40,6 +40,8 @@ const CreateCertificate = ({ handleCreate, handleClose }) => {
   const Base_url = process.env.REACT_APP_BASE_URL;
 
   const [loading, setLoading] = useState(true)
+
+
 
   const {
     register,
@@ -85,8 +87,8 @@ const CreateCertificate = ({ handleCreate, handleClose }) => {
     formdata.append("studentName", data.studentName);
     formdata.append("courseName", data.courseName);
     formdata.append("duration", data.duration);
-    formdata.append("certificate", data.certificate);
-    formdata.append("status", data.status);
+    formdata.append("certificates", data.certificates[0]);
+    
 
     const requestOptions = {
       method: "POST",
@@ -202,42 +204,21 @@ const CreateCertificate = ({ handleCreate, handleClose }) => {
           <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
 
             <TextField
-
-              label="Certificate"
-              name="certificate"
               type="file"
               InputLabelProps={{ shrink: true }}
-              {...register("certificate")}
-              error={!!errors.certificate}
+              label="Certificate"
+              {...register("certificates")}
+              error={!!errors.certificates}
               fullWidth
               margin="normal"
+              inputProps={{ accept: "application/pdf" }} 
             />
             <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.certificate?.message}
+              {errors.certificates?.message}
             </div>
           </Grid>
 
-          <Grid item xs={12} >
-
-            <TextField
-              label={
-                <>
-                  Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                </>
-              }
-
-              type="text"
-              {...register("status")}
-              error={!!errors.status}
-              fullWidth
-              margin="normal"
-            />
-
-            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.status?.message}
-            </div>
-          </Grid>
-
+         
         </Grid>
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', margin: '20px' }}>
