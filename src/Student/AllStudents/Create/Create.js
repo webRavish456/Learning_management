@@ -45,6 +45,7 @@ import Cookies from 'js-cookie';
 const CreateAllStudent = ({ handleCreate, handleClose }) =>  
 {
   const [courseName, setCourseName] = useState([]);
+  
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
     const token = Cookies.get('token');
