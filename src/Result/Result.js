@@ -15,7 +15,6 @@ import {
   TableRow,
   Box,
   IconButton,
-  Skeleton,
 } from "@mui/material";
 
 import ViewResult from "./View/View";
@@ -264,7 +263,7 @@ const Result = () => {
                     <TableRow key={index}>
                       {columns.map((column) => (
                         <TableCell key={column.id} align={column.align}>
-                          <Skeleton width="100%" />
+                          {/* <Skeleton width="100%" /> */}
                         </TableCell>
                       ))}
                     </TableRow>
@@ -306,7 +305,7 @@ const Result = () => {
           </Paper>
     
           <CommonDialog
-            open={openData || viewData || editData || deleteShow}
+            open={openData || viewShow || editShow || deleteShow}
             onClose={handleClose}
             dialogTitle={
               <>

@@ -66,9 +66,6 @@ const ViewFaculty = () => {
       <Grid item xs={12} md={6}>
       
         <Box sx={{ border: "1px solid #ccc", borderRadius: 2, padding: 3 }}>
-       <Typography variant="h5" gutterBottom >
-                    View Teacher Details
-                </Typography>
 
                 <Typography variant="h6" gutterBottom>
             Personal Details

@@ -15,21 +15,7 @@ import {
   TablePagination,
   TableRow,
   Box,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  TextField,
   IconButton,
-  Button,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  Grid,
-  useMediaQuery,
-  Skeleton,
 } from "@mui/material";
 
 import ViewStudentResult from "./View/View";
@@ -70,18 +56,18 @@ const StudentResult = () => {
   const columns = [
     { id: 'si', label: 'SI.No', flex: 1, align: 'center' },
     { id: 'studentName', label: 'Student Name', flex: 1, align: 'center' },
-    {
-      id: 'studentId',
-      label: 'Student ID',
-      flex: 1,
-      align: 'center',
-    },
-    {
-      id: 'resultId',
-      label: 'Result ID',
-      flex: 1,
-      align: 'center',
-    },
+    // {
+    //   id: 'studentId',
+    //   label: 'Student ID',
+    //   flex: 1,
+    //   align: 'center',
+    // },
+    // {
+    //   id: 'resultId',
+    //   label: 'Result ID',
+    //   flex: 1,
+    //   align: 'center',
+    // },
     {
       id: 'courseName',
       label: 'Course Name',
@@ -106,12 +92,12 @@ const StudentResult = () => {
       flex: 1,
       align: 'center',
     },
-    {
-      id: 'sheet',
-      label: 'Sheet',
-      flex: 1,
-      align: 'center',
-    },
+    // {
+    //   id: 'sheet',
+    //   label: 'Sheet',
+    //   flex: 1,
+    //   align: 'center',
+    // },
     {
       id: 'status',
       label: 'Status',
@@ -303,7 +289,7 @@ const StudentResult = () => {
                     <TableRow key={index}>
                       {columns.map((column) => (
                         <TableCell key={column.id} align={column.align}>
-                          <Skeleton width="100%" />
+                          {/* <Skeleton width="100%" /> */}
                         </TableCell>
                       ))}
                     </TableRow>
@@ -344,7 +330,7 @@ const StudentResult = () => {
         </Paper>
 
         <CommonDialog
-          open={openData || viewData || editData || deleteShow}
+          open={openData || viewShow || editShow || deleteShow}
           onClose={handleClose}
           dialogTitle={
             <>

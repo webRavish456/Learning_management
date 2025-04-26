@@ -151,9 +151,6 @@ const CreateFaculty = () => {
     return (
   
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Typography variant="h5" gutterBottom sx={{ marginLeft: 2, marginTop: 4 }}>
-                    Create New Teacher
-                </Typography>
                 <Grid container spacing={6} style={{ padding: "20px" }}>
                     {/* Personal Details */}
                     <Grid item xs={6}>

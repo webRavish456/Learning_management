@@ -208,9 +208,6 @@ const EditFaculty = () => {
 
     return (
         <>
-            <Typography variant="h5" gutterBottom sx={{ marginLeft: 2, marginTop: 4 }}>
-                Edit Teacher Details
-            </Typography>
             {!loadingdata &&
             <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={6} style={{ padding: "20px" }}>
