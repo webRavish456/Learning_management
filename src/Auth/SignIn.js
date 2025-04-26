@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -6,6 +6,7 @@ import { Box, Button, CircularProgress, TextField } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const schema = yup.object().shape({
   email: yup.string().email("Please enter a valid email").required("Email is required"),
@@ -16,6 +17,15 @@ const SignIn = () => {
 
 
   const navigate =useNavigate()
+
+  useEffect(() => {
+
+   const token = Cookies.get("token");
+
+    if (token) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [navigate]);
 
   const {
     register,
@@ -30,8 +40,8 @@ const SignIn = () => {
 
   const [loading, setLoading] = useState(false)
 
-  const onSubmit = (data) => {     //data store
-console.log(data)  //check
+    const onSubmit = (data) => {     //data store
+    console.log(data)  //check
     setLoading(true)
 
     const formdata = new FormData();
@@ -74,6 +84,11 @@ console.log(data)  //check
       .catch((error) => console.error(error));
   };
 
+ const handleFprgot =()=>
+ {
+   navigate("/fogot")
+ }
+
   return (
     <>
       <ToastContainer />
@@ -115,7 +130,7 @@ console.log(data)  //check
           </Box>
 
           <Box className="forgot_password">
-            <Box className="forgot">Forgot Password</Box>
+            <Box className="forgot" onClick={handleFprgot}>Forgot Password</Box>
          </Box>
 
           <Button type="submit" className="primary_button login_btn">

@@ -107,7 +107,7 @@ const EditBranch = ({ handleUpdate,  editData,  handleClose }) => {
                   Branch Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                 </>
               }
-              variant="standard"
+              variant="outlined"
               {...register("branchName")}
               error={!!errors.branchName}
               fullWidth
@@ -126,7 +126,7 @@ const EditBranch = ({ handleUpdate,  editData,  handleClose }) => {
                   Branch Location <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                 </>
               }
-              variant="standard"
+              variant="outlined"
               {...register("branchLocation")}
               error={!!errors.branchLocation}
               fullWidth
@@ -145,7 +145,7 @@ const EditBranch = ({ handleUpdate,  editData,  handleClose }) => {
                   Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                 </>
               }
-              variant="standard"
+              variant="outlined"
               {...register("status")}
               error={!!errors.status}
               fullWidth

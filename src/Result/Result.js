@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import CloseIcon from "@mui/icons-material/Close";
-import Search from "../Search/Search";
+
 
 import {
   Paper,
@@ -16,15 +15,19 @@ import {
   TableRow,
   Box,
   IconButton,
+  Skeleton,
 } from "@mui/material";
-import CommonDialog from "../Component/CommonDialog/CommonDialog";
+
 import ViewResult from "./View/View";
 import CreateResult from "./Create/Create";
 import EditResult from "./Edit/Edit";
 import DeleteResult from "./Delete/Delete";
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import Search from "../Search/Search";
+import CommonDialog from "../Component/CommonDialog/CommonDialog";
 
 const Result = () => {
   const [openData, setOpenData] = useState(false);
@@ -52,33 +55,28 @@ const Result = () => {
     {
       id: 'courseName',
       label: 'Course Name',
-      flex: 1,
-      align: 'center',
+      flex: 1, align: 'center',
     },
     {
       id: 'teacherName',
       label: 'Teacher Name',
-      flex: 1,
-      align: 'center',
+      flex: 1, align: 'center',
     },
     {
       id: 'testType',
       label: 'Test Type ',
-      flex: 1,
-      align: 'center',
+      flex: 1, align: 'center',
     },
     {
       id: 'resultDate',
       label: 'Result Date ',
-      flex: 1,
-      align: 'center',
+      flex: 1, align: 'center',
     },
 
     {
       id: 'action',
       label: 'Action',
-      flex: 1,
-      align: 'center',
+      flex: 1, align: 'center',
     },
   ];
 
@@ -127,19 +125,19 @@ const Result = () => {
       <>
         <IconButton
           style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }}
-          onClick={() => handleView(row)}
-        >
+          onClick={(e) => {e.stopPropagation(); handleView(row); } }
+        > 
           <VisibilityIcon />
         </IconButton>
         <IconButton
           style={{ color: "#6b6666", padding: "4px", transform: "scale(0.8)" }}
-          onClick={() => handleEdit(row)}
+          onClick={(e) => {e.stopPropagation(); handleEdit(row)}}
         >
           <EditIcon />
         </IconButton>
         <IconButton
           style={{ color: "#e6130b", padding: "4px", transform: "scale(0.8)" }}
-          onClick={() => handleShowDelete(row._id)}
+          onClick={(e) => { e.stopPropagation(); handleShowDelete(row._id)}}
         >
           <DeleteIcon />
         </IconButton>
@@ -227,6 +225,14 @@ const Result = () => {
     setPage(0);
   };
 
+ const navigate = useNavigate ()
+
+  const handleStudentResult=(resultId)=>{
+
+     navigate(`/student-result/${resultId._id}`)
+
+  }
+
   return (
     <>
       <ToastContainer />
@@ -253,13 +259,26 @@ const Result = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredRows.length > 0 ? (
+                {loading ? (
+                  Array.from({ length: rowsPerPage }).map((_, index) => (
+                    <TableRow key={index}>
+                      {columns.map((column) => (
+                        <TableCell key={column.id} align={column.align}>
+                          <Skeleton width="100%" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : filteredRows.length > 0 ? (
                   filteredRows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, idx) => (
                       <TableRow hover role="checkbox" key={idx}>
                         {columns.map((column) => (
-                          <TableCell key={column.id} align={column.align}>
+                          <TableCell key={column.id} align={column.align} onClick={(e) => {
+                     
+                            handleStudentResult(row.row); 
+                          }}>
                             {row[column.id]}
                           </TableCell>
                         ))}
@@ -283,14 +302,52 @@ const Result = () => {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
+    
+          <CommonDialog
+            open={openData || viewData || editData || deleteShow}
+            onClose={handleClose}
+            dialogTitle={
+              <>
+                {openData
+                  ? "Create New Result"
+                  : viewData
+                  ? "View Result Details"
+                  : editData
+                  ? "Edit Result Details"
+                  : deleteShow
+                  ? "Delete Result Details"
+                  : ""}
+              </>
+            }
+            dialogContent={
+              openData ? (
+                <CreateResult handleCreate={handleCreate} handleClose={handleClose} />
+              ) : viewShow ? (
+                <ViewResult viewData={viewData} />
+              ) : editShow ? (
+                <EditResult
+                  editData={editData}
+                  handleUpdate={handleUpdate}
+                  handleClose={handleClose}
+                />
+              ) : deleteShow ? (
+                <DeleteResult
+                  handleDelete={handleDelete}
+                  isDeleting={isDeleting}
+                  handleClose={handleClose}
+                />
+              ) : null
+            }
           />
-        </Paper>
+        
 
         <CommonDialog
-          open={openData || viewData || editData || deleteShow}
+          open={openData || viewShow || editShow || deleteShow}
           onClose={handleClose}
           dialogTitle={<>
-            {openData ? "Create New Result" : viewData ? "View Result Details " : editData ? "Edit Result Details" : deleteShow ? "Delete Result Details" : ""}
+            {openData ? "Create New Result" : viewShow ? "View Result Details " : editShow ? "Edit Result Details" : deleteShow ? "Delete Result Details" : ""}
           </>}
 
           dialogContent={

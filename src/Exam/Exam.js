@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-// import CloseIcon from "@mui/icons-material/Close";
 import Search from "../Search/Search";
 import {
   Paper,
@@ -16,13 +14,15 @@ import {
   TableRow,
   Box,
   IconButton,
+  Skeleton,
+  Chip,
 } from "@mui/material";
 import CommonDialog from "../Component/CommonDialog/CommonDialog";
 import ViewExam from "./View/View";
 import CreateExam from "./Create/Create";
 import EditExam from "./Edit/Edit";
 import DeleteExam from "./Delete/Delete";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -44,68 +44,64 @@ const Exam = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const token = Cookies.get("token");
-
   const Base_url = process.env.REACT_APP_BASE_URL;
 
   const columns = [
-    { id: 'si', label: 'SI.No', flex: 1, align: 'center' },
-    { id: 'examName', label: 'Exam Name', flex: 1, align: 'center' },
+    { id: "si", label: "SI.No", flex: 1, align: "center" },
+    { id: "examName", label: "Exam Name", flex: 1, align: "center" },
     {
-      id: 'courseName',
-      label: 'Course Name',
+      id: "courseName",
+      label: "Course Name",
       flex: 1,
-      align: 'center',
+      align: "center",
     },
     {
-      id: 'teacherName',
-      label: 'Teacher Name',
+      id: "teacherName",
+      label: "Teacher Name",
       flex: 1,
-      align: 'center',
+      align: "center",
     },
     {
-      id: 'examDate',
-      label: 'Exam Date ',
+      id: "examDate",
+      label: "Exam Date",
       flex: 1,
-      align: 'center',
+      align: "center",
     },
     {
-      id: 'duration',
-      label: 'Duration ',
+      id: "duration",
+      label: "Duration",
       flex: 1,
-      align: 'center',
+      align: "center",
     },
     {
-      id: 'testType',
-      label: 'Test Type',
+      id: "testType",
+      label: "Test Type",
       flex: 1,
-      align: 'center',
+      align: "center",
     },
     {
-      id: 'totalMarks',
-      label: 'Total Marks ',
+      id: "totalMarks",
+      label: "Total Marks",
       flex: 1,
-      align: 'center',
+      align: "center",
     },
     {
-      id: 'status',
-      label: 'Status',
+      id: "status",
+      label: "Status",
       flex: 1,
-      align: 'center',
+      align: "center",
     },
     {
-      id: 'action',
-      label: 'Action',
+      id: "action",
+      label: "Action",
       flex: 1,
-      align: 'center',
+      align: "center",
     },
   ];
 
   useEffect(() => {
-
     const fetchExamData = async () => {
-
       try {
-
         const response = await fetch(`${Base_url}/exam`, {
           method: "GET",
           headers: {
@@ -117,41 +113,85 @@ const Exam = () => {
         const res = JSON.parse(result);
 
         if (res.status === "success") {
-
           setLoading(false);
 
           const formattedData = res.data.map((item, index) =>
-            createData(index + 1, item, item.examName, item.courseName, item.teacherName, item.examDate, item.duration, item.testType, item.totalMarks, item.status)
+            createData(
+              index + 1,
+              item,
+              item.examName,
+              item.courseName,
+              item.teacherName,
+              item.examDate,
+              item.duration,
+              item.testType,
+              item.totalMarks,
+              item.status
+            )
           );
 
           setRows(formattedData);
-          setFilteredRows(formattedData); // Initialize filteredRows with all data
+          setFilteredRows(formattedData);
         }
-      }
-      catch (error) {
+      } catch (error) {
         console.error("Error fetching exam data:", error);
       }
-    }
+    };
 
     if (loading) {
       fetchExamData();
     }
+  }, [loading]);
 
-  }, [loading])
-
-  const createData = (si, row, examName, courseName, teacherName, examDate, duration, testType, totalMarks, status) => ({
-    si, row, examName, courseName, teacherName, examDate, duration, testType, totalMarks, status, action: (
+  const createData = (
+    si,
+    row,
+    examName,
+    courseName,
+    teacherName,
+    examDate,
+    duration,
+    testType,
+    totalMarks,
+    status
+  ) => ({
+    si,
+    row,
+    examName,
+    courseName,
+    teacherName,
+    examDate,
+    duration,
+    testType,
+    totalMarks,
+    status: (
+      <Chip
+        label={status === "active" ? "Active" : "Inactive"}
+        sx={{
+          backgroundColor: status === "active" ? "green" : "red",
+          color: "white",
+          fontWeight: "bold",
+        }}
+      />
+    ),
+    action: (
       <>
-        <IconButton style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }}
-          onClick={() => handleView(row)}>
+        <IconButton
+          style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }}
+          onClick={() => handleView(row)}
+        >
           <VisibilityIcon />
         </IconButton>
-        <IconButton style={{ color: "#6b6666", padding: "4px", transform: "scale(0.8)" }}
-          onClick={() => handleEdit(row)}>
+        <IconButton
+          style={{ color: "#6b6666", padding: "4px", transform: "scale(0.8)" }}
+          onClick={() => handleEdit(row)}
+        >
           <EditIcon />
         </IconButton>
-        <IconButton style={{ color: "#e6130b", padding: "4px", transform: "scale(0.8)" }}
-          onClick={() => handleShowDelete(row._id)}>
+        <IconButton
+          style={{ color: "#e6130b", padding: "4px", transform: "scale(0.8)" }}
+          onClick={() => handleShowDelete(row._id)}
+        >
           <DeleteIcon />
         </IconButton>
       </>
@@ -218,6 +258,7 @@ const Exam = () => {
     setEditShow(false);
     setDeleteShow(false);
   };
+
   const handleCreate = (refresh = true) => {
     if (refresh) setLoading(true);
     setOpenData(false);
@@ -244,11 +285,13 @@ const Exam = () => {
       <ToastContainer />
 
       <Box className="container">
-        <Search searchTerm={searchTerm}
+        <Search
+          searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           onAddClick={onAddClick}
-          buttonText="Add Exam" />
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+          buttonText="Add Exam"
+        />
+        <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="exam table">
               <TableHead>
@@ -265,82 +308,86 @@ const Exam = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredRows.length > 0 ? (
-                  filteredRows
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, idx) => (
-
-                      <TableRow hover role="checkbox" key={idx}>
-                        {columns.map((column) => (
-
-                          <TableCell key={column.id} align={column.align}>
-                            {row[column.id]}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={columns.length} align="center">
-                      No results found
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[10, 25, 100]}
-            component="div"
-            count={filteredRows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-
-        <CommonDialog
-          open={openData || viewData || editData || deleteShow}
-          onClose={handleClose}
-          dialogTitle={
-            openData
-              ? "Create New Exam"
-              : viewShow
-                ? "View Exam"
-                : editShow
-                  ? "Edit Exam"
-                  : deleteShow
-                    ? "Delete Exam"
-                    : ""
-          }
-
-          dialogContent={
-            openData ? (
-              <CreateExam handleCreate={handleCreate} handleClose={handleClose} />
-            ) : viewShow ? (
-              <ViewExam viewData={viewData} />
-            ) : editShow ? (
-              <EditExam
-                editData={editData}
-                handleUpdate={handleUpdate}
-                handleClose={handleClose}
-              />
-            ) : deleteShow ? (
-              <DeleteExam
-                handleDelete={handleDelete}
-                isDeleting={isDeleting}
-                handleClose={handleClose}
-              />
-            ) : null
-          }
-
+                {loading ? (
+                  Array.from({ length: rowsPerPage }).map((_, index) => (
+                    <TableRow key={index}>
+                      {columns.map((column) => (
+                        <TableCell key={column.id} align={column.align}>
+                          <Skeleton width="100%" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+              ) : filteredRows.length > 0 ? (
+                filteredRows
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, idx) => (
+                    <TableRow hover role="checkbox" key={idx}>
+                      {columns.map((column) => (
+                        <TableCell key={column.id} align={column.align}>
+                          {row[column.id]}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} align="center">
+                    No results found
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={filteredRows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
         />
+      </Paper>
 
-      </Box>
-    </>
-
-  );
+      <CommonDialog
+        open={openData || viewShow || editShow || deleteShow}
+        onClose={handleClose}
+        dialogTitle={
+          openData
+            ? "Create New Exam"
+            : viewShow
+            ? "View Exam"
+            : editShow
+            ? "Edit Exam"
+            : deleteShow
+            ? "Delete Exam"
+            : ""
+        }
+        dialogContent={
+          openData ? (
+            <CreateExam handleCreate={handleCreate} handleClose={handleClose} />
+          ) : viewShow ? (
+            <ViewExam viewData={viewData} />
+          ) : editShow ? (
+            <EditExam
+              editData={editData}
+              handleUpdate={handleUpdate}
+              handleClose={handleClose}
+            />
+          ) : deleteShow ? (
+            <DeleteExam
+              handleDelete={handleDelete}
+              isDeleting={isDeleting}
+              handleClose={handleClose}
+            />
+          ) : null
+        }
+      />
+    </Box>
+  </>
+);
 };
 
 export default Exam;

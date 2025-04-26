@@ -252,8 +252,7 @@ const EditCourseList = ({ handleUpdate,  editData,  handleClose }) => {
   };
 
   return (
-    <>
-  
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container columnSpacing={2}>
           <Grid item xs={12} sm={12} md={6}>
@@ -329,6 +328,7 @@ const EditCourseList = ({ handleUpdate,  editData,  handleClose }) => {
               {errors.pricing?.message}
             </div>
           </Grid>
+          
           <Grid item xs={12} sm={12} md={6}>
             <TextField
               type="file"
@@ -388,7 +388,7 @@ const EditCourseList = ({ handleUpdate,  editData,  handleClose }) => {
           </Button>
         </Box>
       </form>
-    </>
+
   );
 };
 

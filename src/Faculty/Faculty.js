@@ -114,7 +114,7 @@ useEffect(() => {
             item.companyDetails.courseName,
             item.companyDetails.joiningDate,
             item.companyDetails.salary,
-            item.availabilityStatus
+            item.status
           )
         );
         setRows(formattedData);
@@ -146,9 +146,7 @@ function createData(si, id, teacherName, emailId, mobileNo, dob, gender, address
    };
 }
 
-// const rows = [
-//   createData('1', 'Ravish', 'ravish@gmail.com', '1234567812', '17-12-2001', 'Male', 'Sakchi','Full stack','12-03-2025' ,'Active')
-//   ];
+
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -174,16 +172,6 @@ function createData(si, id, teacherName, emailId, mobileNo, dob, gender, address
       setDeleteData(false)
    };
 
-   const handleSubmit = (e) => {
-     e.preventDefault();
-     setOpenData(false)
-     // console.log("Form Data Submitted:", formData);
-   }
-
-   const handleUpdate = (e) => {
-      e.preventDefault();
-      setEditData(false)
-   }
 
 
   return (

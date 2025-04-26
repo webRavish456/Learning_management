@@ -69,7 +69,7 @@ const EditResult = ({ handleUpdate, editData, handleClose }) => {
         formdata.append("courseName", data.courseName);
         formdata.append("teacherName", data.teacherName);
         formdata.append("testType", data.testType);
-        formdata.append("totalMarks", data.resultDate);
+        formdata.append("resultDate", data.resultDate);
         formdata.append("status", data.status)
 
         const requestOptions = {
@@ -90,7 +90,7 @@ const EditResult = ({ handleUpdate, editData, handleClose }) => {
                 if (res.status === "success") {
                     setLoading(false)
 
-                    toast.success("New Result Added Successful!")
+                    toast.success("New Result Edited Successful!")
 
                     handleUpdate(true)
                     handleClose()

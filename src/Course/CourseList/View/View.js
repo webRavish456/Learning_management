@@ -98,7 +98,7 @@ const ViewCourseList =({viewData})=>
 
 
      return (
-        <>
+   
           <Grid container columnSpacing={2} rowSpacing={1}>
 
             <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
@@ -149,7 +149,7 @@ const ViewCourseList =({viewData})=>
             <Box className="pageTitle">Syllabus:</Box>    
             </Grid>
             <Grid item xs={6}>
-            <Box className="pageDescription" onClick={handleDownload}><PictureAsPdfIcon/></Box>
+            <Box className="pageDescription" onClick={()=>handleDownload(viewData.syllabus)}><PictureAsPdfIcon/></Box>
             </Grid> 
             </Grid>
             
@@ -170,7 +170,7 @@ const ViewCourseList =({viewData})=>
 
             </Grid>
 
-        </>
+     
      )
 }
 
