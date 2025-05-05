@@ -78,7 +78,7 @@ const Certificates = () => {
       align: 'center',
     },
     {
-      id: 'certificates',
+      id: 'certificate',
       label: 'Certificate',
       flex: 1,
       align: 'center',

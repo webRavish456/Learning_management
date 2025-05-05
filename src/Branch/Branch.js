@@ -125,7 +125,8 @@ const Branch = () => {
     const filtered = rows.filter(
       (row) =>
         row.branchname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.location.toLowerCase().includes(searchTerm.toLowerCase())
+        row.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.status.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredRows(filtered);
   }, [searchTerm, rows]);

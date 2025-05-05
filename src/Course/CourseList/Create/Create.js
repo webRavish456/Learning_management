@@ -84,7 +84,7 @@ const CreateCourseList =({handleCreate, handleClose})=>
               {
                 setLoading(false)
                
-                toast.success("Courselist Created Successfully!")
+                toast.success("Course Created Successfully!")
                 handleCreate(true)
                 handleClose()
                 reset();

@@ -91,7 +91,7 @@ const EditCourseList = ({ handleUpdate,  editData,  handleClose }) => {
             {
               setLoading(false)
              
-              toast.success("CourseList Updated Successfully!")
+              toast.success("Course Updated Successfully!")
               handleUpdate(true)
                handleClose()
                 reset();

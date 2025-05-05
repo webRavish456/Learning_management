@@ -145,18 +145,18 @@ const AllStudents = () => {
     ),
   });
 
-  //Automatically filter rows based on search term
+
   useEffect(() => {
     const filtered = rows.filter(
       (row) =>
         row.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.mobileNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      //  row.mobileNumber.includes(searchTerm) ||
         row.emailId.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.course.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.status.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredRows(filtered);
-  }, [searchTerm, rows]);  //Dependencies ensure filtering happens dynamically 
+  }, [searchTerm, rows]);  
 
   const handleView = (row) => {
     console.log("row", row)

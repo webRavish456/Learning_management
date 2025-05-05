@@ -6,6 +6,10 @@ import {
   Box,
   Button,
   CircularProgress,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
 } from "@mui/material";
 
 import { useForm } from "react-hook-form";
@@ -98,8 +102,8 @@ const EditBranch = ({ handleUpdate,  editData,  handleClose }) => {
     <>
   
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container columnSpacing={2}>
-          <Grid item xs={12}>
+        <Grid container>
+        <Grid item xs={12} sm={12} md={12}>
             <TextField
               type="text"
               label={
@@ -118,7 +122,7 @@ const EditBranch = ({ handleUpdate,  editData,  handleClose }) => {
             </div>
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={12} md={12}>
             <TextField
               type="text"
               label={
@@ -137,23 +141,33 @@ const EditBranch = ({ handleUpdate,  editData,  handleClose }) => {
             </div>
           </Grid>
 
-          <Grid item xs={12}>
-            <TextField
-              type="text"
-              label={
-                <>
-                  Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                </>
-              }
-              variant="outlined"
-              {...register("status")}
-              error={!!errors.status}
-              fullWidth
-              margin="normal"
-            />
-            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.status?.message}
-            </div>
+          <Grid item xs={12} sm={12} md={12}>
+         
+          <FormControl
+                            fullWidth
+                            margin="normal"
+                            variant="outlined"
+                            error={!!errors.course}
+                        >
+                            <InputLabel>
+                               Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                            </InputLabel>
+
+                            <Select
+                                label="Status"
+                                defaultValue={editData.status}
+                                variant="outlined"
+                                {...register("status")}
+                                error={!!errors.status}
+                            >
+                                   <MenuItem value="Active">Active</MenuItem>
+                                   <MenuItem value="Inactive">In Active</MenuItem>
+                            </Select>
+
+                            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                                {errors.status?.message}
+                            </div>
+                        </FormControl>
           </Grid>
         </Grid>
 
