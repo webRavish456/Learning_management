@@ -286,10 +286,7 @@ const StudentResult = () => {
                     .map((row, idx) => (
                       <TableRow hover role="checkbox" key={idx}>
                         {columns.map((column) => (
-                          <TableCell key={column.id} align={column.align} style={{cursor:"pointer"}} onClick={(e) => {
-                     
-                            handleStudentResult(row.row); 
-                          }}>
+                          <TableCell key={column.id} align={column.align} style={{cursor:"pointer"}}>
                             {row[column.id]}
                           </TableCell>
                         ))}

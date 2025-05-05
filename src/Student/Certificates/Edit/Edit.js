@@ -8,6 +8,9 @@ import {
     CircularProgress,
     Typography,
     MenuItem,
+    FormControl,
+    InputLabel,
+    Select,
     // duration,
   } from "@mui/material";
       
@@ -29,8 +32,8 @@ import { NavLink } from "react-router-dom";
     
   });
 
-  const EditResult = ({ handleUpdate, editData, handleClose }) => {
-    
+  const EditCertificate = ({ handleUpdate, editData, handleClose }) => {
+
   const [courseName, setCourseName] = useState([]);
 
   const isSmScreen = useMediaQuery("(max-width:768px)");
@@ -258,6 +261,7 @@ import { NavLink } from "react-router-dom";
             </Grid>
 
 
+        </Grid>
         </Grid>
 
         <Box className="submit" sx={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', margin: '20px' }}>
