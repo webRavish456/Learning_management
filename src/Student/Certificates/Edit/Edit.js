@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from "react"
+import React, { useState, useEffect } from "react"
 import {
     TextField,
     Grid,
@@ -14,7 +14,7 @@ import {
   import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
 import { NavLink } from "react-router-dom";
@@ -29,8 +29,9 @@ import { NavLink } from "react-router-dom";
     
   });
 
-const EditCertificate =({handleUpdate, editData, handleClose})=>  
-{
+  const EditResult = ({ handleUpdate, editData, handleClose }) => {
+    
+  const [courseName, setCourseName] = useState([]);
 
   const isSmScreen = useMediaQuery("(max-width:768px)");
 
@@ -61,125 +62,132 @@ const EditCertificate =({handleUpdate, editData, handleClose})=>
           });
         }
       }, [editData, reset]);
-    
+  
 
-    const onSubmit = (data) => {
-    
-        setLoading(true)
+  const onSubmit = (data) => {
 
-       const formdata = new FormData();
-       formdata.append("studentName", data.studentName);
-       formdata.append("courseName", data.courseName);
-       formdata.append("duration", data.duration);
-       formdata.append("certificates", data.certificate[0]);
-       formdata.append("status", data.status);
-    
-   
-       const requestOptions = {
-         method: "PATCH",
-         body: formdata,
-         headers: {
-           Authorization: `Bearer ${token}`, 
-          },
-       };
-   
-       fetch(`${Base_url}/certificates/${editData._id}`, requestOptions)
-         .then((response) => response.text())
-   
-         .then((result) => {
-   
-           const res = JSON.parse(result)
-   
-           if(res.status==="success")
-           {
-             setLoading(false)
-            
-             toast.success("Certificate Updated Successfully!")
-             handleUpdate(true)
-             handleClose()
-             reset();
-           }
-           else {
-   
-             setLoading(false)
-             toast.error(res.message)
-   
-           }
-         })
-         .catch((error) => console.error(error));
- };
+    setLoading(true)
+
+    const formdata = new FormData();
+    formdata.append("studentName", data.studentName);
+    formdata.append("courseName", data.courseName);
+    formdata.append("duration", data.duration);
+    formdata.append("certificate", data.certificate);
+    formdata.append("status", data.status);
+
+
+    const requestOptions = {
+      method: "PATCH",
+      body: formdata,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    fetch(`${Base_url}/certificates/${editData._id}`, requestOptions)
+      .then((response) => response.text())
+
+      .then((result) => {
+
+        const res = JSON.parse(result)
+
+        if (res.status === "success") {
+          setLoading(false)
+
+          toast.success("Certificate Updated Successfully!")
+          handleUpdate(true)
+          handleClose()
+          reset();
+        }
+        else {
+
+          setLoading(false)
+          toast.error(res.message)
+
+        }
+      })
+      .catch((error) => console.error(error));
+  };
 
   return (
-     <>
-     
-   <form onSubmit={handleSubmit(onSubmit)}>
+    <>
 
-             <Grid container columnSpacing={2}>
+      <form onSubmit={handleSubmit(onSubmit)}>
 
-            <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-            
+        <Grid container columnSpacing={2}>
+
+          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+
             <TextField
-            label={
-            <>
-                Student Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-            </>
-            }
-        
-            type="text"
-            {...register("studentName")}
-            error={!!errors.studentName}
-            fullWidth
-            margin="normal"
+              label={
+                <>
+                  Student Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                </>
+              }
+
+              type="text"
+              {...register("studentName")}
+              error={!!errors.studentName}
+              fullWidth
+              margin="normal"
             />
 
             <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
               {errors.studentName?.message}
             </div>
 
-            </Grid>
+          </Grid>
 
-            <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-            
-            <TextField
-            label={
-            <>
-                Course Name  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-            </>
-            }
-            
-            type="text"
-              {...register("courseName")}
-              error={!!errors.courseName}
+          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+            <FormControl
               fullWidth
               margin="normal"
-            />
+              error={!!errors.courseName}
+            >
+              <InputLabel>
+                Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+              </InputLabel>
+
+              <Select
+                label="Course Name"
+                defaultValue=""
+                {...register("courseName", { required: "Course name is required" })}
+              >
+
+                {courseName.map((course, index) => (
+                  <MenuItem key={index} value={course.courseName}>
+                    {course.courseName}
+                  </MenuItem>
+                ))}
+              </Select >
+              <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                {errors.courseName?.message}
+              </div>
+            </FormControl>
+          </Grid>
 
 
-<div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.courseName?.message}
-            </div>
-          
-            </Grid>
+          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
 
-            <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-            
             <TextField
-            label={
-            <>
-                Duration <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-            </>
-            }
-            
-            type="text"
+              label={
+                <>
+                  Duration <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                </>
+              }
+
+              type="text"
               {...register("duration")}
               error={!!errors.duration}
               fullWidth
               margin="normal"
             />
-             <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
               {errors.duration?.message}
             </div>
-            </Grid>
+          </Grid>
+
+          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
 
             <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
             
@@ -250,11 +258,11 @@ const EditCertificate =({handleUpdate, editData, handleClose})=>
             </Grid>
 
 
-            </Grid>
+        </Grid>
 
-            <Box className="submit" sx={{display:'flex',justifyContent:'flex-end',gap:'15px',margin:'20px'}}>
-            <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
-            <Button type="submit" className="primary_button">
+        <Box className="submit" sx={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', margin: '20px' }}>
+          <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
+          <Button type="submit" className="primary_button">
 
           {loading ? (
           <>
@@ -270,8 +278,8 @@ const EditCertificate =({handleUpdate, editData, handleClose})=>
           </Box>
           </form>
 
-</>
-)
+    </>
+  )
 }
 
 export default EditCertificate;

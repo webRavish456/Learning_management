@@ -195,8 +195,7 @@ const Exam = () => {
         row.courseName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.teacherName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.duration.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.testType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.status.toLowerCase().includes(searchTerm.toLowerCase())
+        row.testType.toLowerCase().includes(searchTerm.toLowerCase()) 
     );
     setFilteredRows(filtered);
   }, [searchTerm, rows]);

@@ -106,16 +106,13 @@ const CreateStudentResult = ({ handleCreate, handleClose }) => {
 
         fetch(`${Base_url}/result`, requestOptions)
             .then((response) => response.text())
-
             .then((result) => {
-
                 const res = JSON.parse(result)
 
                 if (res.status === "success") {
                     setLoading(false)
 
-                    toast.success("Result Created Successful!")
-
+                    toast.success("Student Result Created Successfully!")
                     handleCreate(true)
                     handleClose()
                     reset();
@@ -130,6 +127,7 @@ const CreateStudentResult = ({ handleCreate, handleClose }) => {
             .catch((error) => console.error(error));
     };
 
+               
     return (
         <>
              <form onSubmit={handleSubmit(onSubmit)}>
@@ -283,7 +281,7 @@ const CreateStudentResult = ({ handleCreate, handleClose }) => {
                 </Box>
             </form>
         </>
-    );
-};
+    )
+}
 
 export default CreateStudentResult;

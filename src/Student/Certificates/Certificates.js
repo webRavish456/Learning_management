@@ -78,7 +78,7 @@ const Certificates = () => {
       align: 'center',
     },
     {
-      id: 'certificate',
+      id: 'certificates',
       label: 'Certificate',
       flex: 1,
       align: 'center',
@@ -119,7 +119,7 @@ const Certificates = () => {
               item.studentName,
               item.courseName,
               item.duration,
-              item.certificate,
+              item.certificates,
               item.status
             )
           );
@@ -138,10 +138,10 @@ const Certificates = () => {
   }, [loading]);
 
 
-  const createData = (si, row, studentName, courseName, duration, certificate, status) => ({
+  const createData = (si, row, studentName, courseName, duration, certificates, status) => ({
 
 
-    si, row, studentName, courseName, duration, certificate, status, action: (
+    si, row, studentName, courseName, duration, certificates, status, action: (
       <>
         <IconButton style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }} onClick={() => handleView(row)}>
           <VisibilityIcon />
@@ -162,7 +162,7 @@ const Certificates = () => {
         // row.studentName?.toLowerCase().includes(searchTerm.toLowerCase()) ||  //1st method
         (row.studentName || "").toLowerCase().includes(searchTerm.toLowerCase()) ||   //2nd method
         (row.courseName || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (row.certificate || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (row.certificates || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
         (row.status || "").toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredRows(filtered);
@@ -274,7 +274,7 @@ const Certificates = () => {
 
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 440 }}>
-            <Table stickyHeader aria-label="certificate table">
+            <Table stickyHeader aria-label="certificates table">
               <TableHead>
                 <TableRow>
                   {columns.map((column) => (

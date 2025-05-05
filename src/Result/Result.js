@@ -15,7 +15,6 @@ import {
   TableRow,
   Box,
   IconButton,
-  Skeleton,
 } from "@mui/material";
 
 import ViewResult from "./View/View";
@@ -225,9 +224,9 @@ const Result = () => {
 
  const navigate = useNavigate ()
 
-  const handleStudentResult=(examId)=>{
+  const handleStudentResult=(resultId)=>{
 
-     navigate(`/student-result/${examId._id}`)
+     navigate(`/student-result/${resultId._id}`)
 
   }
 

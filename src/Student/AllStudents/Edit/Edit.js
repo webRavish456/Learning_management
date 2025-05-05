@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Grid,
@@ -16,9 +16,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-import Cookies from 'js-cookie';
-
+import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
 
 const schema = yup.object().shape({
   studentName: yup.string().required("Student Name is required"),
@@ -29,22 +28,21 @@ const schema = yup.object().shape({
   address: yup.string().required("Address is required"),
   enrollmentDate: yup.string().required("Enrollment Date is required"),
   course: yup.string().required("Course is required"),
-  status: yup.string()
-
+  status: yup.string(),
 });
 
 const EditAllStudent = ({ handleUpdate, editData, handleClose }) => {
 
+  const [courseName, setCourseName] = useState([]);
+  const [loading, setLoading] = useState(true);
   const isSmScreen = useMediaQuery("(max-width:768px)");
 
 
   const token = Cookies.get('token');
 
-  const [courseName, setCourseName] = useState([]);
-
   const Base_url = process.env.REACT_APP_BASE_URL;
 
-  const [loading, setLoading] = useState(false)
+
 
   const [loadingData, setLoadingData] = useState(true)
 
@@ -56,6 +54,32 @@ const EditAllStudent = ({ handleUpdate, editData, handleClose }) => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  // Fetch available course names
+  useEffect(() => {
+    const fetchCourseData = async () => {
+      try {
+        const response = await fetch(`${Base_url}/courselist`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const result = await response.json();
+        if (result.status === "success") {
+          console.log(result.data)
+
+          setCourseName(result.data)
+          setLoading(false)
+        }
+      } catch (error) {
+        console.error("Error fetching course data:", error);
+      }
+    };
+    if (loading) {
+      fetchCourseData();
+    }
+  }, [loading]); //dropdown
 
   useEffect(() => {
 
@@ -101,13 +125,10 @@ const EditAllStudent = ({ handleUpdate, editData, handleClose }) => {
     }
   }, [editData, courseName, reset]);
 
-
   const onSubmit = (data) => {
-
-    setLoading(true)
+    setLoading(true);
 
     const formdata = new FormData();
-
     formdata.append("studentName", data.studentName);
     formdata.append("gender", data.gender);
     formdata.append("mobileNumber", data.mobileNumber);
@@ -117,7 +138,6 @@ const EditAllStudent = ({ handleUpdate, editData, handleClose }) => {
     formdata.append("enrollmentDate", data.enrollmentDate);
     formdata.append("course", data.course);
     formdata.append("status", data.status);
-
 
     const requestOptions = {
       method: "PATCH",
@@ -129,32 +149,28 @@ const EditAllStudent = ({ handleUpdate, editData, handleClose }) => {
 
     fetch(`${Base_url}/allstudents/${editData._id}`, requestOptions)
       .then((response) => response.text())
-
       .then((result) => {
-
-        const res = JSON.parse(result)
-
+        const res = JSON.parse(result);
         if (res.status === "success") {
-          setLoading(false)
-
-          toast.success("Student List Updated Successfully!")
-          handleUpdate(true)
-          handleClose()
+          setLoading(false);
+          toast.success("Student List Updated Successfully!");
+          handleUpdate(true);
+          handleClose();
           reset();
-        }
-        else {
-
-          setLoading(false)
-          toast.error(res.message)
-
+        } else {
+          setLoading(false);
+          toast.error(res.message);
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        setLoading(false);
+        console.error(error);
+        toast.error("An error occurred while updating");
+      });
   };
 
   return (
     <>
-
       <form onSubmit={handleSubmit(onSubmit)}>
 
       <Grid container columnSpacing={2}>
