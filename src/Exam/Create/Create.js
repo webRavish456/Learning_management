@@ -29,6 +29,7 @@ const schema = yup.object().shape({
 });
 
 const CreateExam = ({ handleCreate, handleClose }) => {
+    
     const [courseName, setCourseName] = useState([]);
     const [teacherName, setTeacherName] = useState([]);
     const isSmScreen = useMediaQuery("(max-width:768px)");
@@ -96,7 +97,7 @@ const CreateExam = ({ handleCreate, handleClose }) => {
     }, [loadingdata]);
 
 
-    const testTypeOptions = ["Viva", "Quiz"]
+    const testTypeOptions = ["Viva", "Quiz", "Test"]
 
 
     const onSubmit = (data) => {
@@ -146,7 +147,6 @@ const CreateExam = ({ handleCreate, handleClose }) => {
             .catch((error) => console.error(error));
     };
 
-    console.log("courseName", courseName)
 
     return (
         <>
@@ -294,14 +294,14 @@ const CreateExam = ({ handleCreate, handleClose }) => {
                         </FormControl>
                     </Grid>
 
-                    <Grid item xs={12} sm={12} md={6}>
+                    <Grid item xs={12} sm={12} md={12}>
                         <TextField
                             label={
                                 <>
                                     Total Marks <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                                 </>
                             }
-                            type="numder"
+                            type="number"
                             variant="outlined"
                             {...register("totalMarks")}
                             error={!!errors.totalMarks}

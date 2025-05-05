@@ -1,257 +1,276 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-// import CloseIcon from "@mui/icons-material/Close";
-
-
-
-
 import {
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TablePagination,
-    TableRow,
-    Box,
-    Dialog,
-    DialogTitle,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    TextField,
-    IconButton,
-    Button,
-    MenuItem,
-    Select,
-    FormControl,
-    InputLabel,
-    Grid,
-    useMediaQuery,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Box,
+  IconButton,
 } from "@mui/material";
+
 import CommonDialog from "../../Component/CommonDialog/CommonDialog";
 import ViewStudentsAssignment from "./View/View";
 import CreateStudentsAssignment from "./Create/Create";
 import EditStudentsAssignment from "./Edit/Edit";
 import DeleteStudentsAssignment from "./Delete/Delete";
 import Search from "../../Search/Search";
+import Cookies from "js-cookie";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const StudentsAssignment = () => {
+const StudentsAssignment= () => {
+  const [openData, setOpenData] = useState(false);
+  const [viewShow, setViewShow] = useState(false);
+  const [editShow, setEditShow] = useState(false);
+  const [deleteShow, setDeleteShow] = useState(false);
 
-    const [openData, setOpenData] = useState(false)
+  const [viewData, setViewData] = useState(null);
+  const [editData, setEditData] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-    const [viewData, setViewData] = useState(false)
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    const [editData, setEditData] = useState(false)
+  const token = Cookies.get("token");
+  const Base_url = process.env.REACT_APP_BASE_URL;
 
-    const [deleteData, setDeleteData] = useState(false)
+  const columns = [
 
-    const handleView = () => {
-        setViewData(true)
-    }
+    { id: "studentName", label: "Student Name", flex: 1, align: "center" },
+    { id: "mobileNumber", label: "Mobile Number", flex: 1, align: "center" },
+    { id: "assignmentTitle", label: "Assignment Title", flex: 1, align: "center" },
+    { id: "course", label: "Course", flex: 1, align: "center" },
+    { id: "teacher", label: "Teacher", flex: 1, align: "center" },
+    { id: "dueDate", label: "Due Date", flex: 1, align: "center" },
+    { id: "status", label: "Status", flex: 1, align: "center" },
+    { id: "action", label: "Action", flex: 1, align: "center" },
+  ];
 
-    const handleEdit = () => {
-        setEditData(true)
-    }
+  useEffect(() => {
+    const fetchStudentsAssignmentData = async () => {
+      try {
+        const response = await fetch(`${Base_url}/studentsAssignment`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-    const handleDelete = () => {
-        setDeleteData(true)
-    }
+        const result = await response.text();
+        const res = JSON.parse(result);
 
-
-    const columns = [
-        { 
-            id: 'si', 
-            label: 'SI.No',
-             flex: 1, 
-             align: 'center' 
-            },
-        { id: 'student_name',
-             label: 'Student Name', 
-             flex: 1,
-              align: 'center'
-             },
-        {
-            id: 'assignment_title',
-            label: 'Assignment Title',
-            flex: 1,
-            align: 'center',
-        },
-        {
-            id: 'course_name',
-            label: 'Course Name',
-            flex: 1,
-            align: 'center',
-        },
-        {
-            id: 'teacher_name',
-            label: 'Teacher Name',
-            flex: 1,
-            align: 'center',
-        },
-        {
-            id: 'due_date',
-            label: 'Due Date',
-            flex: 1,
-            align: 'center',
-        },
-
-        {
-            id: 'status',
-            label: 'Status',
-            flex: 1,
-            align: 'center',
-        },
-        {
-            id: 'action',
-            label: 'Action',
-            flex: 1,
-            align: 'center',
-        },
-    ];
-
-    function createData(si, student_name,assignment_title, course_name, teacher_name, due_date, status) {
-        return {
-            si,  student_name, assignment_title, course_name, teacher_name, due_date, status, action: (
-
-                <>
-                    <IconButton style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }} onClick={handleView}>
-                        <VisibilityIcon />
-                    </IconButton>
-                    <IconButton style={{ color: "#6b6666", padding: "4px", transform: "scale(0.8)" }} onClick={handleEdit}>
-                        <EditIcon />
-                    </IconButton>
-                    <IconButton style={{ color: "#e6130b", padding: "4px", transform: "scale(0.8)" }} onClick={handleDelete}>
-                        <DeleteIcon />
-                    </IconButton>
-                </>
-            ),
-        };
-    }
-
-
-    const rows = [
-        createData('1' , 'Manisha', 'Learning Management','Full Stack','Ravish', '10-03-25', 'Active')
-        // createData('2', 'Goldie', 'goldie@gmail.com', '1234567891', '2000-02-02', 'Female', 'JSR', '2023-01-02', 'Science', 'Inactive'),
-        // createData('3', 'Nandani', 'nandani@gmail.com', '1234567892', '1999-03-03', 'Female', 'JSR', '2023-01-03', 'History', 'Active'),
-        // createData('4', 'Manisha', 'manisha@gmail.com', '1234567893', '1998-04-04', 'Female', 'JSR', '2023-01-04', 'English', 'Inactive'),
-        // createData('5', 'Aastha', 'aastha@gmail.com', '1234567894', '1997-05-05', 'Female', 'JSR', '2023-01-05', 'Computer Science', 'Active'),
-    ];
-
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
+        if (res.status === "success") {
+          setLoading(false);
+          const formattedData = res.data.map((item, index) =>
+            createData(
+              
+              item,
+              item.studentName,
+              item.assignmentTitle,
+              item.course,
+              item.teacher,
+              new Date(item.dueDate).toLocaleDateString("en-IN"),
+              item.mobileNumber,
+              item.status
+            )
+          );
+          setRows(formattedData);
+        }
+      } catch (error) {
+        console.error("Error fetching StudentsAssignment data:", error);
+      }
     };
 
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
-
-    const onAddClick = () => {
-        setOpenData(true)
+    if (loading) {
+      fetchStudentsAssignmentData();
     }
+  }, [loading]);
 
-    const handleClose = () => {
-        setEditData(false)
-        setViewData(false)
-        setOpenData(false)
-        setDeleteData(false)
-    };
+  const createData = ( row, studentName,assignmentTitle,course,teacher,dueDate, mobileNumber,status) => ({
+     row,studentName,assignmentTitle,course,teacher,dueDate,mobileNumber, status ,action: (
+      <>
+        <IconButton
+          style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }}
+          onClick={() => handleView(row)}
+        >
+          <VisibilityIcon />
+        </IconButton>
+        <IconButton
+          style={{ color: "#6b6666", padding: "4px", transform: "scale(0.8)" }}
+          onClick={() => handleEdit(row)}
+        >
+          <EditIcon />
+        </IconButton>
+        <IconButton
+          style={{ color: "#e6130b", padding: "4px", transform: "scale(0.8)" }}
+          onClick={() => handleShowDelete(row._id)}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </>
+    ),
+  });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setOpenData(false)
-        // console.log("Form Data Submitted:", formData);
-    }
+  const handleView = (row) => {
+    setViewData(row);
+    setViewShow(true);
+  };
 
-    const handleUpdate = (e) => {
-        e.preventDefault();
-        setEditData(false)
-    }
+  const handleEdit = (data) => {
+    setEditData(data);
+    setEditShow(true);
+  };
 
+  const handleShowDelete = (id) => {
+    setDeleteId(id);
+    setDeleteShow(true);
+  };
 
-    return (
+  const handleDelete = () => {
+    setIsDeleting(true);
+    fetch(`${Base_url}/studentsAssignment/${deleteId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.text())
+      .then((result) => {
+        const res = JSON.parse(result);
+        if (res.status === "success") {
+          toast.success("Student Assignment deleted successfully!");
+          setLoading(true);
+        } else {
+          toast.error(res.message);
+        }
+        setIsDeleting(false);
+        handleClose();
+      })
+      .catch((error) => {
+        console.error("Delete error:", error);
+        setIsDeleting(false);
+      });
+  };
 
-        <Box className="container">
-            <Search onAddClick={onAddClick} buttonText="Add Students Assignment"/>
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                <TableContainer sx={{ maxHeight: 440 }}>
+  const handleClose = () => {
+    setOpenData(false);
+    setViewShow(false);
+    setEditShow(false);
+    setDeleteShow(false);
+  };
 
+  const handleCreate = (data) => {
+    setLoading(data);
+  };
 
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{ minWidth: column.minWidth, fontWeight: 700 }}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row) => {
-                                    return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <TableCell key={column.id} align={column.align}>
-                                                        {column.format && typeof value === 'number'
-                                                            ? column.format(value)
-                                                            : value}
-                                                    </TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-                                    );
-                                })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            </Paper>
+  const handleUpdate = (data) => {
+     setLoading(data);
+  };
 
-            <CommonDialog
-                open={openData || viewData || editData || deleteData}
-                onClose={handleClose}
-                dialogTitle={<>
-                    {openData ? "Create New Student Assignment" : viewData ? "View Student Assignment Details" : editData ? "Edit Student Assignment Details" : deleteData ? "Delete Student Assignment Details" : null}
-                </>}
+  const onAddClick = () => setOpenData(true);
 
-                dialogContent={
-                    openData ? <CreateStudentsAssignment handleSubmit={handleSubmit} handleClose={handleClose} /> :
-                        viewData ? <ViewStudentsAssignment /> :
-                            editData ? <EditStudentsAssignment handleUpdate={handleUpdate} handleClose={handleClose} /> :
-                                deleteData ? <DeleteStudentsAssignment handleDelete={handleDelete} handleClose={handleClose} /> : null
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-                }
+  const handleChangePage = (_, newPage) => setPage(newPage);
+  const handleChangeRowsPerPage = (e) => {
+    setRowsPerPage(+e.target.value);
+    setPage(0);
+  };
 
-            />
+  return (
+    <>
+      <ToastContainer />
+      <Box className="container">
+        <Search onAddClick={onAddClick} buttonText="Add New Student's Assignment" />
+        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table stickyHeader aria-label="studentsAssignment table">
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ fontWeight: 700 }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, idx) => (
+                    <TableRow hover role="checkbox" key={idx}>
+                      {columns.map((column) => (
+                        <TableCell key={column.id} align={column.align}>
+                          {row[column.id]}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
 
-        </Box>
-    );
-}
+        <CommonDialog
+          open={openData || viewShow || editShow || deleteShow}
+          onClose={handleClose}
+          dialogTitle={
+            openData
+              ? "Create New Student's Assignment"
+              : viewShow
+              ? "View  Student's Assignment"
+              : editShow
+              ? "Edit  Student's Assignment"
+              : deleteShow
+              ? "Delete  Student's Assignment"
+              : ""
+          }
+          dialogContent={
+            openData ? (
+              <CreateStudentsAssignment handleCreate={handleCreate} handleClose={handleClose} />
+            ) : viewShow ? (
+              <ViewStudentsAssignment viewData={viewData} />
+            ) : editShow ? (
+              <EditStudentsAssignment
+                editData={editData}
+                handleUpdate={handleUpdate}
+                handleClose={handleClose}
+              />
+            ) : deleteShow ? (
+              <DeleteStudentsAssignment
+                handleDelete={handleDelete}
+                isDeleting={isDeleting}
+                handleClose={handleClose}
+              />
+            ) : null
+          }
+        />
+      </Box>
+    </>
+  );
+};
 
 export default StudentsAssignment;

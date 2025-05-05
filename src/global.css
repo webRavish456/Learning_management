@@ -71,6 +71,10 @@ font-weight: 500;
 color: #000000;
 }  
 
+.download {
+  cursor: pointer;
+}
+
 /* SignUp */
 
 .register {

@@ -25,7 +25,7 @@ import Search from "../../Search/Search";
 import Cookies from "js-cookie";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { NavLink } from "react-router-dom";
+
 
 
 const CourseList=()=>
@@ -76,9 +76,9 @@ useEffect(() => {
 
       const result = await response.text();
       const res = JSON.parse(result);
-       console.log(FormData)
+
       if (res.status === "success") {
-        setLoading(false);
+     
         const formattedData = res.data.map((item, index) =>
           createData(
             index + 1,
@@ -94,6 +94,9 @@ useEffect(() => {
         setRows(formattedData);
         setFilteredRows(formattedData);
       }
+
+      setLoading(false);
+
     } catch (error) {
       console.error("Error fetching courselist data:", error);
     }
@@ -142,6 +145,7 @@ const createData = (si, row, courseName,courseDescription,duration,pricing,sylla
 
 
 useEffect(() => {
+
   const filtered = rows.filter(
     (row) =>
       row.courseName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -203,7 +207,7 @@ const handleClose = () => {
 
 const handleCreate = (data) => {
   setLoading(data);
-  setOpenData(false);
+ 
 };
 
     const handleUpdate = () => {
@@ -223,8 +227,27 @@ const handleCreate = (data) => {
     };
 
 
-const handleClick = () => {
+const handleClick = async (pdfUrl) => {
  
+  try {
+
+    const response = await fetch(pdfUrl.syllabus);
+    const blob = await response.blob();
+    const blobUrl = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = `${pdfUrl.courseName}-syllabus.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(blobUrl);
+
+  }
+   catch (error) {
+    console.error("Failed to download PDF", error);
+  }
+
 };
 
 
@@ -269,7 +292,7 @@ return (
           {column.id === "syllabus" ? (
             
             <img
-              onClick={()=>handleClick(row[column.id])}
+              onClick={()=>handleClick(row.row)}
               src="/pdf.png"
               alt="item"
               style={{ width: "30px", height: "30px", objectFit: "contain", cursor:"pointer" }}

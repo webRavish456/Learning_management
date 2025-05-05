@@ -112,7 +112,6 @@ const Certificates = () => {
         const res = JSON.parse(result);
 
         if (res.status === "success") {
-          setLoading(false);
           const formattedData = res.data.map((item, index) =>
             createData(
               index + 1,
@@ -125,8 +124,9 @@ const Certificates = () => {
             )
           );
           setRows(formattedData);
-          setFilteredRows(formattedData); //Initialization filteredrows with all data
+          setFilteredRows(formattedData); 
         }
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching certificate data:", error);
       }
@@ -156,8 +156,6 @@ const Certificates = () => {
     ),
   });
 
-
-  //Automatically filter rows based on search term
   useEffect(() => {
     const filtered = rows.filter(
       (row) =>
@@ -174,6 +172,29 @@ const Certificates = () => {
   const handleView = (row) => {
     setViewData(row);
     setViewShow(true);
+  };
+
+  const handleClick = async (pdfUrl) => {
+ 
+    try {
+  
+      const response = await fetch(pdfUrl.certificates);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+  
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = `${pdfUrl.courseName}-certificates.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+  
+    }
+     catch (error) {
+      console.error("Failed to download PDF", error);
+    }
+  
   };
 
   const handleEdit = (data) => {
@@ -219,14 +240,13 @@ const Certificates = () => {
     setDeleteShow(false);
   };
 
-  const handleCreate = (refresh = true) => {
-    if (refresh) setLoading(true);
-    setOpenData(false);
+  const handleCreate = (data) => {
+    setLoading(data);
+
   };
 
-  const handleUpdate = (refresh = true) => {
-    if (refresh) setLoading(true);
-    setEditShow(false);
+  const handleUpdate = (data) => {
+     setLoading(data);
   };
 
   const onAddClick = () => setOpenData(true);
@@ -274,12 +294,22 @@ const Certificates = () => {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, idx) => (
                       <TableRow hover role="checkbox" key={idx}>
-                        {columns.map((column) => (
-                          <TableCell key={column.id} align={column.align}>
-                            {row[column.id]}
-                          </TableCell>
-                        ))}
-                      </TableRow>
+                           {columns.map((column) => (
+                  <TableCell key={column.id} align={column.align}>
+                    {column.id === "certificate" ? (
+                      
+                      <img
+                        onClick={()=>handleClick(row.row)}
+                        src="/pdf.png"
+                        alt="item"
+                        style={{ width: "30px", height: "30px", objectFit: "contain", cursor:"pointer" }}
+                      />
+                    ) : (
+                      row[column.id]
+                    )}
+                  </TableCell>
+                ))}
+                                </TableRow>
                     ))
                 ) : (
                   <TableRow>

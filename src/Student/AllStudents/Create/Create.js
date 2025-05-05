@@ -30,6 +30,7 @@ import Cookies from 'js-cookie';
 
 
   const schema = yup.object().shape({
+
     studentName: yup.string().required("Student Name is required"),
     gender: yup.string().required("Gender is required"),
     mobileNumber: yup.string().required("Mobile Number is required"),
@@ -37,8 +38,7 @@ import Cookies from 'js-cookie';
     dob: yup.string().required("DOB is required"),
     address: yup.string().required("Address is required"),
     enrollmentDate: yup.string().required("Enrollment Date is required"),
-    course: yup.string().required("Course is required"),
-    status: yup.string()
+    courseName: yup.string().required("Course is required"),
     
   });
 
@@ -51,7 +51,9 @@ const CreateAllStudent = ({ handleCreate, handleClose }) =>
     
         const Base_url = process.env.REACT_APP_BASE_URL;
       
-        const [loading, setLoading] = useState(true)
+        const [loading, setLoading] = useState(false)
+
+        const [loadingData, setLoadingData] = useState(true)
       
         const {
           register,
@@ -77,17 +79,17 @@ const CreateAllStudent = ({ handleCreate, handleClose }) =>
                 console.log(result.data)
 
                 setCourseName(result.data)
-                setLoading(false)
+                setLoadingData(false)
               }
             }catch(error) {
               console.error("Error fetching course data:",error);
             }
           };
-          if(loading)
+          if(loadingData)
           {
             fetchCourseData();
           }
-        }, [loading]); //dropdown
+        }, [loadingData]); 
     
         const onSubmit = (data) => {
         
@@ -101,9 +103,7 @@ const CreateAllStudent = ({ handleCreate, handleClose }) =>
            formdata.append("dob", data.dob);
            formdata.append("address", data.address);
            formdata.append("enrollmentDate", data.enrollmentDate);
-           formdata.append("course", data.course);
-           formdata.append("status", data.status);
-        
+           formdata.append("course", data.courseName);
           
        
            const requestOptions = {
@@ -139,7 +139,7 @@ const CreateAllStudent = ({ handleCreate, handleClose }) =>
              })
              .catch((error) => console.error(error));
      };
-     console.log("courseName",courseName)
+
     
       return (
          <>
@@ -156,7 +156,7 @@ const CreateAllStudent = ({ handleCreate, handleClose }) =>
                     Student Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                 </>
                 }
-                // variant="outline"
+              
                type="text"
                 {...register("studentName")}
                 error={!!errors.studentName}
@@ -169,30 +169,93 @@ const CreateAllStudent = ({ handleCreate, handleClose }) =>
                 </div>
     
                 </Grid>
+
+                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+
+                  <FormControl
+                  fullWidth
+                  margin="normal"
+                  error={!!errors.courseName}
+                  >
+                   <InputLabel>
+                   Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                   </InputLabel>
+                      
+                  <Select
+                  label="Course Name"
+                  defaultValue=""
+                  {...register("courseName")}
+                  >
+                  
+                    {courseName.map((course,index) => (
+                      <MenuItem key={index} value={course.courseName}>
+                      {course.courseName}
+                      </MenuItem>
+                    ))}
+                  </Select >
+                  <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                  {errors.courseName?.message}
+                </div>
+                  </FormControl>
+                 </Grid>
     
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
                 
                 <TextField
-                label={
-                <>
-                    Gender <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                </>
-                }
-                // variant="outline"
-                type="text"
-                  {...register("gender")}
-                  error={!!errors.gender}
-                  fullWidth
-                  margin="normal"
-                />
+               
+                          select
+                          label={
+                              <>
+                             Gender<span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                              </>
+                          }
+                            variant="outlined"
+                              fullWidth
+                              margin="normal"
+                          {...register("gender")}
+
+                     
+                          error={!!errors.Status}
+                          
+                          SelectProps={{
+                              MenuProps: {
+                              PaperProps: {
+                                  style: { maxHeight: 200 },
+                              },
+                              },
+                          }}
+                          > 
+              <MenuItem value="male">Male</MenuItem>
+                <MenuItem value="female">Female</MenuItem>
+                <MenuItem value="others">Others</MenuItem>
+
+                          </TextField>
     
-    
-    <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
                   {errors.gender?.message}
                 </div>
               
                 </Grid>
-    
+
+                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+                
+                <TextField
+                
+                label="DOB"
+                type="date"
+                 InputLabelProps={{shrink: true}}
+               
+                  {...register("dob")}
+                  error={!!errors.dob}
+                  fullWidth
+                  margin="normal"
+                />
+               
+               <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                  {errors.dob?.message}
+                </div>
+                </Grid>
+
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
                 
                 <TextField
@@ -201,7 +264,7 @@ const CreateAllStudent = ({ handleCreate, handleClose }) =>
                     Mobile Number <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                 </>
                 }
-                // variant="outline"
+              
                 type="number"
                   {...register("mobileNumber")}
                   error={!!errors.mobileNumber}
@@ -233,25 +296,7 @@ const CreateAllStudent = ({ handleCreate, handleClose }) =>
                 </div>
                 </Grid>
     
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                
-                <TextField
-                
-                label="DOB"
-                type="date"
-                 InputLabelProps={{shrink: true}}
-                // variant="outline"
-                  {...register("dob")}
-                  error={!!errors.dob}
-                  fullWidth
-                  margin="normal"
-                />
                
-               <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                  {errors.dob?.message}
-                </div>
-                </Grid>
-
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
                 
                 <TextField
@@ -260,7 +305,7 @@ const CreateAllStudent = ({ handleCreate, handleClose }) =>
                     Address <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                 </>
                 }
-                // variant="outline"
+                multiline
                 type="text"
                   {...register("address")}
                   error={!!errors.address}
@@ -276,13 +321,12 @@ const CreateAllStudent = ({ handleCreate, handleClose }) =>
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
                 
                 <TextField
-                // label={
-                // <>
-                //     Enrollment Date <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                // </>
-                // }
+                label={
+                <>
+                    Enrollment Date <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                </>
+                }
                 // variant="outline"
-                label="Enrollment Date"
                 type="date"
                 InputLabelProps={{ shrink: true }}
                   {...register("enrollmentDate")}
@@ -292,76 +336,25 @@ const CreateAllStudent = ({ handleCreate, handleClose }) =>
                 />
                  </Grid>
 
-                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                  <FormControl
-                  fullWidth
-                  margin="normal"
-                  error={!!errors.courseName}
-                  >
-                   <InputLabel>
-                   Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                   </InputLabel>
-                      
-                  <Select
-                  label="Course Name"
-                  defaultValue=""
-                  {...register("courseName",{required: "Course name is required"})}
-                  >
-                  
-                    {courseName.map((course,index) => (
-                      <MenuItem key={index} value={course.courseName}>
-                      {course.courseName}
-                      </MenuItem>
-                    ))}
-                  </Select >
-                  <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                  {errors.courseName?.message}
-                </div>
-                  </FormControl>
-                 </Grid>
-
- 
-                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                
-                <TextField
-                label={
-                <>
-                    Status <span style={{ course: "rgba(240, 68, 56, 1)" }}>*</span>
-                </>
-                }
-                // variant="outline"
-                type="text"
-                  {...register("status")}
-                  error={!!errors.status}
-                  fullWidth
-                  margin="normal"
-                />
-               
-               <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                  {errors.status?.message}
-                </div>
                 </Grid>
-
-                </Grid>
-               
-               
+              
                 <Box className="submit" sx={{display:'flex',justifyContent:'flex-end',gap:'15px',margin:'20px'}}>
                 <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
                 <Button type="submit" className="primary_button">
     
-    {loading ? (
-    <>
-    <CircularProgress size={18} 
-    style={{ marginRight: 8, color: "#fff" }} />
-          Submitting
-      </>
-      ) : (
-      "Submit"
-      )}
-    
-    </Button>
-    </Box>
-    </form>
+                {loading ? (
+                <>
+                <CircularProgress size={18} 
+                style={{ marginRight: 8, color: "#fff" }} />
+                      Submitting
+                  </>
+                  ) : (
+                  "Submit"
+                  )}
+                
+                </Button>
+                </Box>
+                </form>
     
     </>
     )

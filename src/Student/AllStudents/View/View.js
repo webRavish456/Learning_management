@@ -2,7 +2,9 @@ import React from "react"
 import { Box, Grid, useMediaQuery } from "@mui/material";
 
 const ViewAllStudent = ({viewData})  => {
+
     const isSmScreen = useMediaQuery("(max-width:768px)");
+    
 
     return (
         <>
@@ -19,6 +21,7 @@ const ViewAllStudent = ({viewData})  => {
 
                 </Grid>
 
+              
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6} style={{ display: "flex" }}>
 
                     <Grid item xs={6}>
@@ -28,6 +31,29 @@ const ViewAllStudent = ({viewData})  => {
                         <Box className="pageDescription">{viewData.course} </Box>
                     </Grid>
                 </Grid>
+
+                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6} style={{ display: "flex" }}>
+
+                    <Grid item xs={6}>
+                        <Box className="pageTitle">Gender:</Box>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Box className="pageDescription">{viewData.gender}</Box>
+                    </Grid>
+
+                    </Grid>
+
+                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6} style={{ display: "flex" }}>
+
+                    <Grid item xs={6}>
+                        <Box className="pageTitle">DOB:</Box>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Box className="pageDescription">{new Date(viewData.dob).toLocaleDateString("en-IN")}</Box>
+                    </Grid>
+
+                    </Grid>
+
 
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6} style={{ display: "flex" }}>
 
@@ -42,12 +68,23 @@ const ViewAllStudent = ({viewData})  => {
 
                 <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6} style={{ display: "flex" }}>
 
+                <Grid item xs={6}>
+                    <Box className="pageTitle">Email Id:</Box>
+                </Grid>
+                <Grid item xs={6}>
+                    <Box className="pageDescription">{viewData.emailId} </Box>
+                </Grid>
+
+                </Grid>
+
+                <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6} style={{ display: "flex" }}>
+
                     <Grid item xs={6}>
                         <Box className="pageTitle">Enrollment Date:</Box>
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Box className="pageDescription">{viewData.enrollmentDate} </Box>
+                        <Box className="pageDescription">{new Date(viewData.enrollmentDate).toLocaleDateString("en-IN")} </Box>
                     </Grid>
 
                 </Grid>

@@ -190,6 +190,7 @@ const Scheduling = () => {
   };
 
   const handleDelete = () => {
+
     setIsDeleting(true);
     fetch(`${Base_url}/timetable/${deleteId}`, {
       method: "DELETE",
@@ -213,6 +214,7 @@ const Scheduling = () => {
         console.error("Delete error:", error);
         setIsDeleting(false);
       });
+      
   };
 
   const handleClose = () => {
@@ -222,14 +224,15 @@ const Scheduling = () => {
     setDeleteShow(false);
   };
 
-  const handleCreate = (refresh = true) => {
-    if (refresh) setLoading(true);
-    setOpenData(false);
+  const handleCreate = (data) => {
+
+   setLoading(data);
+
   };
 
-  const handleUpdate = (refresh = true) => {
-    if (refresh) setLoading(true);
-    setEditShow(false);
+  const handleUpdate = (data) => {
+     setLoading(data);
+ 
   };
 
   const onAddClick = () => setOpenData(true);

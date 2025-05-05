@@ -48,7 +48,7 @@ const ViewExam =({viewData})=>
             </Grid>
 
             <Grid item xs={6}>
-            <Box className="pageDescription">{viewData.examDate}</Box>
+            <Box className="pageDescription">{new Date(viewData.examDate).toLocaleDateString("en-IN")}</Box>
             </Grid>
 
             </Grid>

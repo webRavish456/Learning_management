@@ -1,150 +1,4 @@
-// import React, { useState } from "react"
-// import {
-//     TextField,
-//     MenuItem,
-//     Select,
-//     FormControl,
-//     InputLabel,
-//     Grid,
-//     useMediaQuery,
-//     Box,
-//     Button,
-// } from "@mui/material";
 
-// const EditCourseList = ({ handleSubmit, handleClose }) => {
-//     const isSmScreen = useMediaQuery("(max-width:768px)");
-
-//     const [formData, setFormData] = useState({
-//         courseName: "",
-//         courseDescription: "",
-//         duration: "",
-//         pricing: "",
-//         syllabus: "",
-//     });
-
-//     const handleChange = (e) => {
-//         setFormData({ ...formData, [e.target.name]: e.target.value });
-//     };
-
-//     return (
-//         <>
-//                     <Grid container columnSpacing={2}>
-                         
-        
-//                         {/* <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-        
-//                             <FormControl fullWidth margin="normal">
-//                                 <InputLabel>Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
-//                                 <Select name="courseName" value={formData.courseName} onChange={handleChange}>
-//                                     <MenuItem value="BCA">BCA</MenuItem>
-//                                     <MenuItem value="MCA">MCA</MenuItem>
-//                                     <MenuItem value="MBA">BBA</MenuItem>
-//                                 </Select>
-//                             </FormControl>
-        
-//                         </Grid> */}
-//                         <Grid item xs={12} sm={12} md={6}>
-//                             <TextField
-//                                 label={
-//                                     <>
-//                                         Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-//                                     </>
-//                                 }
-//                                 name="courseName"
-//                                 value={formData.courseName}
-//                                 onChange={handleChange}
-//                                 fullWidth
-//                                 margin="normal"
-//                             />
-//                         </Grid>
-//                         <Grid item xs={12} sm={12} md={6}>
-//                             <TextField
-//                                 label={
-//                                     <>
-//                                         Course Description <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-//                                     </>
-//                                 }
-//                                 name="courseDescription"
-//                                 value={formData.courseDescription}
-//                                 onChange={handleChange}
-//                                 fullWidth
-//                                 margin="normal"
-//                             />
-//                         </Grid>
-//                         {/* <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-//                             <FormControl fullWidth margin="normal">
-//                                 <InputLabel>Duration <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span></InputLabel>
-//                                 <Select name="duration" value={formData.duration} onChange={handleChange}>
-//                                     <MenuItem value="BCA">3 years</MenuItem>
-//                                     <MenuItem value="MCA">2 years</MenuItem>
-//                                     <MenuItem value="MBA">2 years</MenuItem>
-//                                 </Select>
-//                             </FormControl>
-        
-//                         </Grid> */}
-                       
-//                        <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-//                             <TextField
-//                                 label={
-//                                     <>
-//                                         Duration  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-//                                     </>
-//                                 }
-//                                 name="duration"
-//                                 value={formData.duration}
-//                                 onChange={handleChange}
-//                                 fullWidth
-//                                 margin="normal"
-//                             />
-//                         </Grid>
-        
-//                         <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-//                             <TextField
-//                                 label={
-//                                     <>
-//                                         Pricing  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-//                                     </>
-//                                 }
-//                                 name="pricing"
-//                                 value={formData.pricing}
-//                                 onChange={handleChange}
-//                                 fullWidth
-//                                 margin="normal"
-//                             />
-//                         </Grid>
-        
-//                         <Grid item xs={12} sm={12} md={12}>
-//                             <TextField
-//                                 label={
-//                                     <>
-//                                         Syllabus <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-//                                     </>
-//                                 }
-//                                 name="syllabus"
-//                                 type="file"
-//                                 InputLabelProps={{shrink:true}}
-//                                 value={formData.syllabus}
-//                                 onChange={handleChange}
-//                                 fullWidth
-//                                 margin="normal"
-//                             />
-//                         </Grid>
-        
-//                     </Grid>
-        
-//                     <Box className="submit" sx={{ display: "flex", gap: 1, justifyContent: "flex-end", marginTop: 2 }}>
-//                         <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
-//                         <Button onClick={handleSubmit} className="primary_button">
-//                             Submit
-//                         </Button>
-//                     </Box>
-        
-//                 </>
-//             )
-//         }
-        
-
-// export default EditCourseList;
 import React, { useEffect, useState } from "react";
 import {
   TextField,
@@ -154,6 +8,8 @@ import {
   Button,
   CircularProgress,
   duration,
+  MenuItem,
+  Typography,
 } from "@mui/material";
 
 import { useForm } from "react-hook-form";
@@ -162,13 +18,13 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
+import { NavLink } from "react-router-dom";
 
 const schema = yup.object().shape({
   courseName: yup.string().required("Course Name is required"),
   courseDescription: yup.string().required("Course Description is required"),
   duration: yup.string().required("Duration is required"),
   pricing: yup.string().required("Pricing is required"),
-  syllabus: yup.string().required("Syllabus is required"),
   status: yup.string()
 });
 
@@ -279,24 +135,6 @@ const EditCourseList = ({ handleUpdate,  editData,  handleClose }) => {
               type="text"
               label={
                 <>
-                  course Description <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                </>
-              }
-              variant="outlined"
-              {...register("courseDescription")}
-              error={!!errors.courseDescription}
-              fullWidth
-              margin="normal"
-            />
-            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.courseDescription?.message}
-            </div>
-          </Grid>
-          <Grid item xs={12} sm={12} md={6}>
-            <TextField
-              type="text"
-              label={
-                <>
                   Duration <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                 </>
               }
@@ -329,44 +167,87 @@ const EditCourseList = ({ handleUpdate,  editData,  handleClose }) => {
             </div>
           </Grid>
           
-          <Grid item xs={12} sm={12} md={6}>
-            <TextField
-              type="file"
-              label={
-                <>
-                  Syllabus <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                </>
-              }
-              variant="outlined"
-              InputLabelProps={{shrink:true}}
-              {...register("syllabus")}
-              error={!!errors.syllabus}
-              fullWidth
-              margin="normal"
-            />
-            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.syllabus?.message}
-            </div>
-          </Grid>
+         
 
           <Grid item xs={12} sm={12} md={6}>
+         
+          <TextField
+                  select
+                  label={
+                      <>
+                        Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                      </>
+                  }
+                  defaultValue={editData.status}
+                  variant="outlined"
+                  {...register("status")}
+                  error={!!errors.status}
+                  fullWidth
+                  margin="normal"
+                  >
+                  <MenuItem value ="Active">Active</MenuItem>
+                  <MenuItem value ="Inactive">Inactive</MenuItem>
+                
+                  </TextField>
+                  <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                  {errors.status?.message}
+                  </div>
+
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={12}>
+
+          <TextField InputLabelProps={{shrink:true}}
+                    type="file"
+                    label={
+                      <>
+                        Syllabus <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                      </>
+                    }
+                    variant="outlined"
+                
+                    {...register("syllabus")}
+                    error={!!errors.syllabus}
+                    fullWidth
+                    margin="normal"
+                  />
+                  <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                    {errors.syllabus?.message}
+                  </div>
+
+                    <Typography variant="body2" sx={{ mt: 0 }}>
+                    View existing syllabus:&nbsp;
+                  <NavLink
+                    to={editData.syllabus} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    Syllabus
+                  </NavLink>
+                </Typography>
+            
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={12}>
             <TextField
               type="text"
               label={
                 <>
-                  Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                  Course Description <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                 </>
               }
               variant="outlined"
-              {...register("status")}
-              error={!!errors.status}
+              {...register("courseDescription")}
+              error={!!errors.courseDescription}
               fullWidth
+              multiline
               margin="normal"
             />
             <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.status?.message}
+              {errors.courseDescription?.message}
             </div>
           </Grid>
+
         </Grid>
 
         <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 2 }}>

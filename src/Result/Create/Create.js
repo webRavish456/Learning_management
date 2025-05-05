@@ -27,6 +27,7 @@ const schema = yup.object().shape({
 });
 
 const CreateResult = ({ handleCreate, handleClose }) => {
+
     const [courseName, setCourseName] = useState([]);
     const [teacherName, setTeacherName] = useState([]);
     const isSmScreen = useMediaQuery("(max-width:768px)");
@@ -61,7 +62,7 @@ const CreateResult = ({ handleCreate, handleClose }) => {
                     console.log(result.data)
 
                     setCourseName(result.data);
-                    setLoading(false)
+                    setLoadingdata(false)
                 }
             } catch (error) {
                 console.error("Error fetching course data:", error);
@@ -80,7 +81,7 @@ const CreateResult = ({ handleCreate, handleClose }) => {
                     console.log(result.data)
 
                     setTeacherName(result.data);
-                    setLoading(false)
+                    setLoadingdata(false)
                 }
             } catch (error) {
                 console.error("Error fetching teacher data:", error);
@@ -92,10 +93,9 @@ const CreateResult = ({ handleCreate, handleClose }) => {
         }
     }, [loadingdata]);
 
-    const testTypeOptions = ["Viva", "Quiz"]
+    const testTypeOptions = ["Viva", "Quiz", "Test"]
 
-    // const courseOptions = ["BCA", "B.Tech", "B.Sc"]; 
-    // const teacherOptions = ["Ravish", "Nikhil", "Sanjoy"]; 
+
 
     const onSubmit = (data) => {
 
@@ -141,8 +141,7 @@ const CreateResult = ({ handleCreate, handleClose }) => {
             })
             .catch((error) => console.error(error));
     };
-    console.log("courseName", courseName)
-    console.log("teacherName", teacherName)
+   
 
     return (
         <>
@@ -182,8 +181,8 @@ const CreateResult = ({ handleCreate, handleClose }) => {
 
                             <Select
                                 label="Course Name"
-                                defaultValue=""
-                                {...register("courseName", { required: "Course name is required" })}
+                           
+                                {...register("courseName")}
                             >
                                 {courseName.map((course, index) => (
                                     <MenuItem key={index} value={course.courseName}>
@@ -210,8 +209,8 @@ const CreateResult = ({ handleCreate, handleClose }) => {
 
                             <Select
                                 label="Teacher Name"
-                                defaultValue=""
-                                {...register("teacherName", { required: "Teacher name is required" })}
+                             
+                                {...register("teacherName")}
                             >
                                 {teacherName.map((teacher, index) => (
                                     <MenuItem key={index} value={teacher.teacherName}>

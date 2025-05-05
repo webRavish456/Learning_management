@@ -24,22 +24,24 @@ import Cookies from 'js-cookie';
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 
 const schema = yup.object().shape({
-    teacherName: yup.string().required("Teacher Name is required"),
-    emailId: yup.string().required("Email is required"),
-    mobileNo: yup.string().required("Mobile Number is required"),
-    experience: yup.string().required("Experience is required"),
-    gender: yup.string().required("Gender is required"),
-    qualification: yup.string().required("Qualification is required"),
-    dob: yup.string().required("Date of birth is required"),
-    address: yup.string().required("Address is required"),
-    branchName: yup.string().required("Branch Name is required"),
-    courseName: yup.string().required("Course Name is required"),
-    salary: yup.string().required("Salary is required"),
-    joiningDate: yup.string().required("Joining Date is required"),
-    highestQualificationCertificate: yup.mixed().required("Highest qualification certificate is required"),
-    resumeCertificate: yup.mixed().required("Resume is required"),
-    aadharDocument: yup.mixed().required("Aadhar Document is required"),
-    panCardDocument: yup.mixed().required("PAN Card Document is required"),
+    teacherName: yup.string().required("Teacher Name is required"), 
+    mobileNumber: yup
+        .string()
+        .required("Mobile number is required")
+        .matches(/^[0-9]{10}$/, "Mobile number must be exactly 10 digits"),
+        emailId: yup
+        .string()
+        .required("Email ID is required")
+        .email("Invalid email format"),
+    experience: yup.string().required("Experience is required"), 
+    gender: yup.string().required("Gender is required"), 
+    qualification: yup.string().required("Qualification is required"), 
+    dob: yup.string().required("Date of birth is required"),  
+    address: yup.string().required("Address is required"),  
+    branchName: yup.string().required("Branch Name is required"), 
+    courseName: yup.string().required("Course Name is required"), 
+    salary: yup.string().required("Salary is required"),  
+    joiningDate: yup.string().required("Joining Date is required"), 
     accountHolderName: yup.string().required("Account Holder Name is required"),
     accountNumber: yup.string().required("Account Number is required"),
     bankName: yup.string().required("Bank Name is required"),
@@ -100,7 +102,7 @@ const EditFaculty = () => {
             gender: res.data.gender,
             dob: res.data.dob ? new Date(res.data.dob).toISOString().split("T")[0] : "",
             mobileNumber: res.data.mobileNumber,
-            emailId: res.data.emailId,
+            emailId: res.data.emailId,  
             experience: res.data.experience,
             qualification:res.data.qualification,
             address:res.data.address,
@@ -188,7 +190,7 @@ const EditFaculty = () => {
             {
               setLoading(false)
              
-              toast.success("Teacher Created Successfully!")
+              toast.success("Teacher Updated Successfully!")
               navigate("/teacher")
               reset();
             }
@@ -208,20 +210,19 @@ const EditFaculty = () => {
 
     return (
         <>
-            <Typography variant="h5" gutterBottom sx={{ marginLeft: 2, marginTop: 4 }}>
-                Edit Teacher Details
-            </Typography>
+           
             {!loadingdata &&
             <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid container spacing={6} style={{ padding: "20px" }}>
-                {/* Personal Details */}
-                <Grid item xs={6}>
+            <Grid container spacing={2} style={{ padding: "20px" }}>
+           
+                <Grid item xs={6} >
                     <Box
                         style={{
                             border: "1px solid #ccc",
                             padding: "20px",
                             borderRadius: "8px",
                             marginBottom: "20px",
+                            backgroundColor:"#ffffff"
                         }}
                     >
                         <Typography variant="h6" gutterBottom>
@@ -267,32 +268,7 @@ const EditFaculty = () => {
                                     {errors.mobileNumber?.message}
                                     </div>
                                 </Box>
-                                <FormControl component="fieldset" fullWidth margin="normal" error={!!errors.gender}>
-
-                    <FormLabel component="legend" sx={{ marginLeft: 2 }}>Gender</FormLabel>
-
-                       <RadioGroup row defaultValue={gender}>
-                        <FormControlLabel
-                            value="male"
-                            control={<Radio sx={{ marginLeft: 2 }} {...register("gender")} />}
-                            label="Male"
-                        />
-                        <FormControlLabel
-                            value="female"
-                            control={<Radio sx={{ marginLeft: 2 }} {...register("gender")} />}
-                            label="Female"
-                        />
-                        <FormControlLabel
-                            value="others"
-                            control={<Radio sx={{ marginLeft: 2 }} {...register("gender")} />}
-                            label="Others"
-                        />
-                    </RadioGroup>
-                    <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                        {errors.gender?.message}
-                    </div>
-
-            </FormControl>
+                              
                                 <Box>
                                
 
@@ -314,6 +290,33 @@ const EditFaculty = () => {
                                     {errors.dob?.message}
                                     </div>
                                 </Box>
+
+                                <FormControl component="fieldset" fullWidth margin="normal" error={!!errors.gender}>
+
+                            <FormLabel component="legend" sx={{ marginLeft: 2 }}>Gender</FormLabel>
+
+                            <RadioGroup row defaultValue={gender}>
+                                <FormControlLabel
+                                    value="male"
+                                    control={<Radio sx={{ marginLeft: 2 }} {...register("gender")} />}
+                                    label="Male"
+                                />
+                                <FormControlLabel
+                                    value="female"
+                                    control={<Radio sx={{ marginLeft: 2 }} {...register("gender")} />}
+                                    label="Female"
+                                />
+                                <FormControlLabel
+                                    value="others"
+                                    control={<Radio sx={{ marginLeft: 2 }} {...register("gender")} />}
+                                    label="Others"
+                                />
+                            </RadioGroup>
+                            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                                {errors.gender?.message}
+                            </div>
+
+                            </FormControl>
                             </Grid>
                             <Grid item xs={6}>
                             <Box>
@@ -398,7 +401,7 @@ const EditFaculty = () => {
                 </Grid>
 
                 <Grid item xs={6}>
-                    <Box style={{ border: "1px solid #ccc", padding: "20px", borderRadius: "8px", marginBottom: "20px" }}>
+                    <Box style={{ border: "1px solid #ccc", padding: "20px", borderRadius: "8px", marginBottom: "20px",backgroundColor:"#ffffff" }}>
                         <Typography variant="h6" gutterBottom>
                             Company Details
                         </Typography>
@@ -423,6 +426,8 @@ const EditFaculty = () => {
                                     {errors.branchName?.message}
                                     </div>
                                 </Box>
+                                </Grid>
+                                <Grid item xs={6}>
                                 <Box>
                                 <TextField
                                   InputLabelProps={{ shrink: true }}
@@ -442,6 +447,8 @@ const EditFaculty = () => {
                                     {errors.courseName?.message}
                                     </div>
                                 </Box>
+                                </Grid>
+                                <Grid item xs={6}>
                                 <Box>
                                 <TextField
                                  InputLabelProps={{ shrink: true }}
@@ -461,6 +468,8 @@ const EditFaculty = () => {
                                     {errors.salary?.message}
                                     </div>
                                 </Box>
+                                </Grid>
+                                <Grid item xs={6}>
                                 <Box>
                                 <TextField 
                                  InputLabelProps={{shrink:true}}
@@ -486,13 +495,11 @@ const EditFaculty = () => {
                 </Grid>
 
                 <Grid item xs={12} md={6}>
-                    <Box sx={{ border: "1px solid #ccc", borderRadius: 2, padding: 3 }}>
+                    <Box sx={{ border: "1px solid #ccc", borderRadius: 2, padding: 3,backgroundColor:"#ffffff" }}>
                         <Typography variant="h6" gutterBottom>
                             Document Details
                         </Typography>
-                        {/* <Typography variant="subtitle2" gutterBottom>
-                            Accepted formats: pdf, jpeg, jpg, png | Minimum file size: 100 KB
-                        </Typography> */}
+                
                         {[
                 { label: "Highest Qualification Certificate", name: "highestQualificationCertificate", file: "certificate.pdf" },
                 { label: "Resume", name: "resumeCertificate", file: "resume.pdf" },
@@ -536,12 +543,12 @@ const EditFaculty = () => {
                         </Grid>              
 
                 <Grid item xs={6}>
-                    <Box style={{ border: "1px solid #ccc", padding: "20px", borderRadius: "8px" }}>
+                    <Box style={{ border: "1px solid #ccc", padding: "20px", borderRadius: "8px", backgroundColor:"#ffffff" }}>
                         <Typography variant="h6" gutterBottom>
                             Bank Details
                         </Typography>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
+                        <Grid container columnSpacing={2}>
+                            <Grid item xs={6}>
                             <Box>
                                 <TextField
                                  InputLabelProps={{ shrink: true }}
@@ -561,6 +568,8 @@ const EditFaculty = () => {
                                     {errors.accountHolderName?.message}
                                     </div>
                                 </Box>
+                                </Grid>
+                                <Grid item xs={6}>
                                 <Box>
                                 <TextField
                                  InputLabelProps={{ shrink: true }}
@@ -580,6 +589,8 @@ const EditFaculty = () => {
                                     {errors.accountNumber?.message}
                                     </div>
                                 </Box>
+                                </Grid>
+                                <Grid item xs={6}>
                                 <Box>
                                 <TextField
                                  InputLabelProps={{ shrink: true }}
@@ -600,7 +611,7 @@ const EditFaculty = () => {
                                     </div>
                                 </Box>
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={6}>
                             <Box>
                                 <TextField
                                  InputLabelProps={{ shrink: true }}
@@ -620,6 +631,8 @@ const EditFaculty = () => {
                                     {errors.ifscCode?.message}
                                     </div>
                                 </Box>
+                                </Grid>
+                                <Grid item xs={6}>
                                 <Box>
                                 <TextField
                                  InputLabelProps={{ shrink: true }}
@@ -639,6 +652,8 @@ const EditFaculty = () => {
                                     {errors.branch?.message}
                                     </div>
                                 </Box>
+                                </Grid>
+                                <Grid item xs={6}>
                                 <Box>
                                 <TextField
                                  InputLabelProps={{ shrink: true }}
@@ -662,7 +677,7 @@ const EditFaculty = () => {
                         </Grid>
                     </Box>
                 </Grid>
-                <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 2 }}>
+                <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 2, width:"100%" }}>
                 <Button onClick={handleCancel} className="secondary_button">
                   Cancel
                 </Button>

@@ -103,7 +103,7 @@ const Result = () => {
               item.courseName,
               item.teacherName,
               item.testType,
-              item.resultDate,
+              new Date( item.resultDate).toLocaleDateString("en-IN"),
               item.status
             )
           );
@@ -204,14 +204,12 @@ const Result = () => {
     setDeleteShow(false);
   };
 
-  const handleCreate = (refresh = true) => {
-    if (refresh) setLoading(true);
-    setOpenData(false);
+  const handleCreate = (data) => {
+    setLoading(data);
   };
 
-  const handleUpdate = (refresh = true) => {
-    if (refresh) setLoading(true);
-    setEditShow(false);
+  const handleUpdate = (data) => {
+    setLoading(data);
   };
 
   const onAddClick = () => setOpenData(true);
@@ -259,23 +257,13 @@ const Result = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {loading ? (
-                  Array.from({ length: rowsPerPage }).map((_, index) => (
-                    <TableRow key={index}>
-                      {columns.map((column) => (
-                        <TableCell key={column.id} align={column.align}>
-                          <Skeleton width="100%" />
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : filteredRows.length > 0 ? (
+                {filteredRows.length > 0 ? (
                   filteredRows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, idx) => (
                       <TableRow hover role="checkbox" key={idx}>
                         {columns.map((column) => (
-                          <TableCell key={column.id} align={column.align} onClick={(e) => {
+                          <TableCell key={column.id} align={column.align} style={{cursor:"pointer"}} onClick={(e) => {
                      
                             handleStudentResult(row.row); 
                           }}>
@@ -305,42 +293,6 @@ const Result = () => {
             />
           </Paper>
     
-          <CommonDialog
-            open={openData || viewData || editData || deleteShow}
-            onClose={handleClose}
-            dialogTitle={
-              <>
-                {openData
-                  ? "Create New Result"
-                  : viewData
-                  ? "View Result Details"
-                  : editData
-                  ? "Edit Result Details"
-                  : deleteShow
-                  ? "Delete Result Details"
-                  : ""}
-              </>
-            }
-            dialogContent={
-              openData ? (
-                <CreateResult handleCreate={handleCreate} handleClose={handleClose} />
-              ) : viewShow ? (
-                <ViewResult viewData={viewData} />
-              ) : editShow ? (
-                <EditResult
-                  editData={editData}
-                  handleUpdate={handleUpdate}
-                  handleClose={handleClose}
-                />
-              ) : deleteShow ? (
-                <DeleteResult
-                  handleDelete={handleDelete}
-                  isDeleting={isDeleting}
-                  handleClose={handleClose}
-                />
-              ) : null
-            }
-          />
         
 
         <CommonDialog

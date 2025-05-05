@@ -6,6 +6,8 @@ import {
     Button,
     Box,
     CircularProgress,
+    Typography,
+    MenuItem,
     // duration,
   } from "@mui/material";
       
@@ -15,13 +17,14 @@ import * as yup from "yup";
 import {  toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
+import { NavLink } from "react-router-dom";
 
 
   const schema = yup.object().shape({
     studentName: yup.string().required("Student Name is required"),
     courseName: yup.string().required("Course Name is required"),
     duration: yup.string().required("Duration is required"),
-    certificate: yup.string().required("Certificate is required"),
+    certificate: yup.mixed().required("Certificate is required"),
     status:  yup.string()
     
   });
@@ -53,7 +56,7 @@ const EditCertificate =({handleUpdate, editData, handleClose})=>
             studentName: editData.studentName || "",
             courseName: editData.courseName || "",
             duration: editData.duration || "",
-            certificate: editData.certificate || "",
+            certificate: editData.certificates || "",
             status: editData.status || "",
           });
         }
@@ -68,7 +71,7 @@ const EditCertificate =({handleUpdate, editData, handleClose})=>
        formdata.append("studentName", data.studentName);
        formdata.append("courseName", data.courseName);
        formdata.append("duration", data.duration);
-       formdata.append("certificate", data.certificate);
+       formdata.append("certificates", data.certificate[0]);
        formdata.append("status", data.status);
     
    
@@ -180,42 +183,70 @@ const EditCertificate =({handleUpdate, editData, handleClose})=>
 
             <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
             
-            <TextField
-            
-            label="Certificate"
-            name="certificate"
-            type="file"
-            InputLabelProps={{shrink : true}}
-            {...register("certificate")}
-            error={!!errors.certificate}
-              fullWidth
-              margin="normal"
-            />
-            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.certificate?.message}
-            </div>
+            <TextField InputLabelProps={{shrink:true}}
+                    type="file"
+                    label={
+                      <>
+                        Certificate <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                      </>
+                    }
+                    variant="outlined"
+                
+                    {...register("certificate")}
+                    error={!!errors.certificate}
+                    fullWidth
+                    margin="normal"
+                  />
+                  <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                    {errors.certificate?.message}
+                  </div>
+
+                    <Typography variant="body2" sx={{ mt: 0 }}>
+                    View existing certificate:&nbsp;
+                  <NavLink
+                    to={editData.certificates} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                   Certificate
+                  </NavLink>
+                </Typography>
              
             </Grid>
 
-            
             <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-            
             <TextField
-            label={
-            <>
-                Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-            </>
-            }
-                type="text"
-              {...register("status")}
-              error={!!errors.status}
-              fullWidth
-              margin="normal"
-            />
-           
-           <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.status?.message}
-            </div>
+   
+                select
+                label={
+                  <>
+                      Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                  </>
+                  }
+                  variant="outlined"
+                    {...register("status")}
+                    error={!!errors.status}
+                    fullWidth
+                    margin="normal"
+                    defaultValue={editData.status}
+                    SelectProps={{
+                        MenuProps: {
+                        PaperProps: {
+                            style: { maxHeight: 200 },
+                        },
+                        },
+                }}
+                > 
+              <MenuItem value="Active">Active</MenuItem>
+              <MenuItem value="Inactive">InActive</MenuItem>
+
+
+           </TextField>
+
+        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+          {errors.status?.message}
+        </div>
+         
             </Grid>
 
 
@@ -225,19 +256,19 @@ const EditCertificate =({handleUpdate, editData, handleClose})=>
             <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
             <Button type="submit" className="primary_button">
 
-{loading ? (
-<>
-<CircularProgress size={18} 
-style={{ marginRight: 8, color: "#fff" }} />
-      Updating
-  </>
-  ) : (
-  "Update"
-  )}
+          {loading ? (
+          <>
+          <CircularProgress size={18} 
+          style={{ marginRight: 8, color: "#fff" }} />
+                Updating
+            </>
+            ) : (
+            "Update"
+            )}
 
-</Button>
-</Box>
-</form>
+          </Button>
+          </Box>
+          </form>
 
 </>
 )

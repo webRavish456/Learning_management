@@ -42,7 +42,7 @@ function App() {
         <Route path="course/all-courses" element={<CourseList/>}/>
         <Route path="course/document-sharing" element={<DocumentSharing/>}/>
         <Route path="student/all-students" element={<AllStudents/>}/>
-        <Route path="student/certificates" element={<Certificates/>}/>
+        <Route path="student/certificate" element={<Certificates/>}/>
         <Route path="assignment/all-assignments" element={<AllAssignment/>}/>
         <Route path="assignment/students-assignment" element={<StudentAssignment/>}/>
         <Route path="exam" element={<Exam/>}/>

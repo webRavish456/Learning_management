@@ -21,23 +21,23 @@ const Header = () => {
   const navigate = useNavigate();
   const settings = ['My Profile', 'Logout'];
 
+  const Profilephoto = JSON.parse(localStorage.getItem("profilePhoto")) || null
 
-  // const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  // const handleOpenNavMenu = (event) => {
-  //   setAnchorElNav(event.currentTarget);
-  // };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseUserMenu = (setting) => {
     setAnchorElUser(null);
-    if (setting === 'My Profile') {
-      navigate('/profile');
-    } else if (setting === 'Logout') {
-      navigate('/logout');
+    if (setting === "My Profile") {
+      navigate("/profile");
+    } else if (setting === "Logout") {
+      
+      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      navigate("/login");
     }
   };
 
@@ -45,18 +45,17 @@ const Header = () => {
     const path = location.pathname;
 
     if (path.includes("/branch")) return "Branch";
-    if (path.includes("/course/all-courses")) return "All Courses";
+    if (path.includes("/course/all-courses")) return "Course";
     if (path.includes("/course/document-sharing")) return "Document Sharing";
     if (path.includes("/teacher")) return "Teacher";
-    if (path.includes("/student/all-students")) return "AllStudents";
-    if (path.includes("/student/certificates")) return "Certificates";
+    if (path.includes("/student/all-students")) return "Student";
+    if (path.includes("/student/certificates")) return "Certificate";
     if (path.includes("/scheduling")) return "Scheduling";
-    if (path.includes("/assignment/all-assignments")) return "All Assignments";
-    if (path.includes("/assignment/students-assignment")) return "Students-Assignments";
+    if (path.includes("/assignment/all-assignments")) return "Assignment";
+    if (path.includes("/assignment/students-assignment")) return "Student Assignment";
     if (path.includes("/exam")) return "Exam";
-    if (path.includes("/result")) return "Results";
+    if (path.includes("/result")) return "Result";
 
-    // Move the "Dashboard" condition here
     if (path === "/dashboard") return "Dashboard";
 
     return ""; // Fallback in case no match is found
@@ -71,16 +70,11 @@ const Header = () => {
           {getHeadingFromPath()}
         </Typography>
         <Box sx={{ flexGrow: 0, padding: "10px 30px", display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
-          <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{
-              position: "absolute", // Set absolute positioning for the avatar
-              top: "3px",          // Adjust the vertical position
-              right: "30px",        // Adjust the horizontal position
-              zIndex: "1",          // Ensure it appears above other elements
-            }}>
-              <Avatar alt="Learning.." src="Learning.." />
-            </IconButton>
-          </Tooltip>
+        <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="profilePhoto" src={Profilephoto} />
+              </IconButton>
+            </Tooltip>
           <Menu
             sx={{ mt: '45px' }}
             id="menu-appbar"

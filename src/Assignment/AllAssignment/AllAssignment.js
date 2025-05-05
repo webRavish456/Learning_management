@@ -1,243 +1,273 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-// import CloseIcon from "@mui/icons-material/Close";
-
-
-
-
 import {
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TablePagination,
-    TableRow,
-    Box,
-    Dialog,
-    DialogTitle,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    TextField,
-    IconButton,
-    Button,
-    MenuItem,
-    Select,
-    FormControl,
-    InputLabel,
-    Grid,
-    useMediaQuery,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Box,
+  IconButton,
 } from "@mui/material";
+
 import CommonDialog from "../../Component/CommonDialog/CommonDialog";
-import ViewDiscount from "./View/View";
-import CreateDiscount from "./Create/Create";
-import EditDiscount from "./Edit/Edit";
-import DeleteDiscount from "./Delete/Delete";
+import ViewAllAssignment from "./View/View";
+import CreateAllAssignment from "./Create/Create";
+import EditAllAssignment from "./Edit/Edit";
+import DeleteAllAssignment from "./Delete/Delete";
 import Search from "../../Search/Search";
+import Cookies from "js-cookie";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const AllAssignment = () => {
+const AllAssignment= () => {
+  const [openData, setOpenData] = useState(false);
+  const [viewShow, setViewShow] = useState(false);
+  const [editShow, setEditShow] = useState(false);
+  const [deleteShow, setDeleteShow] = useState(false);
 
-    const [openData, setOpenData] = useState(false)
+  const [viewData, setViewData] = useState(null);
+  const [editData, setEditData] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-    const [viewData, setViewData] = useState(false)
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    const [editData, setEditData] = useState(false)
+  const token = Cookies.get("token");
+  const Base_url = process.env.REACT_APP_BASE_URL;
 
-    const [deleteData, setDeleteData] = useState(false)
+  const columns = [
+    { id: "assignmentTitle", label: "Assignment Title", flex: 1, align: "center" },
+    { id: "course", label: "Course", flex: 1, align: "center" },
+    { id: "teacher", label: "Teacher", flex: 1, align: "center" },
+    { id: "dueDate", label: "Due Date", flex: 1, align: "center" },
+    { id: "status", label: "Status", flex: 1, align: "center" },
+    { id: "action", label: "Action", flex: 1, align: "center" },
+  ];
 
-    const handleView = () => {
-        setViewData(true)
-    }
+  useEffect(() => {
+    const fetchAllAssignmentData = async () => {
+      try {
+        const response = await fetch(`${Base_url}/allAssignment`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-    const handleEdit = () => {
-        setEditData(true)
-    }
+        const result = await response.text();
+        const res = JSON.parse(result);
 
-    const handleDelete = () => {
-        setDeleteData(true)
-    }
-
-
-    const columns = [
-        { id: 'si',
-             label: 'SI.No',
-              flex: 1, 
-              align: 'center' },
-        { 
-            id: 'assignment_title',
-             label: 'Assignment Title',
-              flex: 1,
-               align: 'center'
-             },
-        {
-            id: 'teacher',
-            label: 'Teacher',
-            flex: 1,
-            align: 'center',
-        },
-        {
-            id: 'due_date',
-            label: 'Due Date',
-            flex: 1,
-            align: 'center',
-        },
-        {
-            id: 'status',
-            label: 'Status',
-            flex: 1,
-            align: 'center',
-        },
-        {
-            id: 'action',
-            label: 'Action',
-            flex: 1,
-            align: 'center',
-        },
-    ];
-
-    function createData(si, assignment_title, teacher, due_date, status) {
-        return {
-            si, assignment_title, teacher, due_date,status, action: (
-
-                <>
-                    <IconButton style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }} onClick={handleView}>
-                        <VisibilityIcon />
-                    </IconButton>
-                    <IconButton style={{ color: "#6b6666", padding: "4px", transform: "scale(0.8)" }} onClick={handleEdit}>
-                        <EditIcon />
-                    </IconButton>
-                    <IconButton style={{ color: "#e6130b", padding: "4px", transform: "scale(0.8)" }} onClick={handleDelete}>
-                        <DeleteIcon />
-                    </IconButton>
-                </>
-            ),
-        };
-    }
-
-
-    const rows = [
-        createData('1', 'Learning Management', 'Ravish', '12-04-25', 'Active')
-        // createData('2', 'Goldie', 'goldie@gmail.com', '1234567891', '2000-02-02', 'Female', 'JSR', '2023-01-02', 'Science', 'Inactive'),
-        // createData('3', 'Nandani', 'nandani@gmail.com', '1234567892', '1999-03-03', 'Female', 'JSR', '2023-01-03', 'History', 'Active'),
-        // createData('4', 'Manisha', 'manisha@gmail.com', '1234567893', '1998-04-04', 'Female', 'JSR', '2023-01-04', 'English', 'Inactive'),
-        // createData('5', 'Aastha', 'aastha@gmail.com', '1234567894', '1997-05-05', 'Female', 'JSR', '2023-01-05', 'Computer Science', 'Active'),
-    ];
-
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
+        if (res.status === "success") {
+          setLoading(false);
+          const formattedData = res.data.map((item, index) =>
+            createData(
+              
+              item,
+              item.assignmentTitle,
+              item.course,
+              item.teacher,
+              new Date(item.dueDate).toLocaleDateString("en-IN"),
+              item.status
+            )
+          );
+          setRows(formattedData);
+        }
+      } catch (error) {
+        console.error("Error fetching allAssignment data:", error);
+      }
     };
 
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
-
-    const onAddClick = () => {
-        setOpenData(true)
+    if (loading) {
+      fetchAllAssignmentData();
     }
+  }, [loading]);
 
-    const handleClose = () => {
-        setEditData(false)
-        setViewData(false)
-        setOpenData(false)
-        setDeleteData(false)
-    };
+  const createData = ( row,assignmentTitle,course,teacher,dueDate,status) => ({
+     row,assignmentTitle,course,teacher,dueDate,status,action: (
+      <>
+        <IconButton
+          style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }}
+          onClick={() => handleView(row)}
+        >
+          <VisibilityIcon />
+        </IconButton>
+        <IconButton
+          style={{ color: "#6b6666", padding: "4px", transform: "scale(0.8)" }}
+          onClick={() => handleEdit(row)}
+        >
+          <EditIcon />
+        </IconButton>
+        <IconButton
+          style={{ color: "#e6130b", padding: "4px", transform: "scale(0.8)" }}
+          onClick={() => handleShowDelete(row._id)}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </>
+    ),
+  });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setOpenData(false)
-        // console.log("Form Data Submitted:", formData);
-    }
+  const handleView = (row) => {
+    setViewData(row);
+    setViewShow(true);
+  };
 
-    const handleUpdate = (e) => {
-        e.preventDefault();
-        setEditData(false)
-    }
+  const handleEdit = (data) => {
+    setEditData(data);
+    setEditShow(true);
+  };
 
+  const handleShowDelete = (id) => {
+    setDeleteId(id);
+    setDeleteShow(true);
+  };
 
-    return (
+  const handleDelete = () => {
+    setIsDeleting(true);
+    fetch(`${Base_url}/allAssignment/${deleteId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.text())
+      .then((result) => {
+        const res = JSON.parse(result);
+        if (res.status === "success") {
+          toast.success("Assignment deleted successfully!");
+          setLoading(true);
+        } else {
+          toast.error(res.message);
+        }
+        setIsDeleting(false);
+        handleClose();
+      })
+      .catch((error) => {
+        console.error("Delete error:", error);
+        setIsDeleting(false);
+      });
+  };
 
-        <Box className="container">
-            <Search onAddClick={onAddClick} buttonText="Add Assignment" />
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                <TableContainer sx={{ maxHeight: 440 }}>
+  const handleClose = () => {
+    setOpenData(false);
+    setViewShow(false);
+    setEditShow(false);
+    setDeleteShow(false);
+  };
 
+  const handleCreate = (data) => {
+     setLoading(data);
 
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{ minWidth: column.minWidth, fontWeight: 700 }}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row) => {
-                                    return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <TableCell key={column.id} align={column.align}>
-                                                        {column.format && typeof value === 'number'
-                                                            ? column.format(value)
-                                                            : value}
-                                                    </TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-                                    );
-                                })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            </Paper>
+  };
 
-            <CommonDialog
-                open={openData || viewData || editData || deleteData}
-                onClose={handleClose}
-                dialogTitle={<>
-                    {openData ? "Create New Assignment" : viewData ? "View Assignment Details" : editData ? "Edit Assignment Details" : deleteData ? "Delete Assignment Details" : null}
-                </>}
+  const handleUpdate = (data) => {
+    setLoading(data);
+   
+  };
 
-                dialogContent={
-                    openData ? <CreateDiscount handleSubmit={handleSubmit} handleClose={handleClose} /> :
-                        viewData ? <ViewDiscount /> :
-                            editData ? <EditDiscount handleUpdate={handleUpdate} handleClose={handleClose} /> :
-                                deleteData ? <DeleteDiscount handleDelete={handleDelete} handleClose={handleClose} /> : null
+  const onAddClick = () => setOpenData(true);
 
-                }
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-            />
+  const handleChangePage = (_, newPage) => setPage(newPage);
+  const handleChangeRowsPerPage = (e) => {
+    setRowsPerPage(+e.target.value);
+    setPage(0);
+  };
 
-        </Box>
-    );
-}
+  return (
+    <>
+      <ToastContainer />
+      <Box className="container">
+        <Search onAddClick={onAddClick} buttonText="Add New Assignment" />
+        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table stickyHeader aria-label="allAssignment table">
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ fontWeight: 700 }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, idx) => (
+                    <TableRow hover role="checkbox" key={idx}>
+                      {columns.map((column) => (
+                        <TableCell key={column.id} align={column.align}>
+                          {row[column.id]}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
 
-export default AllAssignment;
+        <CommonDialog
+          open={openData || viewShow || editShow || deleteShow}
+          onClose={handleClose}
+          dialogTitle={
+            openData
+              ? "Create New Assignment"
+              : viewShow
+              ? "View Assignment"
+              : editShow
+              ? "Edit Assignment"
+              : deleteShow
+              ? "Delete Assignment"
+              : ""
+          }
+          dialogContent={
+            openData ? (
+              <CreateAllAssignment handleCreate={handleCreate} handleClose={handleClose} />
+            ) : viewShow ? (
+              <ViewAllAssignment viewData={viewData} />
+            ) : editShow ? (
+              <EditAllAssignment
+                editData={editData}
+                handleUpdate={handleUpdate}
+                handleClose={handleClose}
+              />
+            ) : deleteShow ? (
+              <DeleteAllAssignment
+                handleDelete={handleDelete}
+                isDeleting={isDeleting}
+                handleClose={handleClose}
+              />
+            ) : null
+          }
+        />
+      </Box>
+    </>
+  );
+};
+
+export default  AllAssignment;

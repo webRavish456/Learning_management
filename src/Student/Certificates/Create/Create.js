@@ -23,10 +23,10 @@ import Cookies from 'js-cookie';
 
 const schema = yup.object().shape({
   studentName: yup.string().required("Student Name is required"),
-  courseName: yup.string().required("course Name is required"),
-  duration: yup.string().required("duration is required"),
-  certificate: yup.string().required("certificate is required"),
-  status: yup.string()
+  courseName: yup.string().required("Course Name is required"),
+  duration: yup.string().required("Duration is required"),
+  certificate: yup.mixed().required("Certificate is required"),
+
 
 });
 
@@ -39,7 +39,9 @@ const CreateCertificate = ({ handleCreate, handleClose }) => {
 
   const Base_url = process.env.REACT_APP_BASE_URL;
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+
+  const [loadingData, setLoadingData] = useState(true)
 
   const {
     register,
@@ -65,16 +67,16 @@ const CreateCertificate = ({ handleCreate, handleClose }) => {
           console.log(result.data)
 
           setCourseName(result.data)
-          setLoading(false)
+          setLoadingData(false)
         }
       } catch (error) {
         console.error("Error fetching course data:", error);
       }
     };
-    if (loading) {
+    if (loadingData) {
       fetchCourseData();
     }
-  }, [loading]); //dropdown
+  }, [loadingData]); 
 
 
   const onSubmit = (data) => {
@@ -85,8 +87,8 @@ const CreateCertificate = ({ handleCreate, handleClose }) => {
     formdata.append("studentName", data.studentName);
     formdata.append("courseName", data.courseName);
     formdata.append("duration", data.duration);
-    formdata.append("certificate", data.certificate);
-    formdata.append("status", data.status);
+    formdata.append("certificates", data.certificate[0]);
+
 
     const requestOptions = {
       method: "POST",
@@ -201,46 +203,26 @@ const CreateCertificate = ({ handleCreate, handleClose }) => {
 
           <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
 
-            <TextField
+          <TextField
+            label="Certificate"
+            name="certificate"
+            type="file"
+            InputLabelProps={{ shrink: true }}
+            inputProps={{ accept: "application/pdf" }} 
+            {...register("certificate")}
+            error={!!errors.certificate}
+            fullWidth
+            margin="normal"
+          />
+          <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+            {errors.certificate?.message}
+          </div>
 
-              label="Certificate"
-              name="certificate"
-              type="file"
-              InputLabelProps={{ shrink: true }}
-              {...register("certificate")}
-              error={!!errors.certificate}
-              fullWidth
-              margin="normal"
-            />
-            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.certificate?.message}
-            </div>
-          </Grid>
-
-          <Grid item xs={12} >
-
-            <TextField
-              label={
-                <>
-                  Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                </>
-              }
-
-              type="text"
-              {...register("status")}
-              error={!!errors.status}
-              fullWidth
-              margin="normal"
-            />
-
-            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.status?.message}
-            </div>
           </Grid>
 
         </Grid>
 
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', margin: '20px' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', margin: '20px 0px' }}>
           <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
           <Button type="submit" className="primary_button">
 

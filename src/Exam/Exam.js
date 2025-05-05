@@ -14,7 +14,6 @@ import {
   TableRow,
   Box,
   IconButton,
-  Skeleton,
   Chip,
 } from "@mui/material";
 import CommonDialog from "../Component/CommonDialog/CommonDialog";
@@ -122,7 +121,7 @@ const Exam = () => {
               item.examName,
               item.courseName,
               item.teacherName,
-              item.examDate,
+              new Date( item.examDate).toLocaleDateString("en-IN"),
               item.duration,
               item.testType,
               item.totalMarks,
@@ -164,16 +163,7 @@ const Exam = () => {
     duration,
     testType,
     totalMarks,
-    status: (
-      <Chip
-        label={status === "active" ? "Active" : "Inactive"}
-        sx={{
-          backgroundColor: status === "active" ? "green" : "red",
-          color: "white",
-          fontWeight: "bold",
-        }}
-      />
-    ),
+    status,
     action: (
       <>
         <IconButton
@@ -308,17 +298,7 @@ const Exam = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {loading ? (
-                  Array.from({ length: rowsPerPage }).map((_, index) => (
-                    <TableRow key={index}>
-                      {columns.map((column) => (
-                        <TableCell key={column.id} align={column.align}>
-                          <Skeleton width="100%" />
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-              ) : filteredRows.length > 0 ? (
+                {filteredRows.length > 0 ? (
                 filteredRows
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, idx) => (

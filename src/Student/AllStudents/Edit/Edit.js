@@ -6,6 +6,10 @@ import {
   Button,
   Box,
   CircularProgress,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
 } from "@mui/material";
 
 import { useForm } from "react-hook-form";
@@ -36,9 +40,13 @@ const EditAllStudent = ({ handleUpdate, editData, handleClose }) => {
 
   const token = Cookies.get('token');
 
+  const [courseName, setCourseName] = useState([]);
+
   const Base_url = process.env.REACT_APP_BASE_URL;
 
   const [loading, setLoading] = useState(false)
+
+  const [loadingData, setLoadingData] = useState(true)
 
   const {
     register,
@@ -50,20 +58,48 @@ const EditAllStudent = ({ handleUpdate, editData, handleClose }) => {
   });
 
   useEffect(() => {
+
+    const fetchCourseData = async () => {
+      try{
+        const response = await fetch(`${Base_url}/courselist`,{
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const result = await response.json();
+        if (result.status === "success"){
+          console.log(result.data)
+
+          setCourseName(result.data)
+          setLoadingData(false)
+
+        }
+      }catch(error) {
+        console.error("Error fetching course data:",error);
+      }
+    };
+    if(loadingData)
+    {
+      fetchCourseData();
+    }
+  }, [loadingData]);
+
+  useEffect(() => {
     if (editData) {
       reset({
         studentName: editData.studentName || "",
         gender: editData.gender || "",
         mobileNumber: editData.mobileNumber || "",
         emailId: editData.emailId || "",
-        dob: editData.dob || "",
+        dob: editData.dob ? new Date(editData.dob).toISOString().split("T")[0] : "",
         address: editData.address || "",
-        enrollmentDate: editData.enrollmentDate || "",
+        enrollmentDate: editData.enrollmentDate ? new Date(editData.enrollmentDate).toISOString().split("T")[0] : "",
         course: editData.course || "",
         status: editData.status || "",
       });
     }
-  }, [editData, reset]);
+  }, [editData, courseName, reset]);
 
 
   const onSubmit = (data) => {
@@ -71,7 +107,8 @@ const EditAllStudent = ({ handleUpdate, editData, handleClose }) => {
     setLoading(true)
 
     const formdata = new FormData();
-    formdata.append("studentName", data.courseName);
+
+    formdata.append("studentName", data.studentName);
     formdata.append("gender", data.gender);
     formdata.append("mobileNumber", data.mobileNumber);
     formdata.append("emailId", data.emailId);
@@ -120,63 +157,126 @@ const EditAllStudent = ({ handleUpdate, editData, handleClose }) => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
 
-        <Grid container columnSpacing={2}>
+      <Grid container columnSpacing={2}>
+    
+    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+    
+    <TextField
+    label={
+    <>
+        Student Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+    </>
+    }
+  
+   type="text"
+    {...register("studentName")}
+    error={!!errors.studentName}
+    fullWidth
+    margin="normal"
+    />
 
-          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+    <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+      {errors.studentName?.message}
+    </div>
 
-            <TextField
+    </Grid>
+
+    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+
+      <FormControl
+      fullWidth
+      margin="normal"
+      error={!!errors.courseName}
+      >
+       <InputLabel>
+       Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+       </InputLabel>
+          
+      <Select
+      label="Course Name"
+      defaultValue={editData.course}
+      {...register("course")}
+      >
+      
+        {courseName.map((course,index) => (
+          <MenuItem key={index} value={course.courseName}>
+          {course.courseName}
+          </MenuItem>
+        ))}
+      </Select >
+      <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+      {errors.course?.message}
+    </div>
+      </FormControl>
+     </Grid>
+
+    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+    
+     <TextField
+   
+              select
               label={
-                <>
-                  Student Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                </>
+                  <>
+                 Gender<span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                  </>
               }
-              // variant="outline"
-              type="text"
-              {...register("studentName")}
-              error={!!errors.studentName}
-              fullWidth
-              margin="normal"
-            />
-
-            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.studentName?.message}
-            </div>
-
-          </Grid>
-
-          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-
-            <TextField
-              label={
-                <>
-                  Gender  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                </>
-              }
-              // variant="outline"
-              type="text"
+                variant="outlined"
+                  fullWidth
+                  margin="normal"
               {...register("gender")}
+
+               defaultValue={editData.gender}
               error={!!errors.gender}
-              fullWidth
-              margin="normal"
-            />
+              
+              SelectProps={{
+                  MenuProps: {
+                  PaperProps: {
+                      style: { maxHeight: 200 },
+                  },
+                  },
+              }}
+              > 
+            <MenuItem value="Male">Male</MenuItem>
+            <MenuItem value="Female">Female</MenuItem>
+            <MenuItem value="Others">Others</MenuItem>
 
+                      </TextField>
 
-            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
               {errors.gender?.message}
             </div>
+          
+            </Grid>
 
-          </Grid>
-
-          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-
+            <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+            
             <TextField
-              label={
-                <>
-                  Mobile Number <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                </>
-              }
-              // variant="outline"
-              type="text"
+            
+            label="DOB"
+            type="date"
+            InputLabelProps={{shrink: true}}
+          
+              {...register("dob")}
+              error={!!errors.dob}
+              fullWidth
+              margin="normal"
+            />
+          
+          <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+              {errors.dob?.message}
+            </div>
+            </Grid>
+
+            <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+            
+            <TextField
+            label={
+            <>
+                Mobile Number <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+            </>
+            }
+          
+            type="number"
               {...register("mobileNumber")}
               error={!!errors.mobileNumber}
               fullWidth
@@ -185,18 +285,18 @@ const EditAllStudent = ({ handleUpdate, editData, handleClose }) => {
             <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
               {errors.mobileNumber?.message}
             </div>
-          </Grid>
+            </Grid>
 
-          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-
+            <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+            
             <TextField
-              label={
-                <>
-                  Email Id  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                </>
-              }
-              // variant="outline"
-              type="text"
+            label={
+            <>
+                Email Id <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+            </>
+            }
+            // variant="outline"
+            type="text"
               {...register("emailId")}
               error={!!errors.emailId}
               fullWidth
@@ -205,115 +305,51 @@ const EditAllStudent = ({ handleUpdate, editData, handleClose }) => {
             <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
               {errors.emailId?.message}
             </div>
-          </Grid>
+            </Grid>
 
-          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-
+          
+            <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+            
             <TextField
-              // label={
-              // <>
-              //     Email Id  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-              // </>
-              // }
-              // variant="outline"
-              label="DOB"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              {...register("dob")}
-              error={!!errors.dob}
-              fullWidth
-              margin="normal"
-            />
-            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.dob?.message}
-            </div>
-          </Grid>
-
-          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-
-            <TextField
-              label={
-                <>
-                  Address  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                </>
-              }
-              // variant="outline"
-              type="text"
+            label={
+            <>
+                Address <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+            </>
+            }
+              multiline
+               type="text"
               {...register("address")}
               error={!!errors.address}
               fullWidth
               margin="normal"
             />
-            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+          
+          <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
               {errors.address?.message}
             </div>
-          </Grid>
+            </Grid>
 
-          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-
+            <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+            
             <TextField
-              // label={
-              // <>
-              //     Enrollment Date <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-              // </>
-              // }
-              // variant="outline"
-              label="EnrollmentDate"
-              type="date"
-              InputLabelProps={{ shrink: true }}
+            label={
+            <>
+                Enrollment Date <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+            </>
+            }
+            // variant="outline"
+            type="date"
+            InputLabelProps={{ shrink: true }}
               {...register("enrollmentDate")}
               error={!!errors.enrollmentDate}
               fullWidth
               margin="normal"
             />
+            </Grid>
 
-            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.enrollmentDate?.message}
-            </div>
-          </Grid>
+            </Grid>
 
-          <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-
-            <TextField
-              label={
-                <>
-                  Course  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                </>
-              }
-              // variant="outline"
-              type="text"
-              {...register("course")}
-              error={!!errors.course}
-              fullWidth
-              margin="normal"
-            />
-            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.course?.message}
-            </div>
-          </Grid>
-
-          <Grid item xs={12} sm={12} md={6}>
-            <TextField
-              label={
-                <>
-                  Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                </>
-              }
-              type="text"
-              // variant="outlined"
-              {...register("status")}
-              error={!!errors.status}
-              fullWidth
-              margin="normal"
-            />
-            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-              {errors.status?.message}
-            </div>
-          </Grid>
-
-        </Grid>
-
-        <Box className="submit" sx={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', margin: '20px' }}>
+        <Box className="submit" sx={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', margin: '20px 0px' }}>
           <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
           <Button type="submit" className="primary_button">
 

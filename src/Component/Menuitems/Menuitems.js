@@ -41,8 +41,8 @@ const Menuitems = [
            href: "/student/all-students"
         },
         {
-           label: "Certificates",
-           href: "/student/certificates"
+           label: "Certificate",
+           href: "/student/certificate"
         }
       ]
     },

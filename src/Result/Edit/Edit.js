@@ -28,9 +28,15 @@ const schema = yup.object().shape({
 });
 
 const EditResult = ({ handleUpdate, editData, handleClose }) => {
+
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
     const token = Cookies.get('token');
+
+    const [courseName, setCourseName] = useState([]);
+    const [teacherName, setTeacherName] = useState([]);
+
+    const [loadingdata, setLoadingdata] = useState(true)
 
     const Base_url = process.env.REACT_APP_BASE_URL;
 
@@ -45,20 +51,64 @@ const EditResult = ({ handleUpdate, editData, handleClose }) => {
     });
 
     useEffect(() => {
+
+        const fetchCourseData = async () => {
+            try {
+                const response = await fetch(`${Base_url}/courselist`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const result = await response.json();
+                if (result.status === "success") {
+                    console.log(result.data)
+
+                    setCourseName(result.data);
+                    setLoadingdata(false)
+                }
+            } catch (error) {
+                console.error("Error fetching course data:", error);
+            }
+        };
+        const fetchTeacherData = async () => {
+            try {
+                const response = await fetch(`${Base_url}/teacher`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const result = await response.json();
+                if (result.status === "success") {
+                    console.log(result.data)
+
+                    setTeacherName(result.data);
+                    setLoadingdata(false)
+                }
+            } catch (error) {
+                console.error("Error fetching teacher data:", error);
+            }
+        };
+        if (loadingdata) {
+            fetchCourseData();
+            fetchTeacherData();
+        }
+    }, [loadingdata]);
+
+    useEffect(() => {
         if (editData) {
             reset({
                 examName: editData.examName || "",
                 courseName: editData.courseName || "",
                 teacherName: editData.teacherName || "",
                 testType: editData.testType || "",
-                resultDate: editData.totalMarks || "",
-                status: editData.status || "",
+                resultDate: editData.resultDate ? new Date(editData.resultDate).toISOString().split("T")[0] : "",
             });
         }
     }, [editData, reset]);
 
-    const courseOptions = ["BCA", "B.Tech", "B.Sc"]; 
-    const teacherOptions = ["Ravish", "Nikhil", "Sanjoy"]; 
+
 
     const onSubmit = (data) => {
 
@@ -132,42 +182,56 @@ const EditResult = ({ handleUpdate, editData, handleClose }) => {
                     </Grid>
 
                     <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                        <FormControl fullWidth margin="normal" variant="outlined">
-                            <InputLabel id="courseName-label">
+                        <FormControl
+                            fullWidth
+                            margin="normal"
+                            variant="outlined"
+                            error={!!errors.courseName}
+                        >
+                            <InputLabel>
                                 Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                             </InputLabel>
+
                             <Select
-                                labelId="courseName-label"
+                                label="Course Name"
+                                defaultValue={editData.courseName}
                                 {...register("courseName")}
-                                error={!!errors.courseName}
                             >
-                                {courseOptions.map((option) => (
-                                    <MenuItem key={option} value={option}>
-                                        {option}
+                                {courseName.map((course, index) => (
+                                    <MenuItem key={index} value={course.courseName}>
+                                        {course.courseName}
                                     </MenuItem>
                                 ))}
                             </Select>
+
                             <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
                                 {errors.courseName?.message}
                             </div>
                         </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                        <FormControl fullWidth margin="normal" variant="outlined">
-                            <InputLabel id="teacherName-label">
+                        <FormControl
+                            fullWidth
+                            margin="normal"
+                            variant="outlined"
+                            error={!!errors.teacherName}
+                        >
+                            <InputLabel>
                                 Teacher Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                             </InputLabel>
+
                             <Select
-                                labelId="teacherName-label"
+                                label="Teacher Name"
+                                defaultValue={editData.teacherName}
                                 {...register("teacherName")}
-                                error={!!errors.teacherName}
                             >
-                                {teacherOptions.map((option) => (
-                                    <MenuItem key={option} value={option}>
-                                        {option}
+                                {teacherName.map((teacher, index) => (
+                                    <MenuItem key={index} value={teacher.teacherName}>
+                                        {teacher.teacherName}
                                     </MenuItem>
                                 ))}
                             </Select>
+
                             <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
                                 {errors.teacherName?.message}
                             </div>
@@ -193,7 +257,7 @@ const EditResult = ({ handleUpdate, editData, handleClose }) => {
                         </div>
                     </Grid>
 
-                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+                    <Grid item xs={12} sm={12} md={12}>
                         <TextField
                             label={
                                 <>
@@ -212,24 +276,7 @@ const EditResult = ({ handleUpdate, editData, handleClose }) => {
                             {errors.resultDate?.message}
                         </div>
                     </Grid>
-                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                        <TextField
-                            label={
-                                <>
-                                    Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                                </>
-                            }
-                            type="text"
-                            variant="outlined"
-                            {...register("status")}
-                            error={!!errors.status}
-                            fullWidth
-                            margin="normal"
-                        />
-                        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                            {errors.status?.message}
-                        </div>
-                    </Grid>
+                   
 
                 </Grid>
 

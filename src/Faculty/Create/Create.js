@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     TextField,
     MenuItem,
@@ -38,10 +38,26 @@ const schema = yup.object().shape({
     courseName: yup.string().required("Course Name is required"),
     salary: yup.string().required("Salary is required"),
     joiningDate: yup.string().required("Joining Date is required"),
-    resumeCertificate: yup.mixed().required("Resume is required"),
-    highestQualificationCertificate: yup.mixed().required("Highest qualification certificate is required"),
-    aadharCard: yup.mixed().required("Aadhar Document is required"),
-    panCard: yup.mixed().required("PAN Card Document is required"),
+    resumeCertificate: yup
+    .mixed()
+    .test("required", "Resume Certificate is required", (value) => {
+    return value && value.length > 0;
+    }),
+    highestQualificationCertificate: yup
+    .mixed()
+    .test("required", "Highest qualification certificate is required", (value) => {
+    return value && value.length > 0;
+    }),
+    panCard: yup
+    .mixed()
+    .test("required", "Pan Card is required", (value) => {
+    return value && value.length > 0;
+    }),
+    aadharCard: yup
+    .mixed()
+    .test("required", "Aadhar Card is required", (value) => {
+    return value && value.length > 0;
+    }),
     accountHolderName: yup.string().required("Account Holder Name is required"),
     accountNumber: yup.string().required("Account Number is required"),
     bankName: yup.string().required("Bank Name is required"),
@@ -58,6 +74,12 @@ const CreateFaculty = () => {
 
     const [loading, setLoading] = useState(false)
 
+    const [loadingData, setLoadingData] =useState(true)
+
+    const [branch, setBranch] = useState([])
+
+    const [course, setCourse] =useState([])
+
     const navigate = useNavigate()
 
     const {
@@ -69,6 +91,65 @@ const CreateFaculty = () => {
         resolver: yupResolver(schema),
 
     });
+
+    useEffect(() => {
+        const fetchBranchData = async () => {
+          try {
+            const response = await fetch(`${Base_url}/branch`, {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+      
+            const result = await response.text();
+            const res = JSON.parse(result);
+      
+            if (res.status === "success") {
+              const formattedData = res.data.map((item) => item.branchName);
+              setBranch(formattedData);
+            }
+          } catch (error) {
+            console.error("Error fetching branch data:", error);
+          }
+        };
+      
+        const fetchCourseData = async () => {
+          try {
+            const response = await fetch(`${Base_url}/courselist`, {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+      
+            const result = await response.text();
+            const res = JSON.parse(result);
+      
+            const formattedCourse = res.data.map((item) => item.courseName);
+              
+              setCourse(formattedCourse);
+              
+          } catch (error) {
+            console.error("Error fetching course data:", error);
+          }
+        };
+      
+        const fetchData = async () => {
+          try {
+            await Promise.all([fetchBranchData(), fetchCourseData()]);
+            setLoadingData(false);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+            setLoadingData(false);
+          }
+        };
+      
+        if (loadingData) {
+          fetchData();
+        }
+      
+      }, [loadingData]);
 
     const onSubmit = (data) => {
 
@@ -148,13 +229,13 @@ const CreateFaculty = () => {
         navigate("/teacher")
     }
 
+    console.log("branch", branch)
+    console.log("courseName", course)
+
     return (
   
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Typography variant="h5" gutterBottom sx={{ marginLeft: 2, marginTop: 4 }}>
-                    Create New Teacher
-                </Typography>
-                <Grid container spacing={6} style={{ padding: "20px" }}>
+                <Grid container spacing={4} style={{ padding: "20px" }}>
                     {/* Personal Details */}
                     <Grid item xs={6}>
                         <Box
@@ -163,6 +244,7 @@ const CreateFaculty = () => {
                                 padding: "20px",
                                 borderRadius: "8px",
                                 marginBottom: "20px",
+                                backgroundColor:"#ffffff"
                             }}
                         >
                             <Typography variant="h6" gutterBottom>
@@ -206,6 +288,26 @@ const CreateFaculty = () => {
                                             {errors.mobileNo?.message}
                                         </div>
                                     </Box>
+                                  
+                                    <Box>
+                                        <TextField InputLabelProps={{ shrink: true }}
+                                            type="date"
+                                            label={
+                                                <>
+                                                    Date of Birth
+                                                </>
+                                            }
+                                            variant="outlined"
+                                            {...register("dob")}
+                                            error={!!errors.dob}
+                                            fullWidth
+                                            margin="normal"
+                                        />
+                                        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                                            {errors.dob?.message}
+                                        </div>
+                                    </Box>
+
                                     <FormControl component="fieldset" fullWidth margin="normal" error={!!errors.gender}>
                                         <FormLabel component="legend" sx={{ marginLeft: 2 }}>Gender</FormLabel>
                                         <RadioGroup row>
@@ -232,24 +334,6 @@ const CreateFaculty = () => {
                                             {errors.gender?.message}
                                         </div>
                                     </FormControl>
-                                    <Box>
-                                        <TextField InputLabelProps={{ shrink: true }}
-                                            type="date"
-                                            label={
-                                                <>
-                                                    Date of Birth
-                                                </>
-                                            }
-                                            variant="outlined"
-                                            {...register("dob")}
-                                            error={!!errors.dob}
-                                            fullWidth
-                                            margin="normal"
-                                        />
-                                        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                                            {errors.dob?.message}
-                                        </div>
-                                    </Box>
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Box>
@@ -330,48 +414,80 @@ const CreateFaculty = () => {
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Box style={{ border: "1px solid #ccc", padding: "20px", borderRadius: "8px", marginBottom: "20px" }}>
+                        <Box style={{ border: "1px solid #ccc", padding: "20px", borderRadius: "8px", marginBottom: "20px", backgroundColor:"#ffffff" }}>
                             <Typography variant="h6" gutterBottom>
                                 Company Details
                             </Typography>
-                            
+                            <Grid container spacing={2}>
+                            <Grid item xs={6}>
                                     <Box>
-                                        <TextField
-                                            type="text"
-                                            label={
-                                                <>
-                                                    Branch Name
-                                                </>
-                                            }
-                                            variant="outlined"
-                                            {...register("branchName")}
-                                            error={!!errors.branchName}
-                                            fullWidth
-                                            margin="normal"
-                                        />
+                                    <TextField
+                            select
+                            label={
+                            <>
+                                Branch Name<span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                            </>
+                            }
+                            variant="outlined"
+                            {...register("branchName")}
+                            error={!!errors.branchName}
+                            fullWidth
+                            margin="normal"
+                            SelectProps={{
+                            MenuProps: {
+                                PaperProps: {
+                                style: { maxHeight: 200 },
+                                },
+                            },
+                            }}
+                            >
+                            {branch?.map((branchName, index) => (
+                            <MenuItem key={index} value={branchName}>
+                                {branchName}
+                            </MenuItem>
+                            ))}
+                            </TextField>
                                         <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
                                             {errors.branchName?.message}
                                         </div>
                                     </Box>
-                                    
+                                    </Grid>
+                                    <Grid item xs={6}>
                                     <Box>
-                                        <TextField
-                                            type="text"
-                                            label={
-                                                <>
-                                                    Course Name
-                                                </>
-                                            }
-                                            variant="outlined"
-                                            {...register("courseName")}
-                                            error={!!errors.courseName}
-                                            fullWidth
-                                            margin="normal"
-                                        />
-                                        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                                            {errors.courseName?.message}
-                                        </div>
+
+                           <TextField
+                                 select
+                                 label={
+                               <>
+                                Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                               </>
+                            }
+                            variant="outlined"
+                            {...register("courseName")}
+                            error={!!errors.courseName}
+                            fullWidth
+                            margin="normal"
+                            SelectProps={{
+                            MenuProps: {
+                                PaperProps: {
+                                style: { maxHeight: 200 },
+                                },
+                            },
+                            }}
+                            >
+                            {course?.map((courseName, index) => (
+                            <MenuItem key={index} value={courseName}>
+                                {courseName}
+                            </MenuItem>
+                            ))}
+                            </TextField>
+
+                                <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                                    {errors.courseName?.message}
+                                </div>
                                     </Box>
+                                    </Grid>
+                                    <Grid item xs={6}>
                                     <Box>
                                         <TextField
                                             type="text"
@@ -390,6 +506,9 @@ const CreateFaculty = () => {
                                             {errors.salary?.message}
                                         </div>
                                     </Box>
+                                    </Grid>
+
+                                    <Grid item xs={6}>
                                     <Box>
                                         <TextField InputLabelProps={{ shrink: true }}
                                             type="date"
@@ -408,19 +527,18 @@ const CreateFaculty = () => {
                                             {errors.joiningDate?.message}
                                         </div>
                                     </Box>
-                                
+                                </Grid>
+                                </Grid>
                         </Box>
 
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Box style={{ border: "1px solid #ccc", padding: "20px", borderRadius: "8px" }}>
+                        <Box style={{ border: "1px solid #ccc", padding: "20px", borderRadius: "8px", backgroundColor:"#ffffff" }}>
                             <Typography variant="h6" gutterBottom>
                                 Document Details
                             </Typography>
-                            {/* <Typography variant="subtitle2" gutterBottom>
-                            Accepted formats: pdf, jpeg, jpg, png | Minimum file size: 100 KB
-                        </Typography> */}
+                       
                             <Box marginBottom={2}>
                                 <TextField InputLabelProps={{ shrink: true }}
                                     type="file"
@@ -509,7 +627,7 @@ const CreateFaculty = () => {
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Box style={{ border: "1px solid #ccc", padding: "20px", borderRadius: "8px" }}>
+                        <Box style={{ border: "1px solid #ccc", padding: "20px", borderRadius: "8px", backgroundColor:"#ffffff" }}>
                             <Typography variant="h6" gutterBottom>
                                 Bank Details
                             </Typography>

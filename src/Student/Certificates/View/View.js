@@ -3,18 +3,32 @@ import { Box, Grid, useMediaQuery } from "@mui/material";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 const ViewCertificates = ({viewData})  => {
-    const isSmScreen = useMediaQuery("(max-width:768px)");
-    const handleDownload = () => {
-        const pdfUrl = 'dynamic.pdf';
-        const fileName = 'certificate.pdf';
 
-        const link = document.createElement('a');
-        link.href = pdfUrl;
-        link.download = fileName;
+    const isSmScreen = useMediaQuery("(max-width:768px)");
+
+   const handleDownload =  async (pdfUrl) => {
+
+     try {
+
+        const response = await fetch(pdfUrl.certificates);
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+    
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = `${pdfUrl.courseName}-certificates.pdf`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    }
+        window.URL.revokeObjectURL(blobUrl);
+      
+        }
+         catch (error) {
+          console.error("Failed to download PDF", error);
+        }
+
+}
+
 
     return (
         <>
@@ -61,7 +75,7 @@ const ViewCertificates = ({viewData})  => {
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Box className="pageDescription" onClick={handleDownload}><PictureAsPdfIcon/></Box>
+                        <Box className="pageDescription" onClick={()=>handleDownload(viewData)}><PictureAsPdfIcon/></Box>
                     </Grid>
 
                 </Grid>

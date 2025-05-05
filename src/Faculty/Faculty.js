@@ -25,17 +25,15 @@ import {
 import CommonDialog from "../Component/CommonDialog/CommonDialog";
 import DeleteFaculty from "./Delete/Delete";
 import Cookies from "js-cookie";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
 const Faculty=()=>
   {
   
-    const [openData, setOpenData] = useState(false)
-  
-    const [viewData, setViewData] = useState(false)
-  
-    const [editData, setEditData] = useState(false)
+    const [deleteId, setDeleteId] = useState(null);
+     const [isDeleting, setIsDeleting] = useState(false);
   
     const [deleteData, setDeleteData] = useState(false)
 
@@ -44,7 +42,7 @@ const Faculty=()=>
     
       const token = Cookies.get("token");
       const Base_url = process.env.REACT_APP_BASE_URL;
-   const navigate = useNavigate();
+      const navigate = useNavigate();
    
    
   
@@ -57,30 +55,55 @@ const Faculty=()=>
   {
     navigate(`/editfaculty/${id}`)
   }
+
+  const handleShowDelete=(id)=>{
+    setDeleteId(id);
+    setDeleteData(true)
+  }
   
   const handleDelete = () =>
     {
-      setDeleteData(true)
-    }
+       setIsDeleting(true);
+      fetch(`${Base_url}/teacher/${deleteId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.text())
+        .then((result) => {
+          const res = JSON.parse(result);
+          if (res.status === "success") {
+            toast.success("Teacher deleted successfully!");
+            setLoading(true);
+          } else {
+            toast.error(res.message);
+          }
+          setIsDeleting(false);
+          setLoading(true)
+          handleClose();
+        })
+        .catch((error) => {
+          console.error("Delete error:", error);
+          setIsDeleting(false);
+        });
+  }
   
 
 const columns = [
+
   { id: 'si', label: 'SI.No', flex:1, align:'center' },
   { id: 'teacherName', label: 'Teacher Name', flex:1, align:'center' },
-  
-  {id: 'emailId',label: 'Email ID',flex:1,align: 'center',},
-  {id: 'mobileNo',label: 'Mobile No',flex:1,align: 'center',},
-  
-  {id: 'dob',label: 'DOB',flex:1, align: 'center',},
-  { id: 'gender',label: 'Gender ', flex:1, align: 'center',},
- 
-  {id: 'address',label: 'Address ',flex:1,align: 'center',},
-  {id: 'salary',label: 'Salary',flex:1,align: 'center', },
-  {id: 'joiningDate',label: 'Joining Date',flex:1,align: 'center', },
-
-  {id: 'courseName',label: 'Course ', flex:1,align: 'center',},
-  {id: 'status',label: 'Status',flex:1,align: 'center', },
-  {id: 'action',label: 'Action', flex:1,align: 'center', },
+  {id: 'courseName',label: 'Course ', flex:1,align: 'center'},
+  { id: 'gender',label: 'Gender ', flex:1, align: 'center'},
+  {id: 'mobileNo',label: 'Mobile No',flex:1,align: 'center'},
+  {id: 'emailId',label: 'Email ID',flex:1,align: 'center'},
+  {id: 'experience',label: 'Experience',flex:1,align: 'center'},
+  {id: 'qualification',label: 'Qualification',flex:1,align: 'center'},
+  {id: 'address',label: 'Address',flex:1,align: 'center'},
+  {id: 'joiningDate',label: 'Joining Date',flex:1,align: 'center' },
+  {id: 'status',label: 'Status',flex:1,align: 'center' },
+  {id: 'action',label: 'Action', flex:1,align: 'center' },
  
 ];
 
@@ -111,10 +134,12 @@ useEffect(() => {
             item.dob,
             item.gender,
             item.address,
+            item.experience,
+            item.qualification,
             item.companyDetails.courseName,
-            item.companyDetails.joiningDate,
             item.companyDetails.salary,
-            item.availabilityStatus
+            new Date(item.companyDetails.joiningDate).toLocaleDateString("en-IN"),
+            item.status
           )
         );
         setRows(formattedData);
@@ -129,8 +154,8 @@ useEffect(() => {
   }
 }, [loading]);
 
-function createData(si, id, teacherName, emailId, mobileNo, dob, gender, address, courseName,salary, joiningDate,status ) {
-  return { si, id,  teacherName, emailId, mobileNo, dob, gender, address, courseName,salary, joiningDate,status, action: (
+function createData(si, id, teacherName, emailId, mobileNo, dob, gender, address, experience, qualification, courseName,salary, joiningDate,status ) {
+  return { si, id,  teacherName, emailId, mobileNo, dob, gender, address, experience, qualification, courseName,salary, joiningDate,status, action: (
       <>
       <IconButton style={{color:"rgb(13, 33, 121)", padding:"4px", transform:"scale(0.8)"}} onClick={()=>handleView(id)}>
         <VisibilityIcon />
@@ -138,7 +163,7 @@ function createData(si, id, teacherName, emailId, mobileNo, dob, gender, address
       <IconButton style={{color:"rgb(98, 99, 102)", padding:"4px", transform:"scale(0.8)"}} onClick={()=>handleEdit(id)}>
         <EditIcon />
       </IconButton>
-      <IconButton style={{color:"rgb(224, 27, 20)", padding:"4px", transform:"scale(0.8)"}} onClick={()=>handleDelete(id)}>
+      <IconButton style={{color:"rgb(224, 27, 20)", padding:"4px", transform:"scale(0.8)"}} onClick={()=>handleShowDelete(id)}>
         <DeleteIcon />
       </IconButton>
       </>
@@ -166,15 +191,15 @@ function createData(si, id, teacherName, emailId, mobileNo, dob, gender, address
     }
 
     const handleClose = () => {
-      setEditData(false)
-      setViewData(false)
-      setOpenData(false)
       setDeleteData(false)
    };
 
 
 
   return (
+    <>
+        <ToastContainer/>
+   
     <Box className="container">
       <Search onAddClick={onAddClick} buttonText="Add Teacher"/>
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -234,14 +259,13 @@ function createData(si, id, teacherName, emailId, mobileNo, dob, gender, address
       </>}
       
       dialogContent = {
-         deleteData? <DeleteFaculty handleDelete={handleDelete} handleClose={handleClose} />:null
+         deleteData? <DeleteFaculty handleDelete={handleDelete} isDeleting={isDeleting} handleClose={handleClose} />:null
         
       }
 
       />
-
-   
     </Box>
+    </>
   );
 }
 

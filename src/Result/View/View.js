@@ -60,21 +60,10 @@ const ViewResult =({viewData})=>
             </Grid>
 
             <Grid item xs={6}>
-            <Box className="pageDescription">{viewData.resultDate}</Box>
+            <Box className="pageDescription">{new Date(viewData.resultDate).toLocaleDateString("en-IN")}</Box>
             </Grid>
             </Grid>
 
-            <Grid item xs={12} sm={isSmScreen?12:6} md={6} style={{display:"flex"}}>
-            
-                        <Grid item xs={6}>
-                        <Box className="pageTitle">Status:</Box>
-                        </Grid>
-            
-                        <Grid item xs={6}>
-                        <Box className="pageDescription">{viewData.status}</Box>
-                        </Grid>
-
-            </Grid>
             
 
             </Grid>

@@ -65,11 +65,8 @@ const ViewFaculty = () => {
    
       <Grid item xs={12} md={6}>
       
-        <Box sx={{ border: "1px solid #ccc", borderRadius: 2, padding: 3 }}>
-       <Typography variant="h5" gutterBottom >
-                    View Teacher Details
-                </Typography>
-
+        <Box sx={{ border: "1px solid #ccc", borderRadius: 2, padding: 3,backgroundColor:"#ffffff" }}>
+    
                 <Typography variant="h6" gutterBottom>
             Personal Details
           </Typography>
@@ -113,23 +110,23 @@ const ViewFaculty = () => {
                     
               <Grid item xs={6}>
 
-<TextField 
-fullWidth 
-label="Email ID"
- value={formData.emailId || ""}
-margin="normal" />
+          <TextField 
+          fullWidth 
+          label="Email ID"
+          value={formData.emailId || ""}
+          margin="normal" />
 
-<TextField 
-fullWidth
- label="Experience"
-  value={formData.experience || ""}
-  margin="normal" />
+          <TextField 
+          fullWidth
+          label="Experience"
+            value={formData.experience || ""}
+            margin="normal" />
 
-<TextField 
-fullWidth 
-label="Qualification"
- value={formData.qualification || ""}
-  margin="normal" />
+          <TextField 
+          fullWidth 
+          label="Qualification"
+          value={formData.qualification || ""}
+            margin="normal" />
 
 <TextField 
               fullWidth
@@ -145,7 +142,7 @@ label="Qualification"
 
       <Grid item xs={12} md={6}>
 
-        <Box sx={{ border: "1px solid #ccc", borderRadius: 2, padding: 3 }}>
+        <Box sx={{ border: "1px solid #ccc", borderRadius: 2, padding: 3, backgroundColor:"#ffffff" }}>
           <Typography variant="h6" gutterBottom>
             Company Details
           </Typography>
@@ -170,10 +167,10 @@ label="Qualification"
 
 </Grid>
 
-        {/* Document Details Section */}
+
         <Grid item xs={12} md={6}>
 
-        <Box sx={{ border: "1px solid #ccc", borderRadius: 2, padding: 3 }}>
+        <Box sx={{ border: "1px solid #ccc", borderRadius: 2, padding: 3, backgroundColor:"#ffffff" }}>
           <Typography variant="h6" gutterBottom>
             Document Details
           </Typography>
@@ -184,7 +181,7 @@ label="Qualification"
               { label: "PAN Card Document", name: "panCard", file: "panCard.pdf" }
             ].map(({ label, name, file }) => (
               <Box key={name} mb={2}>
-              <TextField fullWidth label={label} type="file" InputLabelProps={{ shrink: true }} margin="normal" />
+              <TextField fullWidth label={label} type="file" InputLabelProps={{ shrink: true }} margin="normal"  disabled />
               <Typography variant="body2">
                 View existing document: <NavLink to={formData.documents?.[name]} target="_blank" rel="noopener noreferrer">{file}</NavLink>
               </Typography>
@@ -196,17 +193,17 @@ label="Qualification"
         {/* Bank Details Section */}
         <Grid item xs={12} md={6}>
 
-        <Box sx={{ border: "1px solid #ccc", borderRadius: 2, padding: 3 }}>
+        <Box sx={{ border: "1px solid #ccc", borderRadius: 2, padding: 3, backgroundColor:"#ffffff" }}>
           <Typography variant="h6" gutterBottom>
             Bank Details
           </Typography>
             <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <TextField fullWidth label="Account Holder Name" value={formData.bankDetails?.accountHolderName || ""} margin="normal" />
               <TextField fullWidth label="Account Number" value={formData.bankDetails?.accountNumber || ""} margin="normal" />
               <TextField fullWidth label="Bank Name" value={formData.bankDetails?.bankName || ""} margin="normal" />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <TextField fullWidth label="IFSC Code" value={formData.bankDetails?.ifscCode || ""} margin="normal" />
               <TextField fullWidth label="Bank Branch" value={formData.bankDetails?.branch || ""} margin="normal" />
               <TextField fullWidth label="Branch Location" value={formData.bankDetails?.branchLocation || ""} margin="normal" />

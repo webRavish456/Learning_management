@@ -87,15 +87,15 @@ const AllStudents = () => {
               item.gender,
               item.mobileNumber,
               item.emailId,
-              item.dob,
+              new Date(item.dob).toLocaleDateString("en-IN"),
               item.address,
-              item.enrollmentDate,
+              new Date(item.enrollmentDate).toLocaleDateString("en-IN"),
               item.course,
               item.status
             )
           );
           setRows(formattedData);
-          setFilteredRows(formattedData);  //Initialization filteredrows with all data
+          setFilteredRows(formattedData);  
         }
       } catch (error) {
         console.error("Error fetching all students data:", error);
@@ -188,7 +188,7 @@ const AllStudents = () => {
         const res = JSON.parse(result);
 
         if (res.status === "success") {
-          toast.success("student list deleted successfully!");
+          toast.success("Student data deleted successfully!");
           setLoading(true);
         } else {
           toast.error(res.message);
@@ -209,14 +209,12 @@ const AllStudents = () => {
     setDeleteShow(false);
   };
 
-  const handleCreate = (refresh = true) => {
-    if (refresh) setLoading(true);
-    setOpenData(false);
+  const handleCreate = () => {
+     setLoading(true);
   };
 
-  const handleUpdate = (refresh = true) => {
-    if (refresh) setLoading(true);
-    setEditShow(false);
+  const handleUpdate = () => {
+    setLoading(true);
   };
 
   const onAddClick = () => setOpenData(true);

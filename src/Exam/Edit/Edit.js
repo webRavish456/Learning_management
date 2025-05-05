@@ -30,29 +30,83 @@ const schema = yup.object().shape({
 });
 
 const EditExam = ({ handleUpdate,  editData, handleClose}) => {
+
+
+    const [courseName, setCourseName] = useState([]);
+    const [teacherName, setTeacherName] = useState([]);
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
     const token = Cookies.get('token');
 
     const Base_url = process.env.REACT_APP_BASE_URL;
-  
+
     const [loading, setLoading] = useState(false)
+    const [loadingdata, setLoadingdata] = useState(true)
+
     const {
         register,
         handleSubmit,
         formState: { errors },
         reset
     } = useForm({
-        resolver: yupResolver(schema)
+        resolver: yupResolver(schema),
     });
 
+    useEffect(() => {
+
+        const fetchCourseData = async () => {
+            try {
+                const response = await fetch(`${Base_url}/courselist`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const result = await response.json();
+                if (result.status === "success") {
+                    console.log(result.data)
+
+                    setCourseName(result.data);
+                   
+                }
+            } catch (error) {
+                console.error("Error fetching course data:", error);
+            }
+        };
+        const fetchTeacherData = async () => {
+            try {
+                const response = await fetch(`${Base_url}/teacher`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const result = await response.json();
+                if (result.status === "success") {
+                    console.log(result.data)
+
+                    setTeacherName(result.data);
+                    setLoadingdata(false)
+                }
+            } catch (error) {
+                console.error("Error fetching teacher data:", error);
+            }
+        };
+        if (loadingdata) {
+            fetchCourseData();
+            fetchTeacherData();
+        }
+    }, [loadingdata]);
+
+
+    const testTypeOptions = ["Viva", "Quiz", "Test"]
     useEffect(() => {
         if (editData) {
           reset({
             examName: editData.examName || "",
             courseName: editData.courseName || "",
             teacherName: editData.teacherName || "",
-            examDate: editData.examDate || "",
+            examDate: editData.examDate ? new Date(editData.examDate).toISOString().split("T")[0] : "",
             duration: editData.duration || "",
             testType: editData.testType || "",
             totalMarks: editData.totalMarks || "",
@@ -61,8 +115,7 @@ const EditExam = ({ handleUpdate,  editData, handleClose}) => {
         }
       }, [editData, reset]);
 
-      const courseOptions = ["BCA", "B.Tech", "B.Sc"]; 
-    const teacherOptions = ["Ravish", "Nikhil", "Sanjoy"]; 
+
 
 
     const onSubmit = (data) => {
@@ -115,189 +168,227 @@ const EditExam = ({ handleUpdate,  editData, handleClose}) => {
 
     return (
         <>
-        <form onSubmit={handleSubmit(onSubmit)}>
+         <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid container columnSpacing={2}>
-                        <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
 
 
-                            <TextField
+                        <TextField
                             type="text"
-                                label={
-                                    <>
-                                        Exam Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                                    </>
-                                }
-                                fullWidth
-                                margin="normal"
-                                variant="outlined"
-                                {...register("examName")}
-                                error={!!errors.examName}
-                            />
-                            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                                {errors.examName?.message}
-                            </div>
-                        </Grid>
+                            label={
+                                <>
+                                    Exam Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                                </>
+                            }
+                            fullWidth
+                            margin="normal"
+                            variant="outlined"
+                            {...register("examName")}
+                            error={!!errors.examName}
+                        />
+                        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                            {errors.examName?.message}
+                        </div>
+                    </Grid>
 
-                        <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                        <FormControl fullWidth margin="normal" variant="outlined">
-                            <InputLabel id="courseName-label">
+                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+                        <FormControl
+                            fullWidth
+                            margin="normal"
+                            variant="outlined"
+                            error={!!errors.courseName}
+                        >
+                            <InputLabel>
                                 Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                             </InputLabel>
+
                             <Select
-                                labelId="courseName-label"
-                                {...register("courseName")}
-                                error={!!errors.courseName}
+                                label="Course Name"
+                                defaultValue={editData.courseName}
+                                {...register("courseName", { required: "Course name is required" })}
                             >
-                                {courseOptions.map((option) => (
-                                    <MenuItem key={option} value={option}>
-                                        {option}
+                                {courseName.map((course, index) => (
+                                    <MenuItem key={index} value={course.courseName}>
+                                        {course.courseName}
                                     </MenuItem>
                                 ))}
                             </Select>
+
                             <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
                                 {errors.courseName?.message}
                             </div>
                         </FormControl>
-                    </Grid>
 
-                        <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                        <FormControl fullWidth margin="normal" variant="outlined">
-                            <InputLabel id="teacherName-label">
+
+
+                    </Grid>
+                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+                        <FormControl
+                            fullWidth
+                            margin="normal"
+                            variant="outlined"
+                            error={!!errors.teacherName}
+                        >
+                            <InputLabel>
                                 Teacher Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                             </InputLabel>
+
                             <Select
-                                labelId="teacherName-label"
-                                {...register("teacherName")}
-                                error={!!errors.teacherName}
+                                label="Teacher Name"
+                                defaultValue={editData.teacherName}
+                                {...register("teacherName", { required: "Teacher name is required" })}
                             >
-                                {teacherOptions.map((option) => (
-                                    <MenuItem key={option} value={option}>
-                                        {option}
+                                {teacherName.map((teacher, index) => (
+                                    <MenuItem key={index} value={teacher.teacherName}>
+                                        {teacher.teacherName}
                                     </MenuItem>
                                 ))}
                             </Select>
+
                             <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
                                 {errors.teacherName?.message}
                             </div>
                         </FormControl>
                     </Grid>
 
-                        <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                            <TextField
-                                label={
-                                    <>
-                                        Exam Date  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                                    </>
-                                }
-                                type="date"
-                                InputLabelProps={{shrink: true}}
-                                variant="outlined"
-                                {...register("examDate")}
-                                error={!!errors.examDate}
-                                fullWidth
-                                margin="normal"
-                            />
-                            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                                {errors.examDate?.message}
-                            </div>
-                        </Grid>
+                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+                        <TextField
+                            label={
+                                <>
+                                    Exam Date  <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                                </>
+                            }
+                            type="date"
+                            InputLabelProps={{ shrink: true }}
+                            variant="outlined"
+                            {...register("examDate")}
+                            error={!!errors.examDate}
+                            fullWidth
+                            margin="normal"
+                        />
+                        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                            {errors.examDate?.message}
+                        </div>
+                    </Grid>
 
-                        <Grid item xs={12} sm={12} md={6}>
-                            <TextField
-                                label={
-                                    <>
-                                        Duration <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                                    </>
-                                }
-                                type="text"
-                                variant="outlined"
-                                {...register("duration")}
-                                error={!!errors.duration}
-                                fullWidth
-                                margin="normal"
-                            />
-                            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                                {errors.duration?.message}
-                            </div>
-                        </Grid>
+                    <Grid item xs={12} sm={12} md={6}>
+                        <TextField
+                            label={
+                                <>
+                                    Duration <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                                </>
+                            }
+                            type="text"
+                            variant="outlined"
+                            {...register("duration")}
+                            error={!!errors.duration}
+                            fullWidth
+                            margin="normal"
+                        />
+                        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                            {errors.duration?.message}
+                        </div>
+                    </Grid>
 
-                        <Grid item xs={12} sm={12} md={6}>
-                            <TextField
-                                label={
-                                    <>
-                                        Test Type <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                                    </>
-                                }
-                                type="text"
-                                variant="outlined"
+                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+                        <FormControl fullWidth margin="normal" variant="outlined">
+                            <InputLabel id="testType-label">
+                                Test Type <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                            </InputLabel>
+                            <Select
+                                labelId="testType-label"
+                                defaultValue={editData.testType}
                                 {...register("testType")}
                                 error={!!errors.testType}
-                                fullWidth
-                                margin="normal"
-                            />
+                            >
+                                {testTypeOptions.map((option) => (
+                                    <MenuItem key={option} value={option}>
+                                        {option}
+                                    </MenuItem>
+                                ))}
+                            </Select>
                             <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
                                 {errors.testType?.message}
                             </div>
-                        </Grid>
+                        </FormControl>
+                    </Grid>
 
-                        <Grid item xs={12} sm={12} md={6}>
-                            <TextField
-                                label={
-                                    <>
-                                        Total Marks <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                                    </>
-                                }
-                                type="number"
-                                variant="outlined"
-                                {...register("totalMarks")}
-                                error={!!errors.totalMarks}
-                                fullWidth
-                                margin="normal"
-                            />
-                            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                                {errors.totalMarks?.message}
-                            </div>
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={6}>
-                            <TextField
-                                label={
-                                    <>
-                                        Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                                    </>
-                                }
-                                type="text"
-                                variant="outlined"
-                                {...register("status")}
-                                error={!!errors.status}
-                                fullWidth
-                                margin="normal"
-                            />
-                            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                                {errors.status?.message}
-                            </div>
-                        </Grid>                   
+                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+                        <TextField
+                            label={
+                                <>
+                                    Total Marks <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                                </>
+                            }
+                            type="number"
+                            variant="outlined"
+                            {...register("totalMarks")}
+                            error={!!errors.totalMarks}
+                            fullWidth
+                            margin="normal"
+                        />
+                        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                            {errors.totalMarks?.message}
+                        </div>
+                    </Grid>
+
+                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+
+                    <TextField
+        
+                        select
+                        label={
+                        <>
+                            Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                        </>
+                        }
+                        variant="outlined"
+                            {...register("status")}
+                            error={!!errors.status}
+                            fullWidth
+                            margin="normal"
+                            defaultValue={editData.status}
+                            SelectProps={{
+                                MenuProps: {
+                                PaperProps: {
+                                    style: { maxHeight: 200 },
+                                },
+                                },
+                        }}
+                        > 
+                    <MenuItem value="Upcoming">Upcoming</MenuItem>
+                    <MenuItem value="Completed">Completed</MenuItem>
+                    <MenuItem value="Cancelled">Cancelled</MenuItem>
+
+                </TextField>
+
+                <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                {errors.status?.message}
+                </div>
+         
+            </Grid>
+
                 </Grid>
 
                 <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 2 }}>
-          <Button onClick={handleClose} className="secondary_button">
-            Cancel
-          </Button>
-          <Button type="submit" className="primary_button">
+                    <Button onClick={handleClose} className="secondary_button">
+                        Cancel
+                    </Button>
+                    <Button type="submit" className="primary_button">
 
-          {loading ? (
-       <>
-         <CircularProgress size={18} 
-          style={{ marginRight: 8, color: "#fff" }} />
-                Submitting
-            </>
-            ) : (
-            "Submit"
-            )}
+                        {loading ? (
+                            <>
+                                <CircularProgress size={18}
+                                    style={{ marginRight: 8, color: "#fff" }} />
+                                Submitting
+                            </>
+                        ) : (
+                            "Submit"
+                        )}
 
-          </Button>
-        </Box>
-      </form>
-
+                    </Button>
+                </Box>
+            </form>
 
 
         </>
