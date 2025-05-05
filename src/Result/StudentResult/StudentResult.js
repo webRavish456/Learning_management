@@ -28,7 +28,7 @@ import { useParams } from "react-router-dom";
 import Cookies from 'js-cookie';
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
-// import { useNavigate } from "react-router-dom";
+
 
 const StudentResult = () => {
 
@@ -41,6 +41,7 @@ const StudentResult = () => {
   const [editData, setEditData] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
 
   const [rows, setRows] = useState([]);
   const [filteredRows, setFilteredRows] = useState([]);
@@ -56,18 +57,7 @@ const StudentResult = () => {
   const columns = [
     { id: 'si', label: 'SI.No', flex: 1, align: 'center' },
     { id: 'studentName', label: 'Student Name', flex: 1, align: 'center' },
-    // {
-    //   id: 'studentId',
-    //   label: 'Student ID',
-    //   flex: 1,
-    //   align: 'center',
-    // },
-    // {
-    //   id: 'resultId',
-    //   label: 'Result ID',
-    //   flex: 1,
-    //   align: 'center',
-    // },
+  
     {
       id: 'courseName',
       label: 'Course Name',
@@ -92,12 +82,12 @@ const StudentResult = () => {
       flex: 1,
       align: 'center',
     },
-    // {
-    //   id: 'sheet',
-    //   label: 'Sheet',
-    //   flex: 1,
-    //   align: 'center',
-    // },
+    {
+      id: 'sheet',
+      label: 'Sheet',
+      flex: 1,
+      align: 'center',
+    },
     {
       id: 'status',
       label: 'Status',
@@ -187,10 +177,12 @@ const StudentResult = () => {
       (row) =>
         row.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.courseName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.marksObtained.toLowerCase().includes(searchTerm.toLowerCase())
+        row.status.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredRows(filtered);
   }, [searchTerm, rows]);
+
+
   const handleView = (row) => {
     setViewData(row);
     setViewShow(true);
@@ -206,6 +198,7 @@ const StudentResult = () => {
     setDeleteShow(true);
   };
   const handleDelete = () => {
+
     setIsDeleting(true);
     fetch(`${Base_url}/studentresult/${deleteId}`, {
       method: "DELETE",
@@ -229,6 +222,7 @@ const StudentResult = () => {
         console.error("Delete error:", error);
         setIsDeleting(false);
       });
+
   };
 
   const handleClose = () => {
@@ -238,14 +232,14 @@ const StudentResult = () => {
     setDeleteShow(false);
   };
 
-  const handleCreate = (refresh = true) => {
-    if (refresh) setLoading(true);
+  const handleCreate = (data) => {
+     setLoading(data);
     setOpenData(false);
   };
 
-  const handleUpdate = (refresh = true) => {
-    if (refresh) setLoading(true);
-    setEditShow(false);
+  const handleUpdate = (data) => {
+     setLoading(data);
+     setEditShow(false);
   };
 
   const onAddClick = () => setOpenData(true);
@@ -259,12 +253,39 @@ const StudentResult = () => {
     setPage(0);
   };
 
+  const handleClick = async (pdfUrl) => {
+ 
+    try {
+  
+      const response = await fetch(pdfUrl.syllabus);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+  
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = `${pdfUrl.courseName}-syllabus.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+  
+    }
+     catch (error) {
+      console.error("Failed to download PDF", error);
+    }
+  
+  };
+
   return (
+    <>
+       <ToastContainer/>
+ 
 
     <Box className="container">
-    <Search onAddClick={onAddClick} buttonText="Add New Students Result" />
-  <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-  <TableContainer sx={{ maxHeight: 440 }}>
+    <Search onAddClick={onAddClick}  searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm} buttonText="Add New Students Result" />
+     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+     <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="result table">
               <TableHead>
                 <TableRow>
@@ -287,7 +308,16 @@ const StudentResult = () => {
                       <TableRow hover role="checkbox" key={idx}>
                         {columns.map((column) => (
                           <TableCell key={column.id} align={column.align} style={{cursor:"pointer"}}>
-                            {row[column.id]}
+                             {column.id === "sheet" ? (
+                          <img
+                            onClick={()=>handleClick(row.row)}
+                            src="/pdf.png"
+                            alt="item"
+                            style={{ width: "30px", height: "30px", objectFit: "contain", cursor:"pointer" }}
+                          />
+                        ) : (
+                          row[column.id]
+                        )}
                           </TableCell>
                         ))}
                       </TableRow>
@@ -320,9 +350,9 @@ const StudentResult = () => {
           <>
             {openData
               ? "Create New Student Result"
-              : viewData
+              : viewShow
                 ? "View Student Result Details"
-                : editData
+                : editShow
                   ? "Edit Student Result Details"
                   : deleteShow
                     ? "Delete Student Result Details"
@@ -331,7 +361,7 @@ const StudentResult = () => {
         }
         dialogContent={
           openData ? (
-            <CreateStudentResult handleCreate={handleCreate} handleClose={handleClose} />
+            <CreateStudentResult handleCreate={handleCreate}  handleClose={handleClose} />
           ) : viewShow ? (
             <ViewStudentResult viewData={viewData} />
           ) : editShow ? (
@@ -351,7 +381,7 @@ const StudentResult = () => {
       />
 
     </Box>
-      
+    </>
   )
 
 }

@@ -75,7 +75,7 @@ const ViewCertificates = ({viewData})  => {
                     </Grid>
 
                     <Grid item xs={6}>
-                        <Box className="pageDescription" onClick={()=>handleDownload(viewData)}><PictureAsPdfIcon/></Box>
+                        <Box className="pageDescription download" onClick={()=>handleDownload(viewData)}><PictureAsPdfIcon/></Box>
                     </Grid>
 
                 </Grid>

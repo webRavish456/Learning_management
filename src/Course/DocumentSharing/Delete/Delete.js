@@ -1,24 +1,4 @@
-// import { Box, Button } from "@mui/material";
-// import React from "react"
 
-// const DeleteDocumentSharing = ({handleClose, handleDelete}) =>
-// {
-//      return (
-//      <>
-//            <Box>
-//              Are you sure want to delete?
-//            </Box>
-//            <Box className="submit" sx={{ display: "flex", gap: 1, marginTop: 2, justifyContent: "flex-end", width: 500 }}>
-//             <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
-//             <Button onClick={handleDelete} className="delete_button">
-//               Delete
-//             </Button>
-//             </Box>
-//      </>
-//      )
-// }
-
-// export default DeleteDocumentSharing;
 import { Box, Button, CircularProgress } from "@mui/material";
 import React from "react"
 
@@ -30,10 +10,10 @@ const DeleteDocumentSharing= ({handleClose, isDeleting, handleDelete }) =>
      return (
      <>
     
-           <Box sx={{ width: '400px', padding: '20px', bgcolor: 'background.paper',textAlign:'flex-end' }}>
+           <Box sx={{ width: '400px', bgcolor: 'background.paper',textAlign:'flex-end' }}>
              Are you sure want to delete?
            </Box>
-           <Box className="submit" sx={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', margin: '20px'}}>
+           <Box className="submit" sx={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', margin: '20px 0px 0px'}}>
             <Button onClick={handleClose} className="secondary_button" >Cancel</Button>
             <Button  onClick={handleDelete} className="delete_button">
            

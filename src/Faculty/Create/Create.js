@@ -19,7 +19,7 @@ import {
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
@@ -28,7 +28,7 @@ const schema = yup.object().shape({
 
     teacherName: yup.string().required("Teacher Name is required"),
     emailId: yup.string().required("Email is required"),
-    mobileNo: yup.number().required("Mobile Number is required"),
+    mobileNo: yup.string().required("Mobile Number is required"),
     experience: yup.string().required("Experience is required"),
     gender: yup.string().required("Gender is required"),
     qualification: yup.string().required("Qualification is required"),
@@ -212,7 +212,10 @@ const CreateFaculty = () => {
                     setLoading(false)
 
                     toast.success("Teacher Created Successfully!")
-                    navigate("/teacher")
+                    setTimeout(()=>{
+                        navigate("/teacher")
+                    },[1000])
+                  
                     reset();
                 }
                 else {
@@ -234,6 +237,9 @@ const CreateFaculty = () => {
 
     return (
   
+         <>
+         <ToastContainer/>
+       
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid container spacing={4} style={{ padding: "20px" }}>
                     {/* Personal Details */}
@@ -552,13 +558,12 @@ const CreateFaculty = () => {
                                     error={!!errors.highestQualificationCertificate}
                                     fullWidth
                                     margin="normal"
+                                    inputProps={{ accept: "application/pdf" }} 
                                 />
                                 <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
                                     {errors.highestQualificationCertificate?.message}
                                 </div>
-                                {/* <Typography variant="body2">
-                                    View existing document: <a href="certificate.pdf" target="_blank" rel="noopener noreferrer">Certificate.pdf</a>
-                                </Typography> */}
+                           
                             </Box>
                             <Box marginBottom={2}>
                                 <TextField InputLabelProps={{ shrink: true }}
@@ -573,13 +578,12 @@ const CreateFaculty = () => {
                                     error={!!errors.resumeCertificate}
                                     fullWidth
                                     margin="normal"
+                                    inputProps={{ accept: "application/pdf" }} 
                                 />
                                 <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
                                     {errors.resumeCertificate?.message}
                                 </div>
-                                {/* <Typography variant="body2">
-                                    View existing document: <a href="resume.pdf" target="_blank" rel="noopener noreferrer">Resume.pdf</a>
-                                </Typography> */}
+                               
                             </Box>
                             <Box marginBottom={2}>
                                 <TextField InputLabelProps={{ shrink: true }}
@@ -594,13 +598,12 @@ const CreateFaculty = () => {
                                     error={!!errors.aadharCard}
                                     fullWidth
                                     margin="normal"
+                                    inputProps={{ accept: "application/pdf" }} 
                                 />
                                 <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
                                     {errors.aadharCard?.message}
                                 </div>
-                                {/* <Typography variant="body2">
-                                    View existing document: <a href="aadhar.pdf" target="_blank" rel="noopener noreferrer">Aadhar.pdf</a>
-                                </Typography> */}
+                              
                             </Box>
                             <Box marginBottom={2}>
                                 <TextField InputLabelProps={{ shrink: true }}
@@ -615,13 +618,12 @@ const CreateFaculty = () => {
                                     error={!!errors.panCard}
                                     fullWidth
                                     margin="normal"
+                                    inputProps={{ accept: "application/pdf" }} 
                                 />
                                 <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
                                     {errors.panCard?.message}
                                 </div>
-                                {/* <Typography variant="body2">
-                                    View existing document: <a href="panCard.pdf" target="_blank" rel="noopener noreferrer">PANCard.pdf</a>
-                                </Typography> */}
+                              
                             </Box>
                         </Box>
                     </Grid>
@@ -773,7 +775,7 @@ const CreateFaculty = () => {
                     </Box>
                 </Grid>
             </form>
-     
+     </>
     );
 };
 

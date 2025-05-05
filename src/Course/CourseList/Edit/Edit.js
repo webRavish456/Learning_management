@@ -25,6 +25,7 @@ const schema = yup.object().shape({
   courseDescription: yup.string().required("Course Description is required"),
   duration: yup.string().required("Duration is required"),
   pricing: yup.string().required("Pricing is required"),
+  syllabus: yup.mixed(),
   status: yup.string()
 });
 
@@ -69,7 +70,10 @@ const EditCourseList = ({ handleUpdate,  editData,  handleClose }) => {
         formdata.append("courseDescription", data.courseDescription);
         formdata.append("duration", data.duration);
         formdata.append("pricing", data.pricing);
-        formdata.append("syllabus", data.syllabus);
+        if (Array.isArray(data.syllabus) || data.syllabus instanceof FileList)
+        {
+          formdata.append("syllabus", data.syllabus[0]);
+        }
         formdata.append("status", data.status);
 
         const requestOptions = {

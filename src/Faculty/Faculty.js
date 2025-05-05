@@ -176,7 +176,8 @@ const Faculty = () => {
         row.teacherName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.emailId.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.courseName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.status.toLowerCase().includes(searchTerm.toLowerCase())
+        row.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        String(row.mobileNo).includes(searchTerm)
     );
     setFilteredRows(filtered);
   }, [searchTerm, rows]);

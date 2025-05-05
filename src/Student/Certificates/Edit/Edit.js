@@ -27,7 +27,7 @@ import { NavLink } from "react-router-dom";
     studentName: yup.string().required("Student Name is required"),
     courseName: yup.string().required("Course Name is required"),
     duration: yup.string().required("Duration is required"),
-    certificate: yup.mixed().required("Certificate is required"),
+    certificate: yup.mixed(),
     status:  yup.string()
     
   });
@@ -38,6 +38,7 @@ import { NavLink } from "react-router-dom";
 
   const isSmScreen = useMediaQuery("(max-width:768px)");
 
+  const [loadingData, setLoadingData] = useState(true)
 
     const token = Cookies.get('token');
 
@@ -66,6 +67,31 @@ import { NavLink } from "react-router-dom";
         }
       }, [editData, reset]);
   
+      useEffect(() => {
+
+        const fetchCourseData = async () => {
+          try {
+            const response = await fetch(`${Base_url}/courselist`, {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            const result = await response.json();
+            if (result.status === "success") {
+              console.log(result.data)
+    
+              setCourseName(result.data)
+              setLoadingData(false)
+            }
+          } catch (error) {
+            console.error("Error fetching course data:", error);
+          }
+        };
+        if (loadingData) {
+          fetchCourseData();
+        }
+      }, [loadingData]); 
 
   const onSubmit = (data) => {
 
@@ -75,7 +101,12 @@ import { NavLink } from "react-router-dom";
     formdata.append("studentName", data.studentName);
     formdata.append("courseName", data.courseName);
     formdata.append("duration", data.duration);
-    formdata.append("certificate", data.certificate);
+
+    if (Array.isArray(data.certificate) || data.certificate instanceof FileList)
+      {
+        formdata.append("certificates", data.certificate[0]);
+      }
+   
     formdata.append("status", data.status);
 
 
@@ -153,8 +184,8 @@ import { NavLink } from "react-router-dom";
 
               <Select
                 label="Course Name"
-                defaultValue=""
-                {...register("courseName", { required: "Course name is required" })}
+                defaultValue={editData.courseName}
+                {...register("courseName")}
               >
 
                 {courseName.map((course, index) => (
@@ -192,7 +223,7 @@ import { NavLink } from "react-router-dom";
 
           <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
 
-            <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+           
             
             <TextField InputLabelProps={{shrink:true}}
                     type="file"
@@ -261,7 +292,7 @@ import { NavLink } from "react-router-dom";
             </Grid>
 
 
-        </Grid>
+    
         </Grid>
 
         <Box className="submit" sx={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', margin: '20px' }}>

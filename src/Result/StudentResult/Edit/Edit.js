@@ -6,27 +6,39 @@ import {
     Box,
     CircularProgress,
     useMediaQuery,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    Typography,
 } from "@mui/material";
 import * as  yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { toast, } from "react-toastify";
+import { toast, ToastContainer, } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from "js-cookie"
+import { NavLink, useParams } from "react-router-dom";
 
 const schema = yup.object().shape({
+
     studentName: yup.string().required("Student Name is required"),
-    studentId: yup.string().required("Student ID is required"),
+    mobileNumber: yup.string().required("Mobile Number is required"),
     resultId: yup.string().required("Result ID is required"),
     courseName: yup.string().required("Course Name is required"),
     marksObtained: yup.number().required("Marks Obtained is required"),
     totalMarks: yup.number().required("Total Marks is required"),
     passingMarks: yup.number().required("Passing Marks is required"),
-    sheet: yup.mixed().required("Sheet is required"),
+    sheet: yup.mixed(),
     status: yup.string()
+
 });
 
 const EditStudentResult = ({ handleUpdate, editData, handleClose }) => {
+
+
+    const [courseName, setCourseName] = useState([]);
+
     const isSmScreen = useMediaQuery("(max-width:768px)");
 
     const token = Cookies.get('token');
@@ -34,6 +46,38 @@ const EditStudentResult = ({ handleUpdate, editData, handleClose }) => {
     const Base_url = process.env.REACT_APP_BASE_URL;
 
     const [loading, setLoading] = useState(false)
+
+    const [loadingdata, setLoadingdata] = useState(true)
+
+    const { resultId } = useParams()
+
+    useEffect(() => {
+
+        const fetchCourseData = async () => {
+            try {
+                const response = await fetch(`${Base_url}/courselist`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const result = await response.json();
+                if (result.status === "success") {
+                    console.log(result.data)
+
+                    setCourseName(result.data);
+                    setLoadingdata(false)
+                }
+            } catch (error) {
+                console.error("Error fetching course data:", error);
+            }
+        };
+      
+        if (loadingdata) {
+            fetchCourseData();
+        }
+    }, [loadingdata]);
+
     const {
         register,
         handleSubmit,
@@ -47,7 +91,7 @@ const EditStudentResult = ({ handleUpdate, editData, handleClose }) => {
         if (editData) {
             reset({
                 studentName: editData.studentName || "",
-                studentId: editData.studentId || "",
+                mobileNumber: editData.mobileNumber || "",
                 resultId: editData.resultId || "",
                 courseName: editData.courseName || "",
                 marksObtained: editData.marksObtained || "",
@@ -65,14 +109,18 @@ const EditStudentResult = ({ handleUpdate, editData, handleClose }) => {
 
         const formdata = new FormData();
         formdata.append("studentName", data.studentName);
-        formdata.append("studentId", data.studentId);
-        formdata.append("resultId", data.resultId);
+        formdata.append("mobileNumber", data.mobileNumber);
+        formdata.append("resultId", resultId);
         formdata.append("courseName", data.courseName);
         formdata.append("marksObtained", data.marksObtained);
         formdata.append("totalMarks", data.totalMarks);
         formdata.append("passingMarks", data.passingMarks);
-        formdata.append("sheet", data.sheet[0]);
-        formdata.append("status", data.status);
+
+        if (Array.isArray(data.sheet) || data.sheet instanceof FileList)
+            {
+                formdata.append("sheet", data.sheet[0]);
+            }
+       
         const requestOptions = {
             method: "PATCH",
             body: formdata,
@@ -81,7 +129,7 @@ const EditStudentResult = ({ handleUpdate, editData, handleClose }) => {
             },
         };
 
-        fetch(`${Base_url}/studentresult/${editData._id}`, requestOptions)
+        fetch(`${Base_url}/studentresult/${editData._id}/${resultId}`, requestOptions)
             .then((response) => response.text())
 
             .then((result) => {
@@ -91,7 +139,7 @@ const EditStudentResult = ({ handleUpdate, editData, handleClose }) => {
                 if (res.status === "success") {
                     setLoading(false)
 
-                    toast.success("New Student Result Edited Successful!")
+                    toast.success("Student Result Edited Successful!")
 
                     handleUpdate(true)
                     handleClose()
@@ -112,9 +160,12 @@ const EditStudentResult = ({ handleUpdate, editData, handleClose }) => {
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <ToastContainer/>
+             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid container columnSpacing={2}>
+
                     <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+
                         <TextField
                             type="text"
                             label={
@@ -122,11 +173,12 @@ const EditStudentResult = ({ handleUpdate, editData, handleClose }) => {
                                     Student Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                                 </>
                             }
-                            varient="outlined"
-                            {...register("studentName")}
-                            error={!!errors.studentName}
+                            InputProps={{ readOnly: true }}
                             fullWidth
                             margin="normal"
+                            variant="outlined"
+                            {...register("studentName")}
+                            error={!!errors.studentName}
                         />
                         <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
                             {errors.studentName?.message}
@@ -134,74 +186,67 @@ const EditStudentResult = ({ handleUpdate, editData, handleClose }) => {
                     </Grid>
 
                     <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                        <TextField
-                            type="text"
-                            label={
-                                <>
-                                    Student ID <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                                </>
-                            }
-                            varient="outlined"
-                            {...register("studentId")}
-                            error={!!errors.studentId}
-                            fullWidth
-                            margin="normal"
-                        />
-                        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                            {errors.studentId?.message}
-                        </div>
+
+                    <TextField
+                        type="text"
+                        label={
+                            <>
+                                Mobile Number <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                            </>
+                        }
+                        InputProps={{ readOnly: true }}
+                        fullWidth
+                        margin="normal"
+                        variant="outlined"
+                        {...register("mobileNumber")}
+                        error={!!errors.mobileNumber}
+                    />
+                    <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                        {errors.mobileNumber?.message}
+                    </div>
                     </Grid>
 
                     <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                        <TextField
-                            type="text"
-                            label={
-                                <>
-                                    Result ID <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                                </>
-                            }
-                            varient="outlined"
-                            {...register("resultId")}
-                            error={!!errors.resultId}
+                        <FormControl
                             fullWidth
                             margin="normal"
-                        />
-                        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                            {errors.resultId?.message}
-                        </div>
-                    </Grid>
-
-                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                        <TextField
-                            type="text"
-                            label={
-                                <>
-                                    Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                                </>
-                            }
-                            varient="outlined"
-                            {...register("courseName")}
+                            variant="outlined"
                             error={!!errors.courseName}
-                            fullWidth
-                            margin="normal"
-                        />
-                        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                            {errors.courseName?.message}
-                        </div>
+                        >
+                            <InputLabel>
+                                Course Name <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                            </InputLabel>
+
+                            <Select
+                                label="Course Name"
+                                defaultValue={editData.courseName}
+                                {...register("courseName")}
+                            >
+                                {courseName.map((course, index) => (
+                                    <MenuItem key={index} value={course.courseName}>
+                                        {course.courseName}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+
+                            <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                                {errors.courseName?.message}
+                            </div>
+                        </FormControl>
                     </Grid>
 
                     <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                        <TextField
-                            type="number"
+                    <TextField
                             label={
                                 <>
-                                    Marks Obtained
-                                    <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                                    Marks Obtained <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                                 </>
                             }
-                            varient="outlined"
+                            type="number"
+                            variant="outlined"
                             {...register("marksObtained")}
                             error={!!errors.marksObtained}
+                            InputLabelProps={{ shrink: true }}
                             fullWidth
                             margin="normal"
                         />
@@ -211,17 +256,17 @@ const EditStudentResult = ({ handleUpdate, editData, handleClose }) => {
                     </Grid>
 
                     <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                        <TextField
-                            type="number"
+                    <TextField
                             label={
                                 <>
-                                    Total Marks
-                                    <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                                    Total Marks <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                                 </>
                             }
-                            varient="outlined"
+                            type="number"
+                            variant="outlined"
                             {...register("totalMarks")}
                             error={!!errors.totalMarks}
+                            InputLabelProps={{ shrink: true }}
                             fullWidth
                             margin="normal"
                         />
@@ -231,17 +276,17 @@ const EditStudentResult = ({ handleUpdate, editData, handleClose }) => {
                     </Grid>
 
                     <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                        <TextField
-                            type="number"
+                    <TextField
                             label={
                                 <>
-                                    Passing Marks
-                                    <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                                    Passing Marks <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
                                 </>
                             }
-                            varient="outlined"
+                            type="number"
+                            variant="outlined"
                             {...register("passingMarks")}
                             error={!!errors.passingMarks}
+                            InputLabelProps={{ shrink: true }}
                             fullWidth
                             margin="normal"
                         />
@@ -250,43 +295,37 @@ const EditStudentResult = ({ handleUpdate, editData, handleClose }) => {
                         </div>
                     </Grid>
 
-                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                        <TextField
-                            type="file"
-                            label={
-                                <>
-                                    Sheet
-                                    <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                                </>
-                            }
-                            varient="outlined"
-                            {...register("sheet")}
-                            error={!!errors.sheet}
-                            fullWidth
-                            margin="normal"
-                        />
-                        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                            {errors.sheet?.message}
-                        </div>
-                    </Grid>
-                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
-                        <TextField
-                            label={
-                                <>
-                                    Status <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
-                                </>
-                            }
-                            type="text"
-                            variant="outlined"
-                            {...register("status")}
-                            error={!!errors.status}
-                            fullWidth
-                            margin="normal"
-                        />
-                        <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
-                            {errors.status?.message}
-                        </div>
-                    </Grid>
+                    <Grid item xs={12} sm={12} md={12}>
+                  
+                    <TextField
+                    type="file"
+                    InputLabelProps={{ shrink: true }}
+                    label="Sheet"
+                    variant="outlined"
+                    {...register("sheet")}
+                    error={!!errors.sheet}
+                    fullWidth
+                    margin="normal"
+                    inputProps={{ accept: "application/pdf" }} 
+        />
+                    <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                    {errors.sheet?.message}
+                    </div>
+
+                    <Typography variant="body2" sx={{ mt: 0 }}>
+                    View existing sheet:&nbsp;
+                  <NavLink
+                    to={editData.sheet} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    Sheet
+                  </NavLink>
+                </Typography>
+          </Grid>
+
+         
+
                 </Grid>
 
                 <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 2 }}>

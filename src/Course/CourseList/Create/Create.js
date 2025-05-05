@@ -22,7 +22,9 @@ import Cookies from 'js-cookie';
     courseDescription: yup.string().required("Course Description is required"),
     duration: yup.string().required("Duration is required"),
     pricing: yup.string().required("Pricing is required"),
-    syllabus: yup.mixed().required("Syllabus is required"),
+    syllabus: yup.mixed().test("required", "Syllabus is required", (value) => {
+      return value && value.length > 0;
+    }),
 
 
 

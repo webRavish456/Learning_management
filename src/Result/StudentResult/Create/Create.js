@@ -15,9 +15,10 @@ import {
 import * as  yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { toast, } from "react-toastify";
+import { toast, ToastContainer, } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from "js-cookie"
+import { useParams } from "react-router-dom";
 
 const CreateStudentResult = ({ handleCreate, handleClose }) => {
 
@@ -32,16 +33,20 @@ const CreateStudentResult = ({ handleCreate, handleClose }) => {
     const [loading, setLoading] = useState(false)
     const [loadingdata, setLoadingdata] = useState(true)
 
+    const { resultId } = useParams()
+
 
     const schema = yup.object().shape({
 
         studentName: yup.string().required("Student Name is required"),
+        mobileNumber: yup.string().required("Mobile No is required"),
         courseName: yup.string().required("Course Name is required"),
         marksObtained: yup.string().required("Marks Obtained is required"),
         totalMarks: yup.string().required("Total Marks is required"),
         passingMarks: yup.string().required("Passing Marks is required"),
-        status:yup.string().required("Status is required"),
-        sheet:yup.mixed().required("Sheet is required")
+        sheet:yup.mixed().test("required", "Sheet is required", (value) => {
+            return value && value.length > 0;
+            })
 
     });
     
@@ -85,15 +90,17 @@ const CreateStudentResult = ({ handleCreate, handleClose }) => {
 
         setLoading(true)
 
+        const status = data.marksObtained>=data.passingMarks?"Passed":"Failed"
+
         const formdata = new FormData();
         formdata.append("studentName", data.studentName);
         formdata.append("courseName", data.courseName);
         formdata.append("marksObtained", data.marksObtained);
         formdata.append("totalMarks", data.totalMarks);
         formdata.append("passingMarks", data.passingMarks);
-        formdata.append("status", data.status);
-        formdata.append("studentId", data.studentId);
-        formdata.append("resultId", data.resultId);
+        formdata.append("status", status);
+        formdata.append("mobileNumber", data.mobileNumber);
+        formdata.append("resultId", resultId);
         formdata.append("sheet", data.sheet[0]);
 
         const requestOptions = {
@@ -104,7 +111,7 @@ const CreateStudentResult = ({ handleCreate, handleClose }) => {
             },
         };
 
-        fetch(`${Base_url}/result`, requestOptions)
+        fetch(`${Base_url}/studentresult`, requestOptions)
             .then((response) => response.text())
             .then((result) => {
                 const res = JSON.parse(result)
@@ -130,6 +137,7 @@ const CreateStudentResult = ({ handleCreate, handleClose }) => {
                
     return (
         <>
+            <ToastContainer/>
              <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid container columnSpacing={2}>
 
@@ -151,6 +159,26 @@ const CreateStudentResult = ({ handleCreate, handleClose }) => {
                         <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
                             {errors.studentName?.message}
                         </div>
+                    </Grid>
+
+                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+
+                    <TextField
+                        type="text"
+                        label={
+                            <>
+                                Mobile Number <span style={{ color: "rgba(240, 68, 56, 1)" }}>*</span>
+                            </>
+                        }
+                        fullWidth
+                        margin="normal"
+                        variant="outlined"
+                        {...register("mobileNumber")}
+                        error={!!errors.mobileNumber}
+                    />
+                    <div style={{ color: "rgba(240, 68, 56, 1)", fontSize: "0.8rem" }}>
+                        {errors.mobileNumber?.message}
+                    </div>
                     </Grid>
 
                     <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
@@ -242,11 +270,12 @@ const CreateStudentResult = ({ handleCreate, handleClose }) => {
                         </div>
                     </Grid>
 
-                    <Grid item xs={12} sm={isSmScreen ? 12 : 6} md={6}>
+                    <Grid item xs={12} sm={12} md={12}>
+                  
                     <TextField
                     type="file"
                     InputLabelProps={{ shrink: true }}
-                    label="sheet"
+                    label="Sheet"
                     variant="outlined"
                     {...register("sheet")}
                     error={!!errors.sheet}
@@ -258,6 +287,8 @@ const CreateStudentResult = ({ handleCreate, handleClose }) => {
                     {errors.sheet?.message}
                     </div>
           </Grid>
+
+         
 
                 </Grid>
 

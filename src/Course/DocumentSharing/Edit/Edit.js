@@ -29,7 +29,7 @@ const schema = yup.object().shape({
   topicDescription: yup.string().required("Topic Description is required"),
   course: yup.string().required("Course is required"),
   teacher: yup.string().required("Teacher is required"),
-
+  document: yup.mixed()
 });
 
 const EditDocumentSharing = ({ handleUpdate,  editData,  handleClose }) => {
@@ -69,6 +69,8 @@ const EditDocumentSharing = ({ handleUpdate,  editData,  handleClose }) => {
       });
     }
   }, [editData, reset]);
+
+  console.log(document)
 
   useEffect(() => {
 
@@ -117,6 +119,7 @@ const EditDocumentSharing = ({ handleUpdate,  editData,  handleClose }) => {
 }, [loadingdata]);
 
 
+
   const onSubmit = (data) => {
   
          setLoading(true)
@@ -127,7 +130,11 @@ const EditDocumentSharing = ({ handleUpdate,  editData,  handleClose }) => {
         formdata.append("topicDescription", data.topicDescription);
         formdata.append("course", data.course);
         formdata.append("teacher", data.teacher);
-        formdata.append("document", data.document[0]);
+        if (Array.isArray(data.document) || data.document instanceof FileList)
+        {
+          formdata.append("document", data.document[0]);
+        }
+       
 
         const requestOptions = {
           method: "PATCH",

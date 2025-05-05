@@ -149,8 +149,9 @@ useEffect(() => {
   const filtered = rows.filter(
     (row) =>
       row.courseName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    row.duration.toLowerCase().includes(searchTerm.toLowerCase())
-    
+      row.duration.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      String(row.pricing).includes(searchTerm)
   );
   setFilteredRows(filtered);
 }, [searchTerm, rows]); 

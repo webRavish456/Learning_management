@@ -25,12 +25,15 @@ const schema = yup.object().shape({
   studentName: yup.string().required("Student Name is required"),
   courseName: yup.string().required("Course Name is required"),
   duration: yup.string().required("Duration is required"),
-  certificate: yup.mixed().required("Certificate is required"),
+  certificate: yup.mixed().test("required", "Certificate is required", (value) => {
+    return value && value.length > 0;
+    }),
 
 
 });
 
 const CreateCertificate = ({ handleCreate, handleClose }) => {
+  
   const [courseName, setCourseName] = useState([]);
   const isSmScreen = useMediaQuery("(max-width:768px)");
 

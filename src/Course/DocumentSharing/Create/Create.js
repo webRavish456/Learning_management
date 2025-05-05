@@ -26,7 +26,9 @@ import Cookies from 'js-cookie';
     topicDescription: yup.string().required("Topic Description is required"),
     course: yup.string().required("Course is required"),
     teacher: yup.string().required("Teacher is required"),
-    document: yup.mixed().required("Document is required"),
+    document: yup.mixed().test("required", "Document is required", (value) => {
+      return value && value.length > 0;
+    }),
 
 
 });

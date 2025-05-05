@@ -152,7 +152,9 @@ const AllStudents = () => {
         row.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.emailId.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.course.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.status.toLowerCase().includes(searchTerm.toLowerCase())
+        row.gender.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        String(row.mobileNumber).includes(searchTerm) ||
+        String(row.enrollmentDate).includes(searchTerm)
     );
     setFilteredRows(filtered);
   }, [searchTerm, rows]);  

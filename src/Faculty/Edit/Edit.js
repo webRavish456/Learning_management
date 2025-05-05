@@ -51,6 +51,8 @@ const schema = yup.object().shape({
 });
 
 const EditFaculty = () => {
+
+    
     const { Id } = useParams();
 
        const token = Cookies.get('token');
@@ -152,7 +154,7 @@ const EditFaculty = () => {
                 branchLocation:data.branchLocation
               }
 
-              const formdata = new FormData();
+        const formdata = new FormData();
         formdata.append("teacherName", data.teacherName);
         formdata.append("gender", data.gender);
         formdata.append("dob", data.dob);
@@ -166,10 +168,22 @@ const EditFaculty = () => {
         formdata.append("qualification", data.qualification);
         formdata.append("address", data.address);
 
-        formdata.append("documents.resumeCertificate", data.resumeCertificate[0]);
-        formdata.append("documents.highestQualificationCertificate", data.highestQualificationCertificate[0]);
-        formdata.append("documents.panCard", data.panCard[0]);
-        formdata.append("documents.aadharCard", data.aadharCard[0]);
+        if (Array.isArray(data.resumeCertificate) || data.resumeCertificatet instanceof FileList)
+            {
+                formdata.append("documents.resumeCertificate", data.resumeCertificate[0]);
+            }
+        if (Array.isArray(data.highestQualificationCertificate) || data.highestQualificationCertificate instanceof FileList)
+            {
+                formdata.append("documents.highestQualificationCertificate", data.highestQualificationCertificate[0]);
+            }
+        if (Array.isArray(data.panCard) || data.panCard instanceof FileList)
+            {
+                formdata.append("documents.panCard", data.panCard[0]);
+            }
+        if (Array.isArray(data.aadharCard) || data.aadharCard instanceof FileList)
+            {
+                formdata.append("documents.aadharCard", data.aadharCard[0]);
+            }
 
         const requestOptions = {
             method: "PATCH",
