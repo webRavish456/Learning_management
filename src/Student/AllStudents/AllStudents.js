@@ -150,7 +150,6 @@ const AllStudents = () => {
     const filtered = rows.filter(
       (row) =>
         row.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.mobileNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.emailId.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.course.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.status.toLowerCase().includes(searchTerm.toLowerCase())

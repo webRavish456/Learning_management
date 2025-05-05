@@ -296,7 +296,7 @@ const Certificates = () => {
                       <TableRow hover role="checkbox" key={idx}>
                            {columns.map((column) => (
                   <TableCell key={column.id} align={column.align}>
-                    {column.id === "certificate" ? (
+                    {column.id === "certificates" ? (
                       
                       <img
                         onClick={()=>handleClick(row.row)}

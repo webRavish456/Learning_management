@@ -26,7 +26,7 @@ import Cookies from "js-cookie";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AllAssignment= () => {
+const AllAssignment = () => {
   const [openData, setOpenData] = useState(false);
   const [viewShow, setViewShow] = useState(false);
   const [editShow, setEditShow] = useState(false);
@@ -38,6 +38,8 @@ const AllAssignment= () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const [rows, setRows] = useState([]);
+  const [filteredRows, setFilteredRows] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
 
   const token = Cookies.get("token");
@@ -69,7 +71,7 @@ const AllAssignment= () => {
           setLoading(false);
           const formattedData = res.data.map((item, index) =>
             createData(
-              
+
               item,
               item.assignmentTitle,
               item.course,
@@ -90,8 +92,8 @@ const AllAssignment= () => {
     }
   }, [loading]);
 
-  const createData = ( row,assignmentTitle,course,teacher,dueDate,status) => ({
-     row,assignmentTitle,course,teacher,dueDate,status,action: (
+  const createData = (row, assignmentTitle, course, teacher, dueDate, status) => ({
+    row, assignmentTitle, course, teacher, dueDate, status, action: (
       <>
         <IconButton
           style={{ color: "#072eb0", padding: "4px", transform: "scale(0.8)" }}
@@ -114,6 +116,17 @@ const AllAssignment= () => {
       </>
     ),
   });
+
+  useEffect(() => {
+    const filtered = rows.filter(
+      (row) =>
+        row.assignmentTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.teacher.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.status.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredRows(filtered);
+  }, [searchTerm, rows]);
+
 
   const handleView = (row) => {
     setViewData(row);
@@ -164,13 +177,13 @@ const AllAssignment= () => {
   };
 
   const handleCreate = (data) => {
-     setLoading(data);
+    setLoading(data);
 
   };
 
   const handleUpdate = (data) => {
     setLoading(data);
-   
+
   };
 
   const onAddClick = () => setOpenData(true);
@@ -188,7 +201,11 @@ const AllAssignment= () => {
     <>
       <ToastContainer />
       <Box className="container">
-        <Search onAddClick={onAddClick} buttonText="Add New Assignment" />
+        <Search
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          onAddClick={onAddClick}
+          buttonText="Add New Assignment" />
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="allAssignment table">
@@ -206,17 +223,25 @@ const AllAssignment= () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, idx) => (
-                    <TableRow hover role="checkbox" key={idx}>
-                      {columns.map((column) => (
-                        <TableCell key={column.id} align={column.align}>
-                          {row[column.id]}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))}
+                {filteredRows.length > 0 ? (
+                  filteredRows
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, idx) => (
+                      <TableRow hover role="checkbox" key={idx}>
+                        {columns.map((column) => (
+                          <TableCell key={column.id} align={column.align}>
+                            {row[column.id]}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={columns.length} align="center">
+                      No results found
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>
@@ -238,12 +263,12 @@ const AllAssignment= () => {
             openData
               ? "Create New Assignment"
               : viewShow
-              ? "View Assignment"
-              : editShow
-              ? "Edit Assignment"
-              : deleteShow
-              ? "Delete Assignment"
-              : ""
+                ? "View Assignment"
+                : editShow
+                  ? "Edit Assignment"
+                  : deleteShow
+                    ? "Delete Assignment"
+                    : ""
           }
           dialogContent={
             openData ? (
@@ -270,4 +295,4 @@ const AllAssignment= () => {
   );
 };
 
-export default  AllAssignment;
+export default AllAssignment;

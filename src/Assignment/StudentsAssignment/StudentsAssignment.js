@@ -38,6 +38,8 @@ const StudentsAssignment= () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const [rows, setRows] = useState([]);
+  const [filteredRows, setFilteredRows] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
 
   const token = Cookies.get("token");
@@ -120,6 +122,17 @@ const StudentsAssignment= () => {
     ),
   });
 
+  useEffect(() => {
+      const filtered = rows.filter(
+        (row) =>
+          row.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          row.assignmentTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          row.course.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          row.teacher.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredRows(filtered);
+    }, [searchTerm, rows]);
+
   const handleView = (row) => {
     setViewData(row);
     setViewShow(true);
@@ -191,7 +204,11 @@ const StudentsAssignment= () => {
     <>
       <ToastContainer />
       <Box className="container">
-        <Search onAddClick={onAddClick} buttonText="Add New Student's Assignment" />
+        <Search 
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        onAddClick={onAddClick}
+         buttonText="Add New Student's Assignment" />
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="studentsAssignment table">
@@ -209,17 +226,25 @@ const StudentsAssignment= () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, idx) => (
-                    <TableRow hover role="checkbox" key={idx}>
-                      {columns.map((column) => (
-                        <TableCell key={column.id} align={column.align}>
-                          {row[column.id]}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))}
+                              {filteredRows.length > 0 ? (
+                                filteredRows
+                                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                  .map((row, idx) => (
+                                    <TableRow hover role="checkbox" key={idx}>
+                                      {columns.map((column) => (
+                                        <TableCell key={column.id} align={column.align}>
+                                          {row[column.id]}
+                                        </TableCell>
+                                      ))}
+                                    </TableRow>
+                                  ))
+                              ) : (
+                                <TableRow>
+                                  <TableCell colSpan={columns.length} align="center">
+                                    No results found
+                                  </TableCell>
+                                </TableRow>
+                              )}
               </TableBody>
             </Table>
           </TableContainer>
