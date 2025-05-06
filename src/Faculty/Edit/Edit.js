@@ -530,6 +530,7 @@ const EditFaculty = () => {
                   error={!!errors[name]}
                   fullWidth
                   margin="normal"
+                  inputProps={{ accept: "application/pdf" }} 
                 />
 
 {existingDocuments?.[name] && (
